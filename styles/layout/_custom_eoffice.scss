@@ -1,0 +1,10 @@
+
+.icon-react{
+    .with-hover {
+        font-size: 2rem;  /* Set the normal size */
+        transition: font-size 0.2s ease; /* Smooth transition for hover effect */
+    }  
+    .with-hover:hover {
+        font-size: 2.5rem;  /* Increase size on hover */
+    }
+}

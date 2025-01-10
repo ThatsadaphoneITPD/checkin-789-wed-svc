@@ -1,0 +1,48 @@
+import { create } from 'zustand';
+import { persist, devtools } from 'zustand/middleware';
+
+type User = {
+  id: number;
+  gender: {
+    id: number;
+    name: string
+  };
+  firstname: string;
+  lastname: string;
+  code: string;
+  boardId: number;
+  positionId: number;
+  departmentId: number;
+  divisionId: number;
+  officeId: number | null;
+  unitId: number;
+  roleId: number;
+  levelId: number;
+};
+
+type Store = {
+  authData:  User | null; // User data, initially null
+  setAuthData: (data: User ) => void; // Method to update auth data
+  clearAuthData: () => void; // Method to clear auth data
+};
+
+const authenStore = create<Store>()(
+  devtools(
+    persist(
+      (set) => ({
+        authData: null,
+        setAuthData: (data) => {
+          set(() => ({ authData: data })); // Update auth data with new values
+        },
+        clearAuthData: () => {
+          set(() => ({
+            authData:  null , // Clear the state
+          }));
+        },
+      }),
+      { name: 'authStore' } // Persist store with the name 'authStore'
+    )
+  )
+);
+
+export default authenStore;

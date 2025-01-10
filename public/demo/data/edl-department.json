@@ -1,0 +1,138 @@
+{
+    "message": "Operation successfully",
+    "statusCode": 200,
+    "data": [
+        {
+            "department_id": 1,
+            "department_name": "ຫ້ອງການໄຟຟ້າລາວ",
+            "department_code": "201",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:49:09.384Z",
+            "updated_at": "2024-03-13T09:23:13.192Z"
+        },
+        {
+            "department_id": 9,
+            "department_name": "ສະຖາບັນໄຟຟ້າລາວ",
+            "department_code": "202",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:52:40.916Z",
+            "updated_at": "2024-03-14T13:37:03.829Z"
+        },
+        {
+            "department_id": 3,
+            "department_name": "ຝ່າຍບຸກຄະລາກອນ",
+            "department_code": "204",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:51:26.112Z",
+            "updated_at": "2024-03-13T09:33:32.747Z"
+        },
+        {
+            "department_id": 11,
+            "department_name": "ຝ່າຍຄຸ້ມຄອງລະບົບໄຟຟ້າພາກເໜືອ",
+            "department_code": "209",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:53:03.741Z",
+            "updated_at": null
+        },
+        {
+            "department_id": 10,
+            "department_name": "ຝ່າຍຄຸ້ມຄອງລະບົບໄຟຟ້າພາກກາງ",
+            "department_code": "210",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:52:51.674Z",
+            "updated_at": null
+        },
+        {
+            "department_id": 12,
+            "department_name": "ຝ່າຍຄຸ້ມຄອງລະບົບໄຟຟ້າພາກໃຕ້",
+            "department_code": "211",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:53:15.878Z",
+            "updated_at": "2024-04-07T12:55:43.239Z"
+        },
+        {
+            "department_id": 2,
+            "department_name": "ຝ່າຍກວດກາ",
+            "department_code": "205",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:51:16.953Z",
+            "updated_at": "2024-03-21T11:26:45.753Z"
+        },
+        {
+            "department_id": 5,
+            "department_name": "ຝ່າຍບັນຊີ ແລະ ຄຸ້ມຄອງເງິນກູ້",
+            "department_code": "203",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:51:54.253Z",
+            "updated_at": "2024-03-22T13:11:00.398Z"
+        },
+        {
+            "department_id": 4,
+            "department_name": "ຝ່າຍທຸລະກີດ ແລະ ແຜນການ",
+            "department_code": "208",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:51:43.643Z",
+            "updated_at": "2024-03-21T11:59:28.106Z"
+        },
+        {
+            "department_id": 6,
+            "department_name": "ຝ່າຍພັດທະນາ ແລະ O&M",
+            "department_code": "206",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:52:05.418Z",
+            "updated_at": "2024-03-25T13:30:48.268Z"
+        },
+        {
+            "department_id": 8,
+            "department_name": "ຝ່າຍວາງແຜນ ແລະ ບົບບັນຊາໄຟຟ້າ",
+            "department_code": "207",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:52:25.979Z",
+            "updated_at": "2024-06-25T10:12:31.849Z"
+        },
+        {
+            "department_id": 7,
+            "department_name": "ຝ່າຍເຕັກໂນໂລຊີ ແລະ ຂໍ້ມູນຂ່າວສານ",
+            "department_code": "DEP007",
+            "department_email": "Dep@gmail.com",
+            "department_phone": "20XXXXXXXX",
+            "department_status": "A",
+            "created_by": 1,
+            "created_at": "2024-03-12T12:52:15.260Z",
+            "updated_at": "2024-08-22T15:13:51.752Z"
+        }
+    ]
+}

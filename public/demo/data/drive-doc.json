@@ -1,0 +1,40 @@
+{
+	"data": [
+		{
+			"_id": 1,
+			"file_name": "13/ຟຟລ ໜີ້ສິນຄ່າກະແສໄຟ ຂອງເຂື່ອນນໍ້າອູ",
+			"url_path": "https://api-ppa.edl.com.la/PPAXayabury827c4ffb-798a-4e03-b448-224289f5eca6.pdf",
+			"size": 1000,
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 2,
+			"file_name": "2813/ຟຟລ.ຝບຊ ໜັງສືສະລາຍງານ ເຖິງ ລັດຖະມົນຕີ",
+			"url_path": "https://api-ppa.edl.com.la/PPAXayabury827c4ffb-798a-4e03-b448-224289f5eca6.doc",
+			"size": 100000000,
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 3,
+			"file_name": "23/ຟຟລ ການຈັດປະຕິບັດ ຈ່າຍພາສີຂາເຂົ້າ 5%",
+			"url_path": "https://api-ppa.edl.com.la/PPAXayabury827c4ffb-798a-4e03-b448-224289f5eca6.jpg",
+			"size": 3000,
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 4,
+			"file_name": "813/ຟຟລ ປັບປຸງລະບົບເກັບເງິນ ອາກອນມູນຄ່າເພີ່ມ Tax RIS",
+			"url_path": "https://api-ppa.edl.com.la/PPAXayabury827c4ffb-798a-4e03-b448-224289f5eca6.pdf",
+			"size": 200,
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		}
+	]
+}

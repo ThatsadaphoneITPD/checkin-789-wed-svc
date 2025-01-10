@@ -1,0 +1,68 @@
+{
+	"data": [
+		{
+			"_id": 1,
+			"ex_code": "0898/ກສພລບຣ",
+			"name": "Bamboo Watch",
+			"title": "Product B",
+			"content": "Product Description",
+			"priority": "NORUSH",
+			"kind_doc": { "id": 4, "dc_name": "ໜັງສືເຊີນ" },
+			"belong_to": { "id": 1, "d_name": "ຫ້ອງການໄຟຟ້າລາວ" },
+			"task_status": "PEND_EVAlUATE",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 2,
+			"ex_code": "98/BCEL",
+			"name": "Watch",
+			"title": "Product A",
+			"content": "Product Description",
+			"priority": "NORMAL",
+			"kind_doc": { "id": 3, "dc_name": "ສະເໜີ" },
+			"belong_to": { "id": 1, "d_name": "ຫ້ອງການໄຟຟ້າລາວ" },
+			"task_status": "PEND_ACCEPT",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 3,
+			"ex_code": "98/BECL.Onepay",
+			"name": "tree",
+			"title": "Product A",
+			"content": "Product Description",
+			"priority": "URGENT",
+			"kind_doc": { "id": 2, "dc_name": "ແຈ້ງການ" },
+			"belong_to": { "id": 1, "d_name": "ຫ້ອງການໄຟຟ້າລາວ" },
+			"task_status": "OPERATING",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 4,
+			"ex_code": "100/Unitel",
+			"name": "Goodle",
+			"title": "Product A",
+			"content": "Product Description",
+			"priority": "URGENT",
+			"kind_doc": { "id": 1, "dc_name": "ນຳສົ່ງ" },
+			"belong_to": { "id": 1, "d_name": "ຫ້ອງການໄຟຟ້າລາວ" },
+			"task_status": "COMPLETED",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		}
+	]
+}

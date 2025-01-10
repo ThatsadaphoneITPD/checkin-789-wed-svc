@@ -1,0 +1,64 @@
+{
+	"data": [
+		{
+			"_id": 1,
+			"name": "Bamboo Watch",
+			"title": "ໜັງສືເຊີ່ນປຶກສາຫາລືໂຄງຮາງ ແລະ ການອອກແບ E-office",
+			"content": "Product Description",
+			"priority": "NORUSH",
+			"kind_doc": { "id": 4, "dc_name": "ໜັງສືເຊີນ" },
+			"destination_to": { "id": 1, "c_name": "ຫ້ອງການໄຟຟ້າລາວ" },
+			"task_status": "PEND_EVAlUATE",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 2,
+			"name": "Watch",
+			"title": "ນຳສົ່ງ ລະບົບເກັບກຳຂໍ້ມູນຜູ້ໃຊ້ EV ຫຼື E-service ເວັບໄຊ໌",
+			"content": "Product Description",
+			"priority": "NORMAL",
+			"kind_doc": { "id": 3, "dc_name": "ສະເໜີ" },
+			"destination_to": { "id": 1, "c_name": "ຝ່າຍ ທຸລະກິດ ແລະ ແຜນການ" },
+			"task_status": "PEND_ACCEPT",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 3,
+			"name": "tree",
+			"title": "ບົດບັນທຶກ Smart meter",
+			"content": "Product Description",
+			"priority": "URGENT",
+			"kind_doc": { "id": 2, "dc_name": "ແຈ້ງການ" },
+			"destination_to": { "id": 1, "c_name": "ຝ່າຍ ພັດທະນາ ແລະ O&M" },
+			"task_status": "OPERATING",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		},
+		{
+			"_id": 4,
+			"name": "Goodle",
+			"title": "ໜັງສືນຳສົ່ງ ການວິເຄາະການເຊືອນຕໍ່ Smart meter",
+			"content": "Product Description",
+			"priority": "URGENT",
+			"kind_doc": { "id": 1, "dc_name": "ນຳສົ່ງ" },
+			"destination_to": { "id": 1, "c_name": "ຝ່າຍ ພັດທະນາ ແລະ O&M" },
+			"task_status": "COMPLETED",
+			"arrival_dep_at": "2024-08-14 03:02:37.794",
+			"complete_at": "2024-08-24 03:02:37.794",
+			"created_by": 44476,
+			"created_at": "2024-08-10 03:02:37.794",
+			"updated_at": "2024-08-10 03:02:37.794"
+		}
+	]
+}
