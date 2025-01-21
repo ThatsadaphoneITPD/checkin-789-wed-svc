@@ -44,32 +44,30 @@ const titleBody = (rowData: Checkin.OutSideWork) => (
 const descBody = (rowData: Checkin.OutSideWork) => (
     <>
         <span className="p-column-title">description</span>
-        <span style={{ maxWidth: '7rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block',}} >
+        <span style={{ maxWidth: '7rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', }} >
             {rowData?.description}
         </span>
     </>
 );
 
 const LocateBody = (rowData: Checkin.OutSideWork) => (
-    <>
-        <span className="p-column-title">Local</span>
-        <OpenMapOutSideWork rowItem={rowData}/>
-    </>
+    <div style={{ ...bodyStyle }}>
+        <OpenMapOutSideWork rowItem={rowData} />
+    </div>
 );
 const StatusBody = (rowData: Checkin.OutSideWork) => (
-    <>
-        <span className="p-column-title">status</span>
+    <div style={{ ...bodyStyle }}>
         <Tag
-            style={{background: `${statusCases(rowData?.status).bgcolor}`, color: `${statusCases(rowData?.status).color}`}}
+            style={{ background: `${statusCases(rowData?.status).bgcolor}`, color: `${statusCases(rowData?.status).color}` }}
             icon={`pi ${statusCases(rowData?.status).icon}`}
             value={statusCases(rowData?.status).statusla}
         />
-    </>
+    </div>
 );
 
 const reqestStartEndBody = (rowData: Checkin.OutSideWork) => (
-    <div style={{...bodyStyle}}>
-        <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateTime(rowData?.punch_time)}`}/>
+    <div style={{ ...bodyStyle }}>
+        <Tag style={{ background: `#d6e4ff`, color: `#2f54eb` }} value={`${formatDateTime(rowData?.punch_time)}`} />
     </div>
 );
 
@@ -92,7 +90,7 @@ const actionBody = (
                 className="p-button-rounded"
                 onClick={() => openViewDoc(rowData?.fw_req_id)}
             /> */}
-            <CreateOutSideWork rowItem={rowData}/>
+            <CreateOutSideWork rowItem={rowData} />
         </>
     );
 };
@@ -111,9 +109,9 @@ export const GetColumns = ({
         <Column key="0" field="work_out_id" header="ເລກທີ" body={(rowData: Checkin.OutSideWork) => codeBody(rowData)} headerStyle={{ minWidth: '3rem' }} />,
         <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="3" field="description" header="ອະທິບາຍ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
-        <Column key="4" field="punch_time" header="ເວລາກົດ" body={reqestStartEndBody} headerStyle={{ minWidth: '2rem', ...headerStyle }} />,
-        <Column key="6" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem', textAlign: 'center'}} />,
-        <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="4" field="punch_time" header="ເວລາກົດ" body={reqestStartEndBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
+        <Column key="6" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
+        <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="8" body={(rowData: Checkin.OutSideWork) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} />,
     ];
 };

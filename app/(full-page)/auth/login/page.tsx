@@ -12,31 +12,34 @@ const LoginPage = () => {
    
     const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     
-    const NavigationBar = 
-    (<div 
-        className="login-navigate text-center text-lg font-medium p-3" 
-        style={{ position: 'fixed',  top: 0,  left: 0,  width: '100%',  backgroundColor: 'transparent',  display: 'flex',  justifyContent: 'center',  alignItems: 'center',  zIndex: 1000 }}
-    >
-        <div className="flex items-center">
-            <img src="/demo/images/login/EDL.png" alt="Image" height="50" className="mr-3" />
-            <div className="p-3" style={{color: "white"}}>
-                <span>E-Office Program</span>
-            </div>
-        </div>
-    </div>
-    );
+    // const NavigationBar = 
+    // (<div 
+    //     className="login-navigate text-center text-lg font-medium p-3" 
+    //     style={{ position: 'fixed',  top: 0,  left: 0,  width: '100%',  backgroundColor: 'transparent',  display: 'flex',  justifyContent: 'center',  alignItems: 'center',  zIndex: 1000 }}
+    // >
+    //     <div className="flex items-center">
+    //         <img src="/demo/images/login/checkin.png" alt="Image" height="50" className="mr-2" />
+    //         <div style={{color: "white", marginTop:"0.65rem"}}>
+    //             <span>CheckIn Time</span>
+    //         </div>
+    //     </div>
+    // </div>
+    // );
 
     return (
         <div>
-            {NavigationBar}
+            {/* {NavigationBar} */}
             <div className={containerClassName}>
-                <div className="flex flex-column align-items-center justify-content-">
+                <div className="flex flex-column align-items-center justify-content-center">
                     <div className="container-login">  <div className="broad-login" /> </div>
-                    <div className='surface-card'  style={{ borderRadius: '15px', padding: '0.3rem', background: 'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}>
+                    <div className='surface-card' style={{ width: '80%', borderRadius: '15px', padding: '0.3rem', background: 'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}>
                         <div  className="surface-card py-3 px-4 sm:px-5"   style={{ borderRadius: '15px',  }} >
-                            <div className="text-center mb-1 sm:mb-4">
-                                <div className="text-3xl sm:text-5xl  font-medium " style={{ color: 'var(--primary-color)' }}> ເຂົ້າສູ່ລະບົບ</div>
-                                <span className="text-600 text-sm font-medium">ບໍລິຫານເອກະສານ ໂດຍ EDL</span>
+                            <div className="flex flex-column align-items-center mb-1 sm:mb-4">
+                                <span className="flex items-center ">
+                                    <img src="/demo/images/login/checkin.png" alt="Image" height="50" className="mr-2" />
+                                    <div className="text-3xl sm:text-xl  font-medium " style={{marginTop:"0.4rem", color: 'var(--primary-color)' }}> Check-In Time</div>
+                                </span>
+                                <span className="text-600 text-sm font-medium">ບໍລິຫານ ເຂົ້າ-ອອກວຽກ ໂດຍ EDL</span>
                             </div>
                             {/* <div>
                                 <label htmlFor="email1" className="block text-900 text-xl font-medium mb-2" > Employee ID </label>

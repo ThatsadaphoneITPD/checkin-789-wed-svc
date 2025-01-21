@@ -21,9 +21,9 @@ type UsersStore = {
 export const useUsersStore = create<UsersStore, []>((set, get) => ({
     ...initialState,
     data: [],
-    loginUser: async (userLogin) => { 
+    loginUser: async (userLogin) => {
         try {
-            const response = await axiosClient.post('/api/login', userLogin);
+            const response = await axiosClient.post('/api/AuthenToken/login', userLogin);
             return response;
         } catch (error) {
             console.log(error);
@@ -41,7 +41,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             set({ ...initialState, error: true });
         }
     },
-    getUserByUserId: async (UserId) => { 
+    getUserByUserId: async (UserId) => {
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get('/Users/byUsers/' + UserId);

@@ -7,14 +7,15 @@ interface AppLayoutProps {
 }
 
 export const metadata: Metadata = {
-    title: 'EDL office',
-    description: 'EDL office',
+    title: 'CheckIn-Time',
+    description: 'Check in-out of Emplpyee',
     robots: { index: false, follow: false },
     viewport: { initialScale: 1, width: 'device-width' },
+    metadataBase: new URL('https://edl.edl.com.la'), 
     openGraph: {
         type: 'website',
         title: 'EDL CheckIn',
-        url: 'https://eoffice.edl.com.la/',
+        url: 'https://edl.edl.com.la',
         description: 'E-office EDL Laos',
         images: ['https://res.cloudinary.com/dp3zeejct/image/upload/v1690474394/Payment/EDLHQ_mcifks.png'],
         ttl: 604800

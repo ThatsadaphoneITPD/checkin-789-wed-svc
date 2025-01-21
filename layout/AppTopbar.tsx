@@ -24,7 +24,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     const topbarmenubuttonRef = useRef(null);
     const pathname = usePathname();
     const router = useRouter();
-    const {authData}= authenStore();
+    const { authData } = authenStore();
 
     const [curscreen, setCurscreen] = useState("");
 
@@ -35,7 +35,8 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     }));
     const handleLogout = () => {
         localStorage.removeItem('token');
-        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        localStorage.removeItem('authStore');
+        document.cookie = 'token=; authStore=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         router.replace('/auth/login');
 
     };
@@ -87,9 +88,9 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                 return (
                     <Link href={"/profile"} passHref className={classNames(options.className, 'w-full p-link flex align-items-center p-2 text-color hover:surface-200 border-noround')}>
                         <Avatar image="/layout/images/testProfile.png" className="mr-2" shape="circle" />
-                        <div className="flex flex-column align" style={{color: "#2f54eb"}}>
-                            <span className="font-bold">{authData != null ? `${authData?.gender != null ? authData?.gender?.name : ""} ${authData?.firstname} ${authData?.lastname}` : "---"}</span>
-                            <span className="text-sm">{authData != null ? authData.positionId : "---"}</span>
+                        <div className="flex flex-column align" style={{ color: "#2f54eb" }}>
+                            <span className="font-bold">{authData != null ? `${authData?.fullname != null ? authData?.fullname : ""}` : "---"}</span>
+                            <span className="text-sm">{authData != null ? authData.position_name : "---"} {authData != null ? `[${authData.role}]` : ""}</span>
                         </div>
                     </Link>
                 );
@@ -110,14 +111,14 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
         }
     ];
     // const color = pathname === "/profile" ? (layoutState.staticMenuDesktopInactive ? 'white' : 'dark'): 'dark';
-    const side = pathname === "/profile"? layoutState.staticMenuDesktopInactive == true ? "0" : "16rem" : layoutState.staticMenuDesktopInactive == true ? "0" : "14rem";
+    const side = pathname === "/profile" ? layoutState.staticMenuDesktopInactive == true ? "0" : "16rem" : layoutState.staticMenuDesktopInactive == true ? "0" : "14rem";
     return (
         <div className={pathname == "/profile" ? "layout-topbar-profile" : "layout-topbar-profile"}>
-            <button ref={menubuttonRef}  style={{left: side}} type="button" className="p-link layout-menu-button layout-topbar-button"  onClick={onMenuToggle}>
+            <button ref={menubuttonRef} style={{ left: side }} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
                 <i className="pi pi-bars" style={pathname == "/profile" ? { color: layoutState.staticMenuDesktopInactive == true ? "#fff" : curscreen } : {}} />
             </button>
             <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
-                <i className="pi pi-ellipsis-v" style={pathname == "/profile" ? { color: layoutState.staticMenuDesktopInactive == true ? "#fff" : "#fff" }: {}} />
+                <i className="pi pi-ellipsis-v" style={pathname == "/profile" ? { color: layoutState.staticMenuDesktopInactive == true ? "#fff" : "#fff" } : {}} />
             </button>
             <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
                 <button type="button" className="p-link layout-topbar-button" onClick={(e) => openprofile.current.toggle(e)} >
@@ -125,7 +126,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                     <span>Profile</span>
                 </button>
                 <OverlayPanel ref={openprofile} >
-                    <Menu model={items}  className='w-full'/>
+                    <Menu model={items} className='w-full' />
                     <style>{css}</style>
                     <style>{overlaycss}</style>
                 </OverlayPanel>
