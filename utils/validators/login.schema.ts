@@ -4,6 +4,7 @@ import { z } from 'zod';
 export const loginSchema = z.object({
   // email: z.string().email(),
   username: z.string().min(5, 'ກະລຸນາ ລະຫັດພະນັກງານ'),
+  deviceId: z.string().optional().default(''),
   password: z.string().min(5, 'ກະລຸນາປ້ອນລະຫັດຜ່ານ'),
 });
 export type LoginSchema = z.infer<typeof loginSchema>;

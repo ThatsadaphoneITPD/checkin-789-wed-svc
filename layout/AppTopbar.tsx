@@ -36,7 +36,9 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('authStore');
-        document.cookie = 'token=; authStore=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        localStorage.removeItem('sideMenu');
+        // localStorage.removeItem('ally-supports-cache');
+        document.cookie = 'token=; authStore=; sideMenu=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         router.replace('/auth/login');
 
     };
@@ -46,19 +48,19 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     const isLaptop = useMediaQuery({ query: '(max-width: 1024px)' });
     useEffect(() => {
         if (isMobileM) {
-            setCurscreen("#fff");
+            setCurscreen("#2f54eb");
             // console.log("Current screen size: Mobile (375px)");
         } else if (isMobileL) {
-            setCurscreen("#fff");
+            setCurscreen("#2f54eb");
             // console.log("Current screen size: Mobile (425px)");
         } else if (isTablet) {
-            setCurscreen("#fff");
+            setCurscreen("#2f54eb");
             // console.log("Current screen size: Tablet (768px)");
         } else if (isLaptop) {
-            setCurscreen("#fff");
+            setCurscreen("#2f54eb");
             //console.log("Current screen size: Laptop (1024px)");
         } else {
-            setCurscreen("#000");
+            setCurscreen("#2f54eb");
             // console.log("Current screen size: Desktop");
         }
     }, [isMobileM, isMobileL, isTablet, isLaptop]);
@@ -113,16 +115,16 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     // const color = pathname === "/profile" ? (layoutState.staticMenuDesktopInactive ? 'white' : 'dark'): 'dark';
     const side = pathname === "/profile" ? layoutState.staticMenuDesktopInactive == true ? "0" : "16rem" : layoutState.staticMenuDesktopInactive == true ? "0" : "14rem";
     return (
-        <div className={pathname == "/profile" ? "layout-topbar-profile" : "layout-topbar-profile"}>
+        <div className="layout-topbar-profile">
             <button ref={menubuttonRef} style={{ left: side }} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
-                <i className="pi pi-bars" style={pathname == "/profile" ? { color: layoutState.staticMenuDesktopInactive == true ? "#fff" : curscreen } : {}} />
+                <i className="pi pi-bars"/>
             </button>
             <button ref={topbarmenubuttonRef} type="button" className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
-                <i className="pi pi-ellipsis-v" style={pathname == "/profile" ? { color: layoutState.staticMenuDesktopInactive == true ? "#fff" : "#fff" } : {}} />
+                <i className="pi pi-ellipsis-v" />
             </button>
             <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
                 <button type="button" className="p-link layout-topbar-button" onClick={(e) => openprofile.current.toggle(e)} >
-                    <i className="pi pi-user" style={pathname == "/profile" ? { color: layoutState.staticMenuDesktopInactive == true ? "#fff" : "#fff" } : {}}  ></i>
+                    <i className="pi pi-user"/>
                     <span>Profile</span>
                 </button>
                 <OverlayPanel ref={openprofile} >

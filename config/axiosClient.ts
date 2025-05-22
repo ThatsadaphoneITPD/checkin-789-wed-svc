@@ -37,15 +37,15 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      const { status } = error.response;
-
-      if (status === 401) {
+      const { status} = error.response;
+      // console.log("resp----", error.response);
+      if (status === 401 && error.response.data != "Invalid username or password" ) {
         // Handle unauthorized access (e.g., token expiration)
         console.warn('Token expired or unauthorized, redirecting to login...');
         document.cookie =
           'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         localStorage.removeItem('token');
-        window.location.replace('/login');
+        window.location.replace('/auth/login');
       } else {
         console.error(
           `API Error: ${error.response.status} - ${error.response.statusText}`

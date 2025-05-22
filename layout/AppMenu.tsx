@@ -49,19 +49,13 @@ const AppMenu = () => {
 
 
 
-    const BroadHelper = (<div className="broad-contrainer w-full mt-3" style={{ width: "100%", borderRadius: "15px", height: "12rem", background: "#2B7BF4" }}>
+    const BroadHelper = (<div className="broad-contrainer w-full mt-3" style={{ width: "100%", height: "4rem", background: "#2B7BF4" }}>
         <div className='help-tag'>
             <div className='time-container'>
-                <span className='keep-icon'  >
-                    <i className='pi pi-question icon-help' />
-                </span>
                 <div className='timecount'>
-                    {currentTime}
+                    <i className="pi pi-clock" style={{ fontSize: "1.4rem" }}></i>  {currentTime}
                 </div>
             </div>
-            <h5 className='title'>Need Help?</h5>
-            <h6 className='content'>Please contact EDL Office</h6>
-            <button className='button-contactus'>Contact Us</button>
         </div>
 
         <div className='main-cycle cycle-7'>

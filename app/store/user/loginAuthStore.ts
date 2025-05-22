@@ -6,6 +6,7 @@ type User = {
     department_name: string;
     fullname: string;
     position_name: string;
+    username: string;
     role: string;
 };
 

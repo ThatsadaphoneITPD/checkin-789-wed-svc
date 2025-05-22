@@ -23,7 +23,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
     data: [],
     loginUser: async (userLogin) => {
         try {
-            const response = await axiosClient.post('/api/AuthenToken/login', userLogin);
+            const response = await axiosClient.post('/api/Auth/login', userLogin);
             return response;
         } catch (error) {
             console.log(error);

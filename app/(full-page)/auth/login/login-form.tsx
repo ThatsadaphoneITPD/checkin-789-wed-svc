@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import authenStore from '@/app/store/user/loginAuthStore';
 import { useUsersStore } from '../../../store/user/usersStore';
 import { Checkbox } from 'primereact/checkbox';
+import { log } from 'console';
 
 const initialValues: LoginSchema = {
     username: '',
@@ -39,13 +40,17 @@ export default function SignInForm() {
                     setLoading(false);
                     // location.reload();
                 }, 2000);
-            } else {
-                setLoading(false);
-                toast.error('Invalid username or password');
             }
         } catch (error: any) {
+            console.log("catch")
+            const { status} = error.response;
             setLoading(false);
-            toast.error(error?.message);
+            if (status === 401 && error.response.data == "Invalid username or password")
+            {
+                toast.error('Invalid username or password')
+            } else{
+                toast.error(error?.message);
+            }
         }
     };
 
@@ -100,12 +105,6 @@ export default function SignInForm() {
                             />
                         )}
                     />
-                    {/* <div className="flex align-items-center justify-content-between mb-1 gap-5">
-                <div className="flex align-items-center">
-                    <Checkbox  inputId="rememberme1"  checked={checked}  onChange={(e) => setChecked(e.checked ?? false)}  className="mr-2" />
-                    <label htmlFor="rememberme1">ບັນທຶກ</label>
-                </div>
-            </div> */}
                     <div />
                     <Button
                         loading={isLoading}

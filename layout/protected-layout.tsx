@@ -37,9 +37,27 @@ const findMenuItemByPath = (items: AppMenuItem[], path: string): AppMenuItem | n
 
 // Helper: Check user permissions for a menu item
 const checkPermission = (userSideGroups: any[], menuName: string): boolean => {
-    const permissionNames = userSideGroups?.map((group) => group.side_group_name) || [];
-    return permissionNames.includes(menuName);
+    const sideMenuString = localStorage.getItem('sideMenu');// Retrieve and parse the sideMenu from localStorage
+    if (!sideMenuString) {
+        console.error('No sideMenu found in localStorage');
+        return false;
+    }
+    try {
+        const sideMenu = JSON.parse(sideMenuString);
+        const permissionNames = sideMenu.flatMap((item: any) => {// Flatten the menu to extract all `label` values
+            const labels = [item.label];// Include top-level label
+            if (item.items) {// Include nested items' labels
+                labels.push(...item.items.map((subItem: any) => subItem.label));
+            }
+            return labels;
+        }).filter(Boolean); // Remove undefined values
+        return permissionNames.includes(menuName);
+    } catch (error) {
+        console.error('Error parsing sideMenu from localStorage:', error);
+        return false;
+    }
 };
+
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
 
@@ -65,6 +83,8 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
             router.push('/auth/login');
             return;
         }
+        // Admin bypass for all routes
+        if (users.role === 'Super Admin') return;
 
         // Admin bypass for all routes
         if (users.role === 'Admin') return;

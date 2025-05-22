@@ -1,77 +1,60 @@
 'use client';
-
-import { LayoutContext } from '@/layout/context/layoutcontext';
+import authenStore from '@/app/store/user/loginAuthStore';
 import React, { useContext, useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import CreateUserProfile from './edit-profile';
-
-const FroatProfileComponent = (user?: any) => {
-    return (
-        <div className="float-card flex flex-wrap align-items-center justify-content gap-4">
-            <img src={`/layout/images/testProfile.png`} alt="logo" />
-            <div className='flex flex-column '>
-                <p className="text-l text-900 font-bold">ທ່ານ ສຸກສະຫວັນ ພານທອງ</p>
-                <p className="text-s" style={{ color: "#718096" }}>esthera@simmmple.com</p>
-            </div>
-        </div>
-    );
-};
 
 const ProfileUser = () => {
-    const [lang, setLang] = useState("LA");
-    const [user, setUser] = useState({
-        empoyee_code: 44476,
-        frist_name: "the Rock",
-        last_name: "Dude",
-        postion: "ວິຊາການ",
-        // Department Infomation
-        department: "ຝ່າຍບຸຄະລະກອນ",
-        division: "ພະແນກ ICT - APP",
-        center_service_unit: null,
-        unit: null,
-        // Contract Info
-        tel_phone: 99822455,
-        whatapp: 99822455,
-        email: "kayeriveren@gmail.com",
-        // Deputy
-        deputy_one: "10011",
-        deputy_two: "10012",
-        deputy_three: "10013",
-        deputy_four: "10014",
-
-    });
-    const [curscreen, setCurscreen] = useState("");
-    const { layoutState } = useContext(LayoutContext);
-    const isMobileM = useMediaQuery({ query: '(max-width: 375px)' });
-    const isMobileL = useMediaQuery({ query: '(max-width: 425px)' });
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' });
-    const isLaptop = useMediaQuery({ query: '(max-width: 1024px)' });
-    useEffect(() => {
-        if (isMobileM) {
-            setCurscreen("86%");
-            // console.log("Current screen size: Mobile (375px)");
-        } else if (isMobileL) {
-            setCurscreen("87%");
-            // console.log("Current screen size: Mobile (425px)");
-        } else if (isTablet) {
-            setCurscreen("88%");
-            // console.log("Current screen size: Tablet (768px)");
-        } else if (isLaptop) {
-            setCurscreen("93%");
-            // console.log("Current screen size: Laptop (1024px)");
-        } else {
-            setCurscreen("82%");
-            // console.log("Current screen size: Desktop");
-        }
-    }, [isMobileM, isMobileL, isTablet, isLaptop]);
-
+    const { authData } = authenStore();
     return (
-        <div className='container-profile'>
-            <div className="broad-profile" style={{ width: layoutState.staticMenuDesktopInactive == false && curscreen }}>
-                <FroatProfileComponent />
+            <div className='flex flex-column align-items-center justify-content-center' style={{width: "12rem", borderRadius: "1rem",  display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px"}}>
+                <div className="grid justify-content-center text-center">
+                    <div className="col-12 flex justify-content-center" style={{margin: "-6rem"}}>
+                        <div style={{  height: "9rem",   width: "9rem",   borderRadius: "0.8rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden", background: "linear-gradient(90deg, rgba(245,255,23,1) 0%, rgba(244,250,35,1) 41%, rgba(226,238,64,1) 100%)", padding: "5px"  }} >
+                            <div style={{  height: "2rem", width: "2rem", background: "white", borderRadius: "0.8rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }} />
+                        </div>
+                    </div>
+                    <div className="col-12 flex justify-content-center -mt-3">
+                        <div style={{  height: "7.5rem",   width: "7.5rem",   borderRadius: "1.5rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, rgba(48,42,157,1) 0%, rgba(28,28,140,1) 41%, rgba(84,84,235,1) 100%)", padding: "5px"  }} >
+                            <div style={{  height: "6.8rem", width: "7rem", background: "white", borderRadius: "1.7rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }} >
+                                <img src={`/layout/images/testProfile.png`} alt="logo"  style={{ height: "9rem", width: "8rem", margin: "2rem 0 0 2rem",  transform: "rotate(-42deg)", objectFit: "cover"}}/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid justify-content-center text-center">
+                        <div style={{marginLeft: "-4rem", marginRight: "4rem", marginTop: "-3.5rem"}}>
+                            <div style={{  height: "6rem",   width: "6rem",   borderRadius: "0.9rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, rgba(48,42,157,1) 0%, rgba(28,28,140,1) 41%, rgba(84,84,235,1) 100%)", padding: "5px"  }} >
+                                <div style={{  height: "4.5rem", width: "4.5rem", background: "white", borderRadius: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }} />
+                            </div>
+                        </div>
+                        <div style={{marginLeft: "4rem", marginRight: "-4rem", marginTop: "-3.5rem"}}>
+                            <div style={{  height: "6rem",   width: "6rem",   borderRadius: "0.8rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, rgba(48,42,157,1) 0%, rgba(28,28,140,1) 41%, rgba(84,84,235,1) 100%)", padding: "5px"  }} >
+                                <div style={{  height: "4.5rem", width: "4.5rem", background: "white", borderRadius: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='flex flex-column align-items-center justify-content-center'>
+                    <div className="flex flex-column align" style={{ color: "#2f54eb" }}>
+                        <div className="grid grid-nogutter justify-content-center text-center">
+                            <span className='col-12' style={{fontSize: "0.7rem"}}>{authData != null ? `${authData?.fullname != null ? authData?.fullname : ""}` : "---"}</span>
+                            <span className='col-12' style={{fontSize: "0.6rem"}} >{authData != null ? `${authData.position_name } [${authData.role}]` : ""}</span>
+                        </div>
+                        <div className="grid grid-nogutter">
+                            <div className="col-3 " >
+                                <div style={{fontSize: "0.6rem"}}  className="text-right">ລະຫັດ:</div>
+                            </div>
+                            <div className="col-6 col-offset-1">
+                                <div style={{fontSize: "0.6rem"}} className="text-left">{authData != null ? authData?.username : "---"}</div>
+                            </div>
+                            <div className="col-3">
+                                <div style={{fontSize: "0.6rem"}} className="text-right">ສັງກັດ:</div>
+                            </div>
+                            <div className="col-6 col-offset-1">
+                                <div style={{fontSize: "0.6rem"}} className="text-left">{authData != null ? authData.department_name : "---"}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <CreateUserProfile data={user} className="profile-from" />
-        </div>
     );
 };
 
