@@ -13,8 +13,8 @@ declare namespace Checkin {
         total_days:         number;
         file_path:          string;
         status:             string;
-        created_at:         Date;
-        updated_at:         null;
+        created_at:         string | null;
+        updated_at:         string | null;
         fieldWorkApprovals: null;
     }
     type ApproveField = FormData | {
@@ -32,7 +32,7 @@ declare namespace Checkin {
         longitude: number
         file_path: string
         status: string
-        workOutsideApprovals: any
+        workOutsideApprovals: any | null
     }
     type ApproveOutSideWork = FormData | {
         workOutId:   string;

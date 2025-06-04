@@ -39,7 +39,7 @@ export default function SignInForm() {
                     router.push('/');
                     setLoading(false);
                     // location.reload();
-                }, 2000);
+                }, 1300);
             }
         } catch (error: any) {
             console.log("catch")

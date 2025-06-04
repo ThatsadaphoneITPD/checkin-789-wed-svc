@@ -5,7 +5,17 @@ import React from 'react';
 import { Button } from 'primereact/button';
 
 const AccessDeniedPage = () => {
-    const router = useRouter();
+     const router = useRouter();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('authStore');
+        localStorage.removeItem('sideMenu');
+        // localStorage.removeItem('ally-supports-cache');
+        document.cookie = 'token=; authStore=; sideMenu=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        router.replace('/auth/login');
+
+    };
 
     return (
         <div className="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
@@ -25,7 +35,10 @@ const AccessDeniedPage = () => {
                         <h1 className="text-900 font-bold text-5xl mb-2">ປະຕິເສດ ການເຂົ້າເຖິ່ງ</h1>
                         <div className="text-600 mb-5">ທ່ານ ບໍ່ມີສິດ ອະນຸຍາດ ຈຳເປັນໃນການເຂົ້າເຖິ່ງ</div>
                         <img src="/demo/images/access/asset-access.svg" alt="Error" className="mb-5" width="80%" />
-                        <Button icon="pi pi-arrow-left" label="ກັບໄປ ໜ້າຫຼັກ" text onClick={() => router.push('/')} />
+                        <div className="flex gap-3 justify-content-center">
+                            <Button icon="pi pi-arrow-left" label="ກັບໄປ ໜ້າຫຼັກ" text onClick={() => router.push('/')} />
+                            <Button icon="pi pi-sign-out" label="LogIn ເຂົ້າໃໝ່" text onClick={() => handleLogout()} />
+                        </div>
                     </div>
                 </div>
             </div>

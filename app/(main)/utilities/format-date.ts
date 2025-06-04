@@ -1,9 +1,24 @@
 import dayjs from 'dayjs';
+import moment from 'moment';
+import "moment/locale/lo"; 
 
 export function formatDate(date?: any, format: string = 'DD/MM/YYYY'): string {
   if (!date) return '';
   return dayjs(date).format(format);
 }
+
+export function formatDateLA(date?: any, format: string = 'DD/MM/YYYY hh:mm a'): string {
+  if (!date) return '';
+  const formattedDate = moment(date, 'YYYY-MM-DD HH:mm:ss.SSS').format(format);
+  return formattedDate
+}
+
+export function formatDateLao(date?: any): string {
+  if (!date) return '';
+  const formattedDate = moment(date, 'YYYY-MM-DD HH:mm:ss.SSS').format('DD/MM/YYYY hh:mm a');
+  return formattedDate;
+}
+
 export function formatDayMonth(date?: any, format: string = 'DD/MM'): string {
     if (!date) return '';
     return dayjs(date).format(format);
@@ -110,3 +125,16 @@ export function formatDateMonthYear(dateString: string): string {
 
   return `${month}/${year}`;
 }
+
+export const formatFileSize = (bytes: number): string => {
+  if (bytes >= 1024 ** 3) return (bytes / (1024 ** 3)).toFixed(2) + ' GB';
+  if (bytes >= 1024 ** 2) return (bytes / (1024 ** 2)).toFixed(2) + ' MB';
+  if (bytes >= 1024) return (bytes / 1024).toFixed(2) + ' KB';
+  return bytes + ' B';
+};
+
+export const formatName = (employee?: { gender?: string; first_name?: string; last_name?: string }) => {
+  if (!employee) return "";
+  const title = employee.gender === "Male" ? "ທ່ານ" : "ທ່ານ ນາງ";
+  return `${title} ${employee.first_name ?? ""} ${employee.last_name ?? ""}`.trim();
+};

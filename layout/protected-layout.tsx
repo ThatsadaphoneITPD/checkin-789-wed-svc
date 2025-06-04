@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { menuItems, sideGroups } from './menu-items';
+import { menuItems, sideGroups } from './menu-role/menu-items';
 import { AppMenuItem } from '@/types';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import authenStore from '@/app/store/user/loginAuthStore';
@@ -35,25 +35,29 @@ const findMenuItemByPath = (items: AppMenuItem[], path: string): AppMenuItem | n
 };
 
 
+const extractMenuLabels = (menuItems: any[]): string[] => {
+    return menuItems.flatMap((item) => [
+        item.label, 
+        ...(item.items ? extractMenuLabels(item.items) : []) // Recursively extract nested labels
+    ]);
+};
 // Helper: Check user permissions for a menu item
 const checkPermission = (userSideGroups: any[], menuName: string): boolean => {
-    const sideMenuString = localStorage.getItem('sideMenu');// Retrieve and parse the sideMenu from localStorage
-    if (!sideMenuString) {
-        console.error('No sideMenu found in localStorage');
-        return false;
-    }
     try {
+        const sideMenuString = localStorage.getItem("sideMenu");
+        if (!sideMenuString) {
+            console.error("No sideMenu found in localStorage");
+            return false;
+        }
+
         const sideMenu = JSON.parse(sideMenuString);
-        const permissionNames = sideMenu.flatMap((item: any) => {// Flatten the menu to extract all `label` values
-            const labels = [item.label];// Include top-level label
-            if (item.items) {// Include nested items' labels
-                labels.push(...item.items.map((subItem: any) => subItem.label));
-            }
-            return labels;
-        }).filter(Boolean); // Remove undefined values
+
+        // Extract all labels from the entire menu structure
+        const permissionNames = extractMenuLabels(sideMenu).filter(Boolean);
+
         return permissionNames.includes(menuName);
     } catch (error) {
-        console.error('Error parsing sideMenu from localStorage:', error);
+        console.error("Error parsing sideMenu from localStorage:", error);
         return false;
     }
 };
@@ -72,14 +76,17 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
     useEffect(() => {
         if (isPublicPath(pathname)) return;
+        const token: string | null = localStorage.getItem('token');
+        const raw = localStorage.getItem('authStore');
+        const parsed = JSON.parse(raw || '{}');
+        const hasAuthData = parsed?.state?.authData;
 
-        const token = localStorage.getItem('token');
         if (!token) {
             router.push('/auth/login');
             return;
         }
-        // Redirect to login if not authenticated
-        if (!users) {
+
+        if (!hasAuthData) {
             router.push('/auth/login');
             return;
         }
@@ -87,7 +94,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         if (users.role === 'Super Admin') return;
 
         // Admin bypass for all routes
-        if (users.role === 'Admin') return;
+        if (users.role === 'admin') return;
 
         // Check route permissions
         const currentMenuItem = findMenuItemByPath(menuItems, pathname);

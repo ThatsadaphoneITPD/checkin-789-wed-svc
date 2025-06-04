@@ -31,9 +31,8 @@ export default function OutSideWorkTable() {
     };
     useEffect(() => { getData(); }, []);
 
-    const onViewDoc = useCallback(async (fw_req_id: any) => {
-        console.log("onViewDoc: ", fw_req_id)
-        openModal({ view: <div style={{ height: '100vh', maxHeight: '80vh' }}>{fw_req_id}</div>, className: "", header: "ເອກະສານ", customSize: "1000px", dialogFooter: null });
+    const onViewDoc = useCallback(async (file_path: any) => {
+        console.log("onViewDoc: ", file_path)
     }, [openModal, getData]);
 
 

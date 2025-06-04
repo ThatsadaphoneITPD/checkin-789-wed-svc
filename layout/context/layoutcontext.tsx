@@ -2,6 +2,7 @@
 import React, { useState, createContext } from 'react';
 import { LayoutState, ChildContainerProps, LayoutConfig, LayoutContextProps } from '@/types';
 import GlobalModal from '@/app/shared/modal-views/container';
+import 'react-photo-view/dist/react-photo-view.css';
 export const LayoutContext = createContext({} as LayoutContextProps);
 
 export const LayoutProvider = ({ children }: ChildContainerProps) => {
@@ -67,5 +68,11 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
         closeProfileSidebar
     };
 
-    return <LayoutContext.Provider value={value}>{children} <GlobalModal/></LayoutContext.Provider>;
+    return (
+    <>
+        <LayoutContext.Provider value={value}>
+            {children} 
+            <GlobalModal/> 
+        </LayoutContext.Provider>
+    </>);
 };

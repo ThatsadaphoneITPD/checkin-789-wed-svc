@@ -14,8 +14,6 @@ import { Avatar } from 'primereact/avatar';
 import authenStore from '@/app/store/user/loginAuthStore';
 // import toast from 'react-hot-toast';
 
-
-
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, closeProfileSidebar } = useContext(LayoutContext);
     const menubuttonRef = useRef(null);

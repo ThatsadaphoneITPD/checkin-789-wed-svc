@@ -1,5 +1,5 @@
 import { AppMenuItem } from "@/types";
-import { defaultsides, devItem, menuItems, sideGroups } from "./menu-items";
+import { defaultsides, devItem, menuItems, sideGroups } from "./menu-role/menu-items";
 
 export const users = {
     username: "user", // Simulated user data
@@ -9,7 +9,7 @@ export const users = {
 export const roleAuthMenu = (role: string) => {
     switch (role) {
         case "Super Admin": return menuItems;
-        case "Admin": return menuItems;
+        case "admin": return menuItems;
         case "User": return sideGroups;
         default: return defaultsides;
     }

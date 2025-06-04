@@ -8,6 +8,7 @@ import { statusCases, statusLeaveType } from '../../utilities/format-status';
 import { Tag } from 'primereact/tag';
 import CreateSickLeave from './create-sick-leave';
 import { useSickLeaveStore } from '@/app/store/sick-leave/sickLeaveStore';
+import { Tooltip } from 'primereact/tooltip';
 type ColumnsProps = {
     onViewDoc?: (fw_req_id: number) => void;
     onEditItem?: (rowData: Checkin.SickLeave) => void;
@@ -39,7 +40,14 @@ const titleBody = (rowData: Checkin.SickLeave) => (
 const descBody = (rowData: Checkin.SickLeave) => (
     <>
         <span className="p-column-title">description</span>
-        {rowData?.reasons}
+        <div>
+            <Tooltip target=".custom-target-des" />
+            <span className="custom-target-des"   data-pr-tooltip={rowData?.reasons === "" ? "---" : rowData?.reasons}   data-pr-position="bottom"  >
+                <span style={{ display: "inline-block",  maxWidth: "8rem",  whiteSpace: "nowrap",  overflow: "hidden",  textOverflow: "ellipsis",  verticalAlign: "middle" }}>
+                    {rowData?.reasons === "" ? "---" : rowData?.reasons}
+                </span>
+            </span>
+        </div>
     </>
 );
 

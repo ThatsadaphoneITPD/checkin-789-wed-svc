@@ -5,7 +5,7 @@ import { LayoutContext } from './context/layoutcontext';
 import { MenuProvider } from './context/menucontext';
 import Link from 'next/link';
 import { AppMenuItem } from '@/types';
-import { menuItems } from './menu-items';
+import { menuItems } from './menu-role/menu-items';
 import { filterMenuItems, roleAuthMenu } from './authmenu-itens';
 import authenStore from '@/app/store/user/loginAuthStore';
 

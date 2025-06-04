@@ -46,7 +46,7 @@ export const statusTypeField = (statustype: string): { statusla: string; bgcolor
             icon = 'pi-globe';
             break;
         case "ພາຍໃນປະເທດ":
-            statusla = statustype;
+            statusla = "ພາຍໃນ";
             bgcolor = "#fffb8f";
             color = "#876800";
             icon = 'pi-car';

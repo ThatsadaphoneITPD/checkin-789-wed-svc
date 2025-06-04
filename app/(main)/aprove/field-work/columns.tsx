@@ -4,10 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Checkin } from '@/types';
-import { formatDate, formatDayMonth, formatDay, formatMonth } from '@/app/(main)/utilities/format-date';
+import { formatDate, formatDayMonth, formatDay, formatMonth, formatDateLao } from '@/app/(main)/utilities/format-date';
 import { statusCases, statusTypeField } from '../../utilities/format-status';
 import { Tag } from 'primereact/tag';
 import CreateFiledWork from './create-field-work';
+import { Tooltip } from 'primereact/tooltip';
+import moment from 'moment';
 type ColumnsProps = {
     onViewDoc?: (fw_req_id: number) => void;
     onEditItem?: (rowData: Checkin.FieldWork) => void;
@@ -36,17 +38,28 @@ const titleBody = (rowData: Checkin.FieldWork) => (
 
 const descBody = (rowData: Checkin.FieldWork) => (
     <>
-        <span className="p-column-title">description</span>
-        <span style={{ maxWidth: '7rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block',}} >
-            {rowData?.description}
-        </span>
+        <div>
+            <Tooltip target=".custom-target-des" />
+            <span className="custom-target-des"   data-pr-tooltip={rowData?.description === "" ? "---" : rowData?.description}   data-pr-position="bottom"  >
+                <span style={{ display: "inline-block",  maxWidth: "8rem",  whiteSpace: "nowrap",  overflow: "hidden",  textOverflow: "ellipsis",  verticalAlign: "middle" }}>
+                    {rowData?.description === "" ? "---" : rowData?.description}
+                </span>
+            </span>
+        </div>
+    </>
+);
+
+const workplaceBody = (rowData: Checkin.FieldWork) => (
+    <>
+        <span className="p-column-title">created_at</span>
+        <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${rowData?.workplace}`}/>
     </>
 );
 
 const reqestTimeBody = (rowData: Checkin.FieldWork) => (
     <>
         <span className="p-column-title">created_at</span>
-        {formatDayMonth(rowData?.created_at)}
+         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.created_at)}`}/>
     </>
 );
 const StatusBody = (rowData: Checkin.FieldWork) => (
@@ -70,14 +83,14 @@ const TypeBody = (rowData: Checkin.FieldWork) =>{
 const reqestStartEndBody = (rowData: Checkin.FieldWork) => (
     <>
         <span className="p-column-title">Complete</span>
-        <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDayMonth(rowData?.start_date)} - ${formatDayMonth(rowData?.end_date)}`}/>
+        <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDate(rowData?.start_date)} - ${formatDate(rowData?.end_date)}`}/>
     </>
 );
 
 const totalDaysBody = (rowData: Checkin.FieldWork) => (
     <>
         <span className="p-column-title">total</span>
-        <Tag style={{background: `#1d39c4`, color: `#f0f5ff`}} value={rowData?.total_days}/> ວັນ
+        <Tag style={{background: `#1d39c4`, color: `#f0f5ff`}} value={`${rowData?.total_days} ວັນ`}/> 
     </>
 );
 
@@ -118,6 +131,7 @@ export const GetColumns = ({
         <Column key="0" field="fw_req_id" header="ເລກທີ" body={(rowData: Checkin.FieldWork) => codeBody(rowData)} headerStyle={{ minWidth: '3rem' }} />,
         <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="2" field="field_work_type" header="ປະເພດ" body={TypeBody} headerStyle={{ maxWidth: '2rem' }} />,
+        <Column key="2" field="workplace" header="ສະຖານທີ" body={workplaceBody} headerStyle={{ maxWidth: '2rem' }} />,
         <Column key="3" field="description" header="ອະທິບາຍ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
         <Column key="4" field="start_date" header="ມື້ເລີ່ມ-ສີ້ນສຸດ" body={reqestStartEndBody} headerStyle={{ minWidth: '5rem' }} />,
         <Column key="5" field="total_days" header="ວັນ" body={totalDaysBody} headerStyle={{ minWidth: '1rem' }} />,

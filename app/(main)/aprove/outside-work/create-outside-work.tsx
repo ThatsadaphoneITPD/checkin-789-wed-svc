@@ -143,13 +143,11 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
       <Dialog visible={openModal} header={header} footer={DialogFooter} onHide={handClose} style={{ width: "600px", padding: "none", marginBottom: "none" }} modal className={`modal-form `}>
         {FormCreate}
       </Dialog>
-      <Button
-        icon={<i className='pi pi-check-square' style={{fontSize: '0.9rem', color: "#ffff"}} />}
-        style={{height: "2rem", width: "2rem", backgroundColor: "#d48806"}}
-        text
-        raised
-        severity="secondary"
-        className="p-button-rounded" onClick={handOpen} />
+        <button  className="button"     
+            onClick={() =>  handOpen()}
+            >
+            <i className='pi pi-check-square' ></i>
+        </button>
     </>
   );
 }

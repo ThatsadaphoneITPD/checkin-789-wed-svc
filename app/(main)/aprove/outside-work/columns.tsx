@@ -10,8 +10,11 @@ import { Tag } from 'primereact/tag';
 import CreateOutSideWork from './create-outside-work';
 import GoogleMapShow from '@/app/shared/google-map/displaymap';
 import OpenMapOutSideWork from './open-map';
+import { Tooltip } from 'primereact/tooltip';
+import GlobalPhotoView from '@/app/shared/photo-view/container';
+
 type ColumnsProps = {
-    onViewDoc?: (work_out_id: number) => void;
+    onViewDoc?: (work_out_id: string) => void;
     onEditItem?: (rowData: Checkin.OutSideWork) => void;
 };
 
@@ -43,10 +46,14 @@ const titleBody = (rowData: Checkin.OutSideWork) => (
 
 const descBody = (rowData: Checkin.OutSideWork) => (
     <>
-        <span className="p-column-title">description</span>
-        <span style={{ maxWidth: '7rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', }} >
-            {rowData?.description}
-        </span>
+        <div>
+            <Tooltip target=".custom-target-des" />
+            <span className="custom-target-des"   data-pr-tooltip={rowData?.description === "" ? "---" : rowData?.description}   data-pr-position="bottom"  >
+                <span style={{ display: "inline-block",  maxWidth: "8rem",  whiteSpace: "nowrap",  overflow: "hidden",  textOverflow: "ellipsis",  verticalAlign: "middle" }}>
+                    {rowData?.description === "" ? "---" : rowData?.description}
+                </span>
+            </span>
+        </div>
     </>
 );
 
@@ -75,23 +82,23 @@ const reqestStartEndBody = (rowData: Checkin.OutSideWork) => (
 // Action body with dropdown menu
 const actionBody = (
     rowData: Checkin.OutSideWork,
-    openViewDoc: (fw_req_id: number) => void,
+    openViewDoc: (file_path: string) => void,
     // editOutSideWork: (rowData: Checkin.OutSideWork) => any,
 ) => {
+    const urltest = 'https://res.cloudinary.com/dp3zeejct/image/upload/v1679296309/Emagi/chedar_SourCream_yw9meg.jpg'
     return (
-        <>
-            {/* <Button
-                icon={<i className='pi pi-briefcase' style={{fontSize: '1.5rem', color: "#ffff"}} />}
-                rounded
-                style={{height: "2.5rem", width: "2.5rem", backgroundColor: "#3a6cb7"}}
-                text
-                raised
-                severity="secondary"
-                className="p-button-rounded"
-                onClick={() => openViewDoc(rowData?.fw_req_id)}
-            /> */}
+         <div className="wrap-button">
+            <GlobalPhotoView
+                image={urltest}
+                // image={rowData?.file_path}
+                render={() => (
+                    <button className="button">
+                    <i className="pi pi-images" />
+                    </button>
+                )}
+            />
             <CreateOutSideWork rowItem={rowData} />
-        </>
+        </div>
     );
 };
 
@@ -99,9 +106,9 @@ const actionBody = (
 export const GetColumns = ({
     onViewDoc,
 }: ColumnsProps) => {
-    const openViewDoc = (fw_req_id: number) => {
+    const openViewDoc = (file_path: string) => {
         if (onViewDoc) {
-            onViewDoc(fw_req_id);
+            onViewDoc(file_path);
         }
     };
 
