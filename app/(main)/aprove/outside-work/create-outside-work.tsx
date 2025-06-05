@@ -133,7 +133,7 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
 
   const DialogFooter = (
     <>
-      <Button label="ສ້າງ" icon="pi pi-check" form="createExportForm" type="submit" />
+      <Button label="ບັນທຶກ" icon="pi pi-check" form="createExportForm" type="submit" />
     </>
   );
   const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຄອບວຽກສະໜາມ ເລກທີ ({rowItem?.work_out_id})</div></div>)

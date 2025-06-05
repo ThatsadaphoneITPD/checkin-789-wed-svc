@@ -74,7 +74,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         sideGroup: roleAuthMenu(authData?.role,)
     }
 
-    useEffect(() => {
+ useEffect(() => {
         if (isPublicPath(pathname)) return;
         const token: string | null = localStorage.getItem('token');
         const raw = localStorage.getItem('authStore');
@@ -90,16 +90,20 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
             router.push('/auth/login');
             return;
         }
-        // Admin bypass for all routes
-        if (users.role === 'Super Admin') return;
-
-        // Admin bypass for all routes
-        if (users.role === 'admin') return;
+        
+        if (!users) {
+            router.push('/auth/login');
+            return;
+        }
+        //SuperAdmin bypass for all routes
+        
+        // if (users?.role?.role_code === "1") return;
 
         // Check route permissions
         const currentMenuItem = findMenuItemByPath(menuItems, pathname);
         if (currentMenuItem?.label) {
             const hasPermission = checkPermission(users.sideGroup, currentMenuItem.label);
+            // console.log("hasPermission", hasPermission)
             if (!hasPermission) {
                 router.push('/auth/unauthorized');
             }

@@ -1,5 +1,5 @@
 import { AppMenuItem } from "@/types";
-import { defaultsides, devItem, menuItems, sideGroups } from "./menu-role/menu-items";
+import { defaultsides, devItem, menuItems, sideGroups, adminmenu } from "./menu-role";
 
 export const users = {
     username: "user", // Simulated user data
@@ -9,7 +9,7 @@ export const users = {
 export const roleAuthMenu = (role: string) => {
     switch (role) {
         case "Super Admin": return menuItems;
-        case "admin": return menuItems;
+        case "admin": return adminmenu;
         case "User": return sideGroups;
         default: return defaultsides;
     }
@@ -35,47 +35,49 @@ export const filterMenuItems = (menuItems: AppMenuItem[], users: { role: string;
         return combinedMenu;
     }
 
-    // Handle Admin Role
-    if (isAdmin) {
-        localStorage.setItem('sideMenu', JSON.stringify(menuItems));
-        return menuItems;
-    }
+    const extractSideBarNames = (sideBars: any[]): string[] => {
+        return sideBars.flatMap((bar) => [
+            bar.side_bar_name, 
+            ...(bar.sideBars ? extractSideBarNames(bar.sideBars) : []) // Recursively extract nested sideBars
+        ]);
+    };
 
     // Flatten sideBars for easier comparison
     const allowedSideBars = users.sideGroup?.flatMap((group) =>
-        group.sideBars?.map((bar: any) => bar.side_bar_name)
+        group.sideBars ? extractSideBarNames(group.sideBars) : []
     );
 
     // Recursive function to filter menuItems
     const filterItems = (items: AppMenuItem[]): AppMenuItem[] => {
+        if (!Array.isArray(items)) return []; // Ensure items is an array
         return items
             .map((item) => {
                 const isAllowed =
-                    allowedSideBars.includes(item.label) ||
-                    (item.slugs &&
-                        item.slugs.some((slug) =>
-                            allowedSideBars.some((barName) => slug.includes(barName))
-                        ));
-
+                    Array.isArray(allowedSideBars) &&
+                    (allowedSideBars.includes(item.label) ||
+                        (Array.isArray(item.slugs) && item.slugs.some((slug) =>
+                            allowedSideBars.some((barName) =>
+                            slug.includes(barName)
+                        )
+                    )));
+    
                 const filteredItems = item.items ? filterItems(item.items) : [];
-
+    
                 if (isAllowed || filteredItems.length > 0) {
-                    const itemCopy = { ...item };
-                    if (filteredItems.length > 0) {
-                        itemCopy.items = filteredItems; // Only add `items` if valid sub-items exist
-                    }
-                    return itemCopy;
+                    return {
+                        ...item,
+                        items: filteredItems.length > 0 ? filteredItems : undefined,
+                    };
                 }
-
-                return null; // Exclude disallowed items
+                return null;
             })
-            .filter(Boolean) as AppMenuItem[]; // Remove null values
+            .filter(Boolean) as AppMenuItem[];
     };
 
     // Filter menu items for non-admin/non-super-admin users
     let finalMenuItems = filterItems(menuItems);
-    if (isUser) {
-        localStorage.setItem('sideMenu', JSON.stringify(finalMenuItems)); // Client-side only
+    if (!isSuperAdmin && typeof window !== "undefined") {
+        localStorage.setItem('sideMenu', JSON.stringify(finalMenuItems)); // Ensure execution only on client-side
     }
     return finalMenuItems;
 };

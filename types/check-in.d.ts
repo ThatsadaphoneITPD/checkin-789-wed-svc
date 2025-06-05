@@ -88,4 +88,22 @@ declare namespace Checkin {
         totalLeaveDays: any
     }
 
+    type Overtime = {
+        ot_id: number
+        emp_code: string
+        description: string
+        punch_time: string
+        latitude: number
+        longitude: number
+        file_path: string
+        status: string
+        overtimeApprovals: any
+    }
+
+    type ApproveOvertime = FormData | {
+        otid:   string;
+        approvedBy: string;
+        status:     string;
+        comments:   string;
+    }
 }

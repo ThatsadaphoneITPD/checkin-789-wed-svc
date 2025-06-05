@@ -1,10 +1,10 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo} from 'react';
 import AppMenuitem from './AppMenuitem';
 import { LayoutContext } from './context/layoutcontext';
 import { MenuProvider } from './context/menucontext';
 import Link from 'next/link';
-import { AppMenuItem } from '@/types';
+import { AppMenuItem, Users } from '@/types';
 import { menuItems } from './menu-role/menu-items';
 import { filterMenuItems, roleAuthMenu } from './authmenu-itens';
 import authenStore from '@/app/store/user/loginAuthStore';
@@ -14,12 +14,16 @@ const AppMenu = () => {
     const [currentTime, setCurrentTime] = useState<string>('');
     // Example usage
     const { authData } = authenStore();
-    const users = {
+    const userRole = authData?.role ?? ( "" as string);
+
+    const users = useMemo(() => ({
         role: authData?.role,
         sideGroup: roleAuthMenu(authData?.role,)
-    }
+    }), [userRole]);
 
-    const finalmenuItems: AppMenuItem[] = filterMenuItems(menuItems, users);
+     const finalmenuItems: AppMenuItem[] = useMemo(() => {
+        return authData ? filterMenuItems(menuItems, users) : [];
+    }, [authData, users]);
 
     // console.log("finalmenuItems", finalmenuItems)
 
@@ -81,10 +85,18 @@ const AppMenu = () => {
                 <img src={`/layout/images/edl_logo.svg`} width="40px" height="35px" alt="logo" />
                 <span style={{ color: "#fff", marginTop: "-0.3rem" }}> CHCEK-IN TIME</span>
             </Link>
-            <ul className="layout-menu" >
-                {finalmenuItems.map((item, i) => {
-                    return !item?.seperator ? <AppMenuitem item={item} root={true} index={i} key={item.label} /> : <li className="menu-separator"></li>;
-                })}
+             <ul className="layout-menu">
+                {finalmenuItems.length > 0 ? (
+                    finalmenuItems.map((item, i) => (
+                        !item?.seperator ? (
+                            <AppMenuitem item={item} root={true} index={i} key={item.label} />
+                        ) : (
+                            <li className="menu-separator" key={`separator-${i}`} />
+                        )
+                    ))
+                ) : (
+                    <li className="menu-placeholder">No Menu Items Available</li>
+                )}
                 {BroadHelper}
             </ul>
         </MenuProvider>

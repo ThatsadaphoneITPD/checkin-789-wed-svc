@@ -101,7 +101,7 @@ const actionBody = (
     // editFieldWork: (rowData: Checkin.FieldWork) => any,
 ) => {
     return (
-        <>
+        <div className="wrap-button">
             {/* <Button
                 icon={<i className='pi pi-briefcase' style={{fontSize: '1.5rem', color: "#ffff"}} />}
                 rounded
@@ -113,7 +113,7 @@ const actionBody = (
                 onClick={() => openViewDoc(rowData?.fw_req_id)}
             /> */}
             <CreateFiledWork rowItem={rowData}/>
-        </>
+        </div>
     );
 };
 

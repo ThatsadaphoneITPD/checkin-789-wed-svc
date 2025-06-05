@@ -130,7 +130,7 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
 
   const DialogFooter = (
     <>
-      <Button label="ສ້າງ" icon="pi pi-check" form="createExportForm" type="submit" />
+      <Button label="ບັນທຶກ" icon="pi pi-check" form="createExportForm" type="submit" />
     </>
   );
   const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຄອບວຽກສະໜາມ ເລກທີ ({rowItem?.fw_req_id})</div></div>)
@@ -140,13 +140,11 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
       <Dialog visible={openModal} header={header} footer={DialogFooter} onHide={handClose} style={{ width: "600px", padding: "none", marginBottom: "none" }} modal className={`modal-form `}>
         {FormCreate}
       </Dialog>
-      <Button
-        icon={<i className='pi pi-check-square' style={{fontSize: '0.9rem', color: "#ffff"}} />}
-        style={{height: "2rem", width: "2rem", backgroundColor: "#d48806"}}
-        text
-        raised
-        severity="secondary"
-        className="p-button-rounded" onClick={handOpen} />
+     <button  className="button"     
+        onClick={() =>  handOpen()}
+        >
+        <i className='pi pi-check-square' ></i>
+      </button>
     </>
   );
 }

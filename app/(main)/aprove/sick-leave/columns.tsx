@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Column } from 'primereact/column';
 import { Checkin } from '@/types';
-import { formatDayMonth } from '@/app/(main)/utilities/format-date';
+import { formatDateLao, formatDayMonth } from '@/app/(main)/utilities/format-date';
 import { statusCases, statusLeaveType } from '../../utilities/format-status';
 import { Tag } from 'primereact/tag';
 import CreateSickLeave from './create-sick-leave';
@@ -85,6 +85,13 @@ const totalDaysBody = (rowData: Checkin.SickLeave) => (
     </div>
 );
 
+const reqestTimeBody = (rowData: Checkin.SickLeave) => (
+    <>
+        <span className="p-column-title">created_at</span>
+         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.created_at)}`}/>
+    </>
+);
+
 // Action body with dropdown menu
 const actionBody = (
     rowData: Checkin.SickLeave,
@@ -92,9 +99,9 @@ const actionBody = (
     // editSickLeave: (rowData: Checkin.SickLeave) => any,
 ) => {
     return (
-        <>
+        <div className="wrap-button">
             <CreateSickLeave rowItem={rowData} />
-        </>
+        </div>
     );
 };
 
@@ -120,6 +127,7 @@ export const GetColumns = ({
         <Column key="4" field="start_date" header="ວັນທີເລີ່ມ-ວັນທີສີ້ນສຸດ" body={reqestStartEndBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
         <Column key="5" field="total_days" header="ຈຳນວນວັນ" body={totalDaysBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
-        <Column key="8" body={(rowData: Checkin.SickLeave) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
+        <Column key="8" field="create_at" header="ຄອບ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="9" body={(rowData: Checkin.SickLeave) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];
 };

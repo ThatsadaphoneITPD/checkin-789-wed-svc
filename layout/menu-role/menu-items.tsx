@@ -24,18 +24,18 @@ export const sideGroups: any[] = [
         side_group_id: 2,
         side_group_name: "ການບໍລິຫານ",
         sideBars: [
-            // {
-            //     side_bar_id: 8,
-            //     side_bar_name: "ພະນັກງານ",
-            //     permissions: [
-            //         {
-            //             permission_id: 37763,
-            //             role_id: 3,
-            //             side_bar_id: 8,
-            //             created_at: "2025-01-20T02:59:15.419Z",
-            //         }
-            //     ]
-            // },
+            {
+                side_bar_id: 8,
+                side_bar_name: "ພະນັກງານ",
+                permissions: [
+                    {
+                        permission_id: 37763,
+                        role_id: 3,
+                        side_bar_id: 8,
+                        created_at: "2025-01-20T02:59:15.419Z",
+                    }
+                ]
+            },
             {
                 side_bar_id: 7,
                 side_bar_name: "ການຄອບວຽກ",
@@ -112,14 +112,13 @@ export const menuItems: AppMenuItem[] = [
     },
     {
         label: 'ການບໍລິຫານ',
-        slugs: ['/users', '/aprove'],
         items: [
-            // {
-            //     label: 'ພະນັກງານ',
-            //     icon: 'pi pi-users',
-            //     to: '/users',
-            //     slugs: ['/users/[viewDetail]', '/users/[viewDetail]']
-            // },
+            {
+                label: 'ພະນັກງານ',
+                icon: 'pi pi-users',
+                to: '/users',
+                slugs: ['/users/[viewDetail]', '/users/[viewDetail]']
+            },
             {
                 label: 'ການຄອບວຽກ',
                 icon: 'pi pi-verified',
