@@ -19,7 +19,6 @@ type ColumnsProps = {
 };
 
 
-const headerStyle: React.CSSProperties = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
 const bodyStyle: React.CSSProperties = { display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "100%" }
 
 

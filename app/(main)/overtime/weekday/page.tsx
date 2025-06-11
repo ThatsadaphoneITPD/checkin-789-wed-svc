@@ -1,6 +1,6 @@
 'use client';
 import React from 'react'
-import Table from './table';
+import Table from './table/index';
 
 interface Props {
 

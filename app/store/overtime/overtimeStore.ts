@@ -6,7 +6,7 @@ import { Checkin } from '@/types';
 
 // create interface for the store
 type OvertimeStore = {
-    data: Checkin.Overtime[];
+    dataOvertime: Checkin.Overtime[];
     getOvertimeData: () => Promise<void>;
     getOvertimeByOvertimeId: (OvertimeId: number) => Promise<void>;
     getOvertimeById: (OvertimeId: number) => any;
@@ -19,13 +19,13 @@ type OvertimeStore = {
 // create the store
 export const useOvertimeStore = create<OvertimeStore, []>((set, get) => ({
     ...initialState,
-    data: [],
+    dataOvertime: [],
     getOvertimeData: async () => {
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get('api/Overtime/GetOvertimes');
             // console.log("Overtime-data",response )
-            set({ ...initialState, success: true, data: Array.isArray(response?.data) && response?.data.length ? response?.data : [] });
+            set({ ...initialState, success: true, dataOvertime: Array.isArray(response?.data) && response?.data.length ? response?.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);
             set({ ...initialState, error: true });
@@ -40,7 +40,7 @@ export const useOvertimeStore = create<OvertimeStore, []>((set, get) => ({
             if (response.status === 200 || response.status === 201) {
                 console.log('approveOvertime', response);
                 const id = response?.data?.data?.otid;
-                set((state) => ({data: state?.data.map((outwork) => outwork?.ot_id === id ?  response?.data?.data?.workOutside : outwork ),}));
+                set((state) => ({dataOvertime: state?.dataOvertime.map((outwork) => outwork?.ot_id === id ?  response?.data?.data?.workOutside : outwork ),}));
                 return {status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.workOutside?.status };
             } else {
                 console.error('Failed to update center. Status:', response.status);

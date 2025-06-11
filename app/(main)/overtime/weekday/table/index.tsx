@@ -1,36 +1,110 @@
-import { Accordion, AccordionTab } from 'primereact/accordion';
-import React from 'react'
+import { DataTable } from 'primereact/datatable';
+import { InputText } from 'primereact/inputtext';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { GetColumns } from './colums';
+import toast from 'react-hot-toast';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import { Nullable } from 'primereact/ts-helpers';
+import { Calendar } from 'primereact/calendar';
+import { useSickLeaveStore} from '@/app/store/sick-leave/sickLeaveStore';
+import EmptyData from '@/app/shared/empty-table/container';
+import { useOvertimeStore } from '@/app/store';
 
-interface Props {
+export default function SickLeaveTable() {
+    // const {data, getSickLeaveData, getLeaveTypeData}= useSickLeaveStore()
+    const {getOvertimeData, dataOvertime} = useOvertimeStore();
+    const { openModal } = useModal();
+    const [selectedItem, setSelectedItem] = useState<any[]>([]);
+    const [date, setDate] = useState<Nullable<Date>>(null);
+    const [globalFilter, setGlobalFilter] = useState<string>('');
+    const [filteredData, setFilteredData] = useState<any[]>([]);
+    const typingTimeout = useRef<NodeJS.Timeout | null>(null);
+    const dt = useRef<DataTable<any>>(null);
 
-}
+    useEffect(() => {
+        getOvertimeData();
+    }, []);
+    
+    useEffect(() => {
+        setFilteredData(dataOvertime);
+    }, [dataOvertime]);
 
-const Table = (props: Props) => {
-    return (
-        <div className='card'>
-            <Accordion activeIndex={0}>
-                <AccordionTab header="Header I">
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-                        id est laborum.
-                    </p>
-                </AccordionTab>
-                <AccordionTab header="Header II">
-                    <p>
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                        Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                    </p>
-                </AccordionTab>
-                <AccordionTab header="Header III">
-                    <p>
-                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt
-                        in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
-                        minus.
-                    </p>
-                </AccordionTab>
-            </Accordion>
+    const onViewDoc = useCallback(async (file_path: any) => {
+        console.log("onViewDoc: ", file_path)
+    }, [openModal]);
+
+    const searchGlobal = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const filterValue = e?.target.value;
+        setGlobalFilter(filterValue);
+
+        // Clear previous timeout
+        if (typingTimeout.current) {
+            clearTimeout(typingTimeout.current);
+        }
+
+        // Set a new timeout to trigger filterData after 300ms of inactivity
+        typingTimeout.current = setTimeout(() => {
+            filterData(filterValue);
+        }, 300);
+    };
+        
+    // Filter data based on global filter (only on id and name)
+    const filterData = (filter: string) => {
+        if (!filter.trim()) {
+            setFilteredData(dataOvertime);
+        } else {
+            const lowercasedFilter = filter.toLowerCase();
+
+            const filtered = dataOvertime?.filter((item: any) =>
+                item?.leave_req_id?.toString().toLowerCase().includes(lowercasedFilter) ||
+                item?.emp_code?.toString().toLowerCase().includes(lowercasedFilter) ||
+                item?.reasons?.toLowerCase().includes(lowercasedFilter)
+            );
+
+            setFilteredData(filtered);
+        }
+    };
+    
+    useEffect(() => {
+        if (!date) {
+            setFilteredData(dataOvertime || []);
+            return;
+        }
+        const filtered = (dataOvertime || []).filter((item: any) => {
+            const createdAt = new Date(item.created_at);
+            const sameMonth =  createdAt.getMonth() === date.getMonth() &&  createdAt.getFullYear() === date.getFullYear();
+            return sameMonth
+        });
+        setFilteredData(filtered);
+    }, [date]);
+
+    const header = (
+        <div className="flex flex-wrap md:flex-nowrap justify-between items-start md:items-center gap-2">
+            <div className="header-table flex flex-wrap gap-2 flex-1">
+                <InputText type="search"  placeholder="ລະຫັດ" className="input-text flex-1 md:max-w-15rem max-w-20rem" value={globalFilter} onChange={searchGlobal} />
+                <Calendar showIcon showButtonBar className="w-auto calendar-search"  value={date}  onChange={(e: any) => setDate(e.value)}  view="month" dateFormat="mm/yy" />
+            </div>
         </div>
-    )
+    );
+
+    return (
+        <div>
+            {header}
+            <DataTable dataKey="leave_req_id" rows={10} paginator ref={dt}
+                sortField="leave_req_id" sortOrder={1} 
+                value={filteredData?.map((item, index) => ({ ...item, _key: `${item?.leave_req_id ?? 'row'}-${index}` }))}
+                selection={selectedItem}
+                onSelectionChange={(e: any) => setSelectedItem(e.value as any)}
+                rowsPerPageOptions={[10, 25, 30, 40, 50, 100]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Max"
+                // globalFilter={globalFilter || ''}
+                emptyMessage={<EmptyData/>} 
+                responsiveLayout="scroll"
+            >
+               {GetColumns({onViewDoc}).map((column, index) => React.cloneElement(column, { key: `column-${index}` }))}
+            </DataTable>
+        </div>
+    );
 }
-export default Table;
