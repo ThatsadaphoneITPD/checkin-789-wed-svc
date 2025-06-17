@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { menuItems, sideGroups } from './menu-role/menu-items';
 import { AppMenuItem } from '@/types';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import authenStore from '@/app/store/user/loginAuthStore';
+import {authenStore} from '@/app/store';
 import { roleAuthMenu } from './authmenu-itens';
 // import { users } from './authmenu-itens';
 

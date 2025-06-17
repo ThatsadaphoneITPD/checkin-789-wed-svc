@@ -16,7 +16,7 @@ type Store = {
     clearAuthData: () => void; // Method to clear auth data
 };
 
-const authenStore = create<Store>()(
+export const authenStore = create<Store>()(
     devtools(
         persist(
             (set) => ({
@@ -34,5 +34,3 @@ const authenStore = create<Store>()(
         )
     )
 );
-
-export default authenStore;

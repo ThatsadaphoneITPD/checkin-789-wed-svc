@@ -1,10 +1,6 @@
 import { AppMenuItem } from "@/types";
 import { defaultsides, devItem, menuItems, sideGroups, adminmenu } from "./menu-role";
 
-export const users = {
-    username: "user", // Simulated user data
-    sideGroup: sideGroups,
-};
 
 export const roleAuthMenu = (role: string) => {
     switch (role) {
@@ -17,9 +13,7 @@ export const roleAuthMenu = (role: string) => {
 
 export const filterMenuItems = (menuItems: AppMenuItem[], users: { role: string; sideGroup: any[] }) => {
     const isSuperAdmin = users.role === "Super Admin"; // Check if the user is a Super Admin
-    const isAdmin = users.role === "admin"; // Check if the user is an Admin
     const isDev = users.role === "Dev"; // Check if the user is a Dev
-    const isUser = users.role === "User"; // Check if the user is a User
 
     // Handle Super Admin Role
     if (isSuperAdmin) {

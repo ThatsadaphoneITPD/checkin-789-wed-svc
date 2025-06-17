@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler } from 'react-hook-form';
-import { useFieldWorkStore } from '@/app/store/field-work/fieldWorkStore';
+import { useFieldWorkStore, authenStore} from '@/app/store';
 // import { CreateFieldWorkInput, createFieldWorkSchema } from ".";
 import toast from 'react-hot-toast';
 import { useModal } from '@/app/shared/modal-views/use-modal';
@@ -22,8 +22,9 @@ interface CreateFieldWorkProps {
 export default function CreateFiledWork({ rowItem }: CreateFieldWorkProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
-   const {approveFieldWork }= useFieldWorkStore()
-  // 1 GB = 1 * 10^9 bytes // or 2 GB = 2 * 10^9 bytes
+  const {approveFieldWork }= useFieldWorkStore();
+  const {authData} = authenStore();
+// 1 GB = 1 * 10^9 bytes // or 2 GB = 2 * 10^9 bytes
 //   const Gigabytes = 1 * (10 ** 9);
   const [openModal, setopenModal] = useState(false)
   const handOpen = () => { setopenModal(true) }
@@ -33,7 +34,7 @@ export default function CreateFiledWork({ rowItem }: CreateFieldWorkProps) {
     try {
       const formattedData = {
         fwReq_id: `${rowItem?.fw_req_id}`,
-        approvedBy: "43589",
+        approvedBy: authData?.user_id,
         ...data,
       };
       // Create a new FormData object

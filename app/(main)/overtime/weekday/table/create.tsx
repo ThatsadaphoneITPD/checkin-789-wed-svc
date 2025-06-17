@@ -14,6 +14,7 @@ import RocketFlamingIcon from '@/app/components/icons/rocket-flaming';
 import GoogleMapShow from '@/app/shared/google-map/displaymap';
 import { PhotoView } from 'react-photo-view';
 import GlobalPhotoView from '@/app/shared/photo-view/container';
+import { useOvertimeStore, authenStore } from '@/app/store';
 
 interface CreateOvertimeProps {
     rowItem: Checkin.Overtime;
@@ -22,7 +23,8 @@ interface CreateOvertimeProps {
 export default function CreateOvertime({ rowItem }: CreateOvertimeProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
-  const {approveSickLeave }= useSickLeaveStore()
+  const {approveOvertime} = useOvertimeStore();
+  const {authData} =authenStore();
   const [openModal, setopenModal] = useState(false)
   const handOpen = () => { setopenModal(true) }
   const handClose = () => { setopenModal(false) }
@@ -30,8 +32,8 @@ export default function CreateOvertime({ rowItem }: CreateOvertimeProps) {
   const onSubmit: SubmitHandler<CreateSickLeaveInput> = async (data) => {
     try {
       const formattedData = {
-        leaveReqId: `${rowItem?.ot_id}`,
-        approvedBy: "43589",
+        otId: `${rowItem?.ot_id}`,
+        approvedBy: authData?.user_id,
         ...data,
       };
       // Create a new FormData object
@@ -42,7 +44,7 @@ export default function CreateOvertime({ rowItem }: CreateOvertimeProps) {
         formData.append(key, value as string); // Convert to string if necessary
       });
   
-      approveSickLeave(formData).then((res: any)=>{ console.log("res", res) 
+      approveOvertime(formData).then((res: any)=>{ console.log("res", res) 
         if(res?.status == 201) {
           if (res.approvething == "Approved") {
             handClose();
@@ -159,9 +161,7 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
       <Dialog visible={openModal} header={header} footer={DialogFooter} onHide={handClose} style={{ width: "600px", padding: "none", marginBottom: "none" }} modal className={`modal-form `}>
         {FormCreate}
       </Dialog>
-       <button  className="button"     
-          onClick={() =>  handOpen()}
-          >
+       <button  className="button" onClick={() =>  handOpen()}>
           <i className='pi pi-check-square' ></i>
         </button>
     </>

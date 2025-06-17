@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler } from 'react-hook-form';
-import { useSickLeaveStore } from '@/app/store/sick-leave/sickLeaveStore';
+import { authenStore, useSickLeaveStore } from '@/app/store';
 // import { CreateSickLeaveInput, createSickLeaveSchema } from ".";
 import toast from 'react-hot-toast';
 import { Button } from 'primereact/button';
@@ -20,7 +20,8 @@ interface CreateSickLeaveProps {
 export default function CreateSickLeave({ rowItem }: CreateSickLeaveProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
-  const {approveSickLeave }= useSickLeaveStore()
+  const {approveSickLeave }= useSickLeaveStore();
+  const {authData} = authenStore();
   const [openModal, setopenModal] = useState(false)
   const handOpen = () => { setopenModal(true) }
   const handClose = () => { setopenModal(false) }
@@ -29,7 +30,7 @@ export default function CreateSickLeave({ rowItem }: CreateSickLeaveProps) {
     try {
       const formattedData = {
         leaveReqId: `${rowItem?.leave_req_id}`,
-        approvedBy: "43589",
+        approvedBy: authData?.user_id,
         ...data,
       };
       // Create a new FormData object
@@ -142,3 +143,4 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
     </>
   );
 }
+

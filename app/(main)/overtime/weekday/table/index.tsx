@@ -23,7 +23,7 @@ export default function SickLeaveTable() {
 
     useEffect(() => {
         getOvertimeData();
-    }, []);
+    }, [getOvertimeData]);
     
     useEffect(() => {
         setFilteredData(dataOvertime);
@@ -31,7 +31,7 @@ export default function SickLeaveTable() {
 
     const onViewDoc = useCallback(async (file_path: any) => {
         console.log("onViewDoc: ", file_path)
-    }, [openModal]);
+    }, []);
 
     const searchGlobal = (e: React.ChangeEvent<HTMLInputElement>) => {
         const filterValue = e?.target.value;
@@ -76,7 +76,7 @@ export default function SickLeaveTable() {
             return sameMonth
         });
         setFilteredData(filtered);
-    }, [date]);
+    }, [date, dataOvertime]);
 
     const header = (
         <div className="flex flex-wrap md:flex-nowrap justify-between items-start md:items-center gap-2">
@@ -90,8 +90,8 @@ export default function SickLeaveTable() {
     return (
         <div>
             {header}
-            <DataTable dataKey="leave_req_id" rows={10} paginator ref={dt}
-                sortField="leave_req_id" sortOrder={1} 
+            <DataTable dataKey="ot_id" rows={10} paginator ref={dt}
+                sortField="ot_id" sortOrder={1} 
                 value={filteredData?.map((item, index) => ({ ...item, _key: `${item?.leave_req_id ?? 'row'}-${index}` }))}
                 selection={selectedItem}
                 onSelectionChange={(e: any) => setSelectedItem(e.value as any)}

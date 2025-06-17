@@ -9,7 +9,7 @@ import { loginSchema, LoginSchema } from '@/utils/validators/login.schema';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import authenStore from '@/app/store/user/loginAuthStore';
+import {authenStore} from '@/app/store';
 import { useUsersStore } from '../../../store/user/usersStore';
 import { Checkbox } from 'primereact/checkbox';
 import { log } from 'console';

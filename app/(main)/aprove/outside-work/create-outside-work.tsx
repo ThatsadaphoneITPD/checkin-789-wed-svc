@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler } from 'react-hook-form';
-import { useOutSideWorkStore } from '@/app/store/outside-work/outSideWorkStore';
+import { useOutSideWorkStore, authenStore } from '@/app/store';
 // import { CreateOutSideWorkInput, createOutSideWorkSchema } from ".";
 import toast from 'react-hot-toast';
 import { useModal } from '@/app/shared/modal-views/use-modal';
@@ -13,6 +13,8 @@ import { Dialog } from 'primereact/dialog';
 import { CreateOutSideWorkInput, createOutSideWorkSchema } from '@/utils/validators/create-outside-work.schema';
 import { Checkin } from '@/types';
 import RocketFlamingIcon from '@/app/components/icons/rocket-flaming';
+import GlobalPhotoView from '@/app/shared/photo-view/container';
+import GoogleMapShow from '@/app/shared/google-map/displaymap';
 
 interface CreateOutSideWorkProps {
     rowItem: Checkin.OutSideWork;
@@ -22,7 +24,8 @@ interface CreateOutSideWorkProps {
 export default function CreateOutSideWork({ rowItem }: CreateOutSideWorkProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
-   const {approveOutSideWork }= useOutSideWorkStore()
+  const {approveOutSideWork }= useOutSideWorkStore()
+  const {authData} = authenStore();
   // 1 GB = 1 * 10^9 bytes // or 2 GB = 2 * 10^9 bytes
 //   const Gigabytes = 1 * (10 ** 9);
   const [openModal, setopenModal] = useState(false)
@@ -33,7 +36,7 @@ export default function CreateOutSideWork({ rowItem }: CreateOutSideWorkProps) {
     try {
       const formattedData = {
         workOutId: `${rowItem?.work_out_id}`,
-        approvedBy: "43589",
+        approvedBy: authData?.user_id,
         ...data,
       };
       console.log("formattedData", formattedData)
@@ -93,6 +96,7 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
         console.log("err", errors)
         // const watchto_md = watch("to_md");
         // console.log("watchat_files", watchat_files)
+        const urltest = 'https://res.cloudinary.com/dp3zeejct/image/upload/v1655344187/cld-sample-2.jpg'
         return (
           <>
             <div key="approvedBy" className="field" style={{ marginTop: "0.6rem" }}>
@@ -100,6 +104,28 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
                 <InputTextarea  defaultValue={rowItem?.description} disabled rows={2} cols={20} />
                 <label htmlFor="content" >{lang === "LA" ? "ເນື້ອໃນການຂອບວຽກ" : "Content"} <span className='required-star' >*</span></label>
               </span>
+            </div>
+            <div className="grid">
+              <div className="col-6">
+                <GoogleMapShow
+                  lat={rowItem?.latitude}
+                  lng={rowItem?.longitude}
+                  height="12rem"
+                  width="16rem"
+                />
+              </div>
+              <div className="col-6">
+                <GlobalPhotoView
+                  image={urltest}
+                  render={() => (
+                    <img
+                      src={urltest}
+                      className="w-12rem h-12rem object-cover"
+                      alt=""
+                    />
+                  )}
+                />
+              </div>
             </div>
             <div style={{ marginTop: "1rem" }} className='filed'>
               <label htmlFor="attachment_files" className='mt-2' style={{ color: "#2684FF", fontWeight: "bold" }}>ເລືອກການອະນຸມັດ</label>

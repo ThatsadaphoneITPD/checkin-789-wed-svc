@@ -11,7 +11,7 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import { Menu } from 'primereact/menu';
 import { itemRenderer } from './AppTopItem';
 import { Avatar } from 'primereact/avatar';
-import authenStore from '@/app/store/user/loginAuthStore';
+import {authenStore} from '@/app/store';
 // import toast from 'react-hot-toast';
 
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {

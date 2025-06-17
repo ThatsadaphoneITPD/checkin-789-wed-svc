@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { AppMenuItem, Users } from '@/types';
 import { menuItems } from './menu-role/menu-items';
 import { filterMenuItems, roleAuthMenu } from './authmenu-itens';
-import authenStore from '@/app/store/user/loginAuthStore';
+import {authenStore} from '@/app/store';
 
 const AppMenu = () => {
     const { layoutConfig } = useContext(LayoutContext);

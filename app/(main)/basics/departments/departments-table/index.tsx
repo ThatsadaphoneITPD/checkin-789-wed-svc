@@ -4,18 +4,18 @@ import { Column } from 'primereact/column'; // Ensure Column is imported
 import { InputText } from 'primereact/inputtext';
 import React, { useEffect, useRef, useState } from 'react';
 import { GetColumns } from './columns';
-import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
+// import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
 import EmptyData from '@/app/shared/empty-table/container';
 
 export default function DepartmentsTable() {
     const [lang, setlang] = useState("LA");
-    const { data, getDepartmentData } = useDepartmentStore();
+    // const { data, getDepartmentData } = useDepartmentStore();
     const [selectedItem, setSelectedItem] = useState<any[]>([]);
     const dt = useRef<DataTable<any>>(null);
     const [globalFilter, setGlobalFilter] = useState<string>(''); // Ensure this is always a string
 
     useEffect(() => {
-        getDepartmentData();
+        // getDepartmentData();
     }, []);
 
     const searchGolbal = (e: any) => {
@@ -40,7 +40,7 @@ export default function DepartmentsTable() {
         <div>
             <DataTable
                 dataKey="id" rows={10} paginator ref={dt} selection={selectedItem}
-                value={data?.map((item, index) => ({ ...item, _key: item?.id || index }))}
+                // value={data?.map((item, index) => ({ ...item, _key: item?.id || index }))}
                 onSelectionChange={(e: any) => setSelectedItem(e.value as any)}
                 rowsPerPageOptions={[10, 25, 30, 40, 50, 100]}
                 className="datatable-responsive p-datatable-gridlines"

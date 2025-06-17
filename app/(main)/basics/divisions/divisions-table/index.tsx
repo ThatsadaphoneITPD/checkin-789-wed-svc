@@ -4,18 +4,18 @@ import { Column } from 'primereact/column'; // Ensure Column is imported
 import { InputText } from 'primereact/inputtext';
 import React, { useEffect, useRef, useState } from 'react';
 import { GetColumns } from './columns';
-import { useDivisionStore } from '@/app/store/divisions/divisionStore';
+// import { useDivisionStore } from '@/app/store/divisions/divisionStore';
 import EmptyData from '@/app/shared/empty-table/container';
 
 export default function DivisionsTable() {
     const [lang, setlang] = useState("LA");
-    const { data, getDivisionData } = useDivisionStore();
+    // const { data, getDivisionData } = useDivisionStore();
     const [selectedItem, setSelectedItem] = useState<any[]>([]);
     const dt = useRef<DataTable<any>>(null);
     const [globalFilter, setGlobalFilter] = useState<string>(''); // Ensure this is always a string
 
     useEffect(() => {
-        getDivisionData();
+        // getDivisionData();
     }, []);
 
     const searchGolbal = (e: any) => {
@@ -40,7 +40,7 @@ export default function DivisionsTable() {
         <div>
             <DataTable
                 dataKey="id" rows={10} paginator ref={dt} selection={selectedItem}
-                value={data?.map((item, index) => ({ ...item, _key: item?.id || index }))}
+                // value={data?.map((item, index) => ({ ...item, _key: item?.id || index }))}
                 onSelectionChange={(e: any) => setSelectedItem(e.value as any)}
                 rowsPerPageOptions={[10, 25, 30, 40, 50, 100]}
                 className="datatable-responsive p-datatable-gridlines"

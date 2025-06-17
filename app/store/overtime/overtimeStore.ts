@@ -39,9 +39,9 @@ export const useOvertimeStore = create<OvertimeStore, []>((set, get) => ({
             // Check if the API call was successful (status code 200)
             if (response.status === 200 || response.status === 201) {
                 console.log('approveOvertime', response);
-                const id = response?.data?.data?.otid;
-                set((state) => ({dataOvertime: state?.dataOvertime.map((outwork) => outwork?.ot_id === id ?  response?.data?.data?.workOutside : outwork ),}));
-                return {status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.workOutside?.status };
+                const id = response?.data?.data?.ot_id;
+                set((state) => ({dataOvertime: state?.dataOvertime.map((overtime) => overtime?.ot_id === id ?  response?.data?.data?.overtime : overtime ),}));
+                return {status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.status };
             } else {
                 console.error('Failed to update center. Status:', response.status);
                 return {status: response.status, sms: response?.data?.message };

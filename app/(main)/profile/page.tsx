@@ -1,5 +1,5 @@
 'use client';
-import authenStore from '@/app/store/user/loginAuthStore';
+import {authenStore} from '@/app/store';
 import React, { useContext, useEffect, useState } from 'react';
 
 const ProfileUser = () => {
