@@ -6,7 +6,8 @@ import { Users } from '@/types';
 
 // create interface for the store
 type UsersStore = {
-    data: Users.User[];
+    loading: boolean;
+    dataUser: Users.User[];
     userLogin: Users.UserLogin;
     loginUser: (userLogin: any) => Promise<void>;
     getUsersData: () => Promise<void>;
@@ -20,7 +21,8 @@ type UsersStore = {
 // create the store
 export const useUsersStore = create<UsersStore, []>((set, get) => ({
     ...initialState,
-    data: [],
+    dataUser: [],
+    loading: false,
     loginUser: async (userLogin) => {
         try {
             const response = await axiosClient.post('/api/Auth/login', userLogin);
@@ -35,17 +37,17 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
         try {
             const response = await axiosClient.get('/api/users');
             console.log("api-data",response )
-            set({ ...initialState, success: true, data: response.status === 200 ? response.data : [] });
+            set({ ...initialState, loading: false, success: true, dataUser: response.status === 200 ? response.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);
-            set({ ...initialState, error: true });
+            set({ ...initialState, loading: false, error: true });
         }
     },
     getUserByUserId: async (UserId) => {
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get('/Users/byUsers/' + UserId);
-            set({ ...initialState, success: true, data: response.status === 200 ? response.data : [] });
+            set({ ...initialState, success: true, dataUser: response.status === 200 ? response.data : [] });
         } catch (error) {
             console.error('Error fetching data by province ID:', error);
             set({ ...initialState, error: true });
@@ -75,7 +77,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             // Check if the API call was successful (status code 201)
             if (response.status === 200) {
                 // Update the local state with the new center
-                set((state) => ({ data: [...state.data, response.data] }));
+                set((state) => ({ dataUser: [...state.dataUser, response.data] }));
             } else {
                 console.error('Failed to add center. Status:', response.status);
             }
@@ -91,7 +93,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             if (response.status === 200) {
                 // Update the local state with the updated center
                 set((state) => ({
-                    data: state.data.map((center) =>
+                    dataUser: state.dataUser.map((center) =>
                         center.id === updatedUser.id ? updatedUser : center
                     ),
                 }));
@@ -110,7 +112,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             if (response.status === 200) {
                 // Update the local state by removing the deleted center
                 set((state) => ({
-                    data: state.data.filter((center) => center.id !== UserId),
+                    dataUser: state.dataUser.filter((center) => center.id !== UserId),
                 }));
             } else {
                 console.error('Failed to delete center. Status:', response.status);

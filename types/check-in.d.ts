@@ -2,6 +2,45 @@ import { EventApi, EventInput } from '@fullcalendar/core';
 import { number } from 'prop-types';
 
 declare namespace Checkin {
+    type Department = {
+        id: number
+        department_name: string
+        department_code: string
+        department_status: string
+    };
+    type Division = {
+        id: number
+        division_name: string
+        division_code: string
+        division_status: string
+        departmentId: number
+    };
+    type Office = {
+        id: number
+        office_name: string
+        office_code: string
+        office_status: string
+        divisionId: number
+    }
+    type Unit =  {
+        id: number
+        unit_name: string
+        unit_code: string
+        unit_status: string
+        unit_type: string
+        divisionId: number
+        officeId: any
+    };
+    type MobileUser = {
+        id: number
+        emp_code: string
+        ful_name: string
+        status: string
+        department: Department
+        division: Division
+        office: Office
+        unit: Unit
+    }
     type FieldWork = {
         fw_req_id:          number;
         emp_code:           string;

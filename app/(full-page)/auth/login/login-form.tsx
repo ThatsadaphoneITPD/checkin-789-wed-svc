@@ -31,23 +31,21 @@ export default function SignInForm() {
             const resp: any = await loginUser(data);
             if (resp.status === 201 || resp.status === 200) {
                 toast.success('Welcome to Check-IN Time App');
-                console.log("Token", resp)
                 localStorage.setItem('token', resp?.data?.accessToken);
                 document.cookie = `token=${resp?.data?.accessToken}; path=/;`;
                 setAuthData(resp?.data?.user);
                 setTimeout(() => {
                     router.push('/');
                     setLoading(false);
-                    // location.reload();
                 }, 1300);
             }
         } catch (error: any) {
-            console.log("catch")
+            console.log("catch", error)
             const { status} = error.response;
             setLoading(false);
-            if (status === 401 && error.response.data == "Invalid username or password")
+            if (status === 401 && error.response.data.message == "Invalid username or password")
             {
-                toast.error('Invalid username or password')
+                toast.error(`ລະຫັດຜ່ານ ຫຼື ຜູ້ໃຊ້ບໍ່ຖຶກຕ້ອງ ${error.response.statusText}`)
             } else{
                 toast.error(error?.message);
             }

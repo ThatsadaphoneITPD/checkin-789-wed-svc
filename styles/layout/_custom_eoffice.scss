@@ -56,7 +56,7 @@
         }
 
         &.remove-button {
-            color: #000;
+            color: #ff7875;
             background-color: #fff;
 
             &:hover {
@@ -75,7 +75,7 @@
         }
         
         &.view-button {
-            color: #000;
+            color: #75a3ff;
             background-color: #fff;
 
             &:hover {
@@ -92,6 +92,67 @@
                 transform: none;  
             }
         }
+
+        &.reset-button {
+            color: #ff9c6e; // Primary text color (Orange)
+            background-color: #fff;
+
+            &:hover {
+                background-color: #ff9c6e;
+                box-shadow: 0px 15px 20px rgba(255, 120, 61, 0.4); // Soft orange glow
+                color: #fff;
+                transform: translateY(-7px);
+            }
+
+            &:disabled {
+                color: #696565;
+                background-color: #f4f4f4;
+                cursor: not-allowed;
+                box-shadow: none;
+                transform: none;
+            }
+        }
+
+        &.unlock-button {
+            color: #52c41a; // Green text
+            background-color: #fff;
+
+            &:hover {
+                background-color: #52c41a;
+                box-shadow: 0px 15px 20px rgba(82, 196, 26, 0.4); // Green glow
+                color: #fff;
+                transform: translateY(-7px);
+            }
+
+            &:disabled {
+                color: #696565;
+                background-color: #f4f4f4;
+                cursor: not-allowed;
+                box-shadow: none;
+                transform: none;
+            }
+        }
+
+        &.resetMobileId-button {
+            color: #294bf5; // Indigo blue text
+            background-color: #fff;
+
+            &:hover {
+                background-color:  #294bf5;
+                box-shadow: 0px 15px 20px rgba(29, 57, 196, 0.4); // Indigo blue glow
+                color: #fff;
+                transform: translateY(-7px);
+            }
+
+            &:disabled {
+                color: #696565;
+                background-color: #f4f4f4;
+                cursor: not-allowed;
+                box-shadow: none;
+                transform: none;
+            }
+        }
+
         
         &.assig-button {
             color: #000;

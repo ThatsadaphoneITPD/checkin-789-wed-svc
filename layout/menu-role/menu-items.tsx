@@ -66,18 +66,24 @@ export const sideGroups: any[] = [
                     }
                 ]
             },
-            // {
-            //     side_bar_id: 7,
-            //     side_bar_name: "ວັນພັກລັດທະກອນ",
-            //     permissions: [
-            //         {
-            //             permission_id: 37763,
-            //             role_id: 3,
-            //             side_bar_id: 8,
-            //             created_at: "2025-01-20T02:59:15.419Z",
-            //         }
-            //     ]
-            // },
+        ]
+    },
+    {
+        side_group_id: 3,
+        side_group_name: "Mobile App",
+        sideBars: [
+            {
+                side_bar_id: 8,
+                side_bar_name: "ຜູ້ໃຊ້",
+                permissions: [
+                    {
+                        permission_id: 37763,
+                        role_id: 3,
+                        side_bar_id: 8,
+                        created_at: "2025-01-20T02:59:15.419Z",
+                    }
+                ]
+            },
         ]
     },
 ]
@@ -116,8 +122,8 @@ export const menuItems: AppMenuItem[] = [
             {
                 label: 'ພະນັກງານ',
                 icon: 'pi pi-users',
-                to: '/users',
-                slugs: ['/users/[viewDetail]', '/users/[viewDetail]']
+                to: '/mobile-user',
+                slugs: ['/mobile-user']
             },
             {
                 label: 'ການຄອບວຽກ',
@@ -144,8 +150,18 @@ export const menuItems: AppMenuItem[] = [
         ]
     },
     {
+        label: 'Mobile App',
+        items: [
+            {
+                label: 'ຜູ້ໃຊ້',
+                icon: 'pi pi-arrow-right-arrow-left',
+                to: '/mobile-user',
+                slugs: []
+            },
+        ]
+    },
+    {
         label: 'ລາຍງານ',
-        to: '/report',
         items: [
             {
                 label: 'ການເຂົ້າ-ອອກວຽກ',
