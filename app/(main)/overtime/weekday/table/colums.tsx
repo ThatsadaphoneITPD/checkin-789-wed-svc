@@ -117,7 +117,7 @@ export const GetColumns = ({
         <Column key="2" field="description" header="ເຫດຜົນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
         <Column key="3" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="4" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
-        <Column key="5" field="create_at" header="ຄອບ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="5" field="create_at" header="ວັນທີຮ້ອງຂໍ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="6" body={(rowData: Checkin.Overtime) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];
 };

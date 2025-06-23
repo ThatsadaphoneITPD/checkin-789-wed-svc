@@ -124,10 +124,10 @@ export const GetColumns = ({
         <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="2" field="leave_type_id" header="ປະເພດລາພັກ" body={(rowData: Checkin.SickLeave) => TypeBody(rowData, dataType)} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="3" field="reasons" header="ເຫດຜົນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
-        <Column key="4" field="start_date" header="ວັນທີເລີ່ມ-ວັນທີສີ້ນສຸດ" body={reqestStartEndBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
+        <Column key="4" field="start_date" header="ໄລຍະ-ລາພັກ" body={reqestStartEndBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
         <Column key="5" field="total_days" header="ຈຳນວນວັນ" body={totalDaysBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
-        <Column key="8" field="create_at" header="ຄອບ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="8" field="create_at" header="ວັນທີຮ້ອງຂໍ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="9" body={(rowData: Checkin.SickLeave) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];
 };

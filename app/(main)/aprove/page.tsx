@@ -23,11 +23,11 @@ const DriveDocument = () => {
         <>
             <DateComponent />
             <TabView>
-                <TabPanel header={translate(contant, 'tabview', 'field_work', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
-                    <FieldWorkTable />
-                </TabPanel>
                 <TabPanel header={translate(contant, 'tabview', 'outside_work', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
                     <OutSideWorkTable/>
+                </TabPanel>
+                <TabPanel header={translate(contant, 'tabview', 'field_work', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
+                    <FieldWorkTable />
                 </TabPanel>
                 <TabPanel header={translate(contant, 'tabview', 'sick_leave', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
                     <SickLeaveTable/>

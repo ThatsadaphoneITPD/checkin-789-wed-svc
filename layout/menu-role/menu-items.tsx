@@ -117,36 +117,31 @@ export const menuItems: AppMenuItem[] = [
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
-        label: 'ການບໍລິຫານ',
+        label: 'ການບໍລິຫານ ເຂົ້າ-ອອກວຽກ',
         items: [
             {
-                label: 'ພະນັກງານ',
+                label: 'ຂໍ້ມູນພະນັກງານ',
                 icon: 'pi pi-users',
                 to: '/mobile-user',
                 slugs: ['/mobile-user']
             },
             {
-                label: 'ການຄອບວຽກ',
+                label: 'ການອະນຸມັດວຽກ',
                 icon: 'pi pi-verified',
                 to: '/aprove',
             },
         ]
     },
     {
-        label: 'ວຽກລວງ ເວລາ',
+        label: 'ວຽກລວງ-ເວລາ',
         to: '/overtime',
         slugs: ['/overtime', '/overtime/weekday', '/overtime/weekend'],
         items: [
             {
-                label: 'ວັນລັດທະກອນ',
+                label: 'ການລວງເວລາ',
                 icon: 'pi pi-arrow-right-arrow-left',
                 to: '/overtime/weekday',
             },
-            // {
-            //     label: 'ວັນພັກລັດທະກອນ',
-            //     icon: 'pi pi-arrow-right-arrow-left',
-            //     to: '/overtime/weekend',
-            // },
         ]
     },
     {
@@ -156,6 +151,17 @@ export const menuItems: AppMenuItem[] = [
                 label: 'ຜູ້ໃຊ້',
                 icon: 'pi pi-arrow-right-arrow-left',
                 to: '/mobile-user',
+                slugs: []
+            },
+        ]
+    },
+      {
+        label: 'ສະຖານທີ ເຂົ້າ-ອອກວຽກ',
+        items: [
+            {
+                label: 'ພີກັດ-ຫ້ອງການ',
+                icon: 'pi pi-map-marker',
+                to: '/work-area',
                 slugs: []
             },
         ]

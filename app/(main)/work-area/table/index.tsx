@@ -1,0 +1,124 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+'use client';
+import { DataTable } from 'primereact/datatable';
+import { InputText } from 'primereact/inputtext';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { GetColumns } from './columns';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import { Nullable } from 'primereact/ts-helpers';
+import EmptyData from '@/app/shared/empty-table/container';
+import { useUsersStore } from '@/app/store/user/usersStore';
+import Create from './create';
+
+export default function MobileUserTable() {
+//    const { loading, emplpyeedata, getEmployeeReportData } = usereportCheckInStore();
+    const {loading, dataUser, getUserByUserId} = useUsersStore();
+    const workarea = [
+        {
+            id: 1,
+            area_name: "ສຳນັກງານໃຫຍ່",
+            longitude: 102.629301,
+            latitude: 17.940424,
+            radius_km: 0.18,
+        },
+        { 
+            id: 2,
+            area_name: "ໂຮງຮຽນ ອະນຸບານ",
+            longitude: 102.626433,
+            latitude: 17.932805,
+            radius_km: 0.1,
+        },
+    ]
+    const { openModal } = useModal();
+    const [selectedItem, setSelectedItem] = useState<any[]>([]);
+    const dt = useRef<DataTable<any>>(null);
+    const [emcode, setEmcode] = useState<Nullable<string>>('');
+    const [debouncedEmcode, setDebouncedEmcode] = useState<Nullable<string>>('');
+
+    // Debounce effect to delay updates to `debouncedEmcode`
+   
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedEmcode(emcode);
+        }, 500); // Adjust the delay as needed (300ms is standard for debouncing)
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [emcode]);
+
+    const getData = async () => {
+        try {
+            console.log("Fetching data for emcode:", debouncedEmcode);
+            // getEmployeeReportData(debouncedEmcode);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // Fetch data whenever `debouncedEmcode` changes
+    useEffect(() => {
+        getData();
+    }, [debouncedEmcode]);
+
+    
+
+    const onViewDoc = useCallback(
+        async (fw_req_id: any) => {
+            console.log("onViewDoc: ", fw_req_id);
+            openModal({
+                view: <div style={{ height: '100vh', maxHeight: '80vh' }}>{fw_req_id}</div>,
+                className: "",
+                header: "ເອກະສານ",
+                customSize: "1000px",
+                dialogFooter: null,
+            });
+        },
+        [openModal]
+    );
+
+    const header = (
+        <div className="card-no-bro">
+            <div className="p-3 flex flex-wrap md:flex-nowrap justify-between items-start md:items-center gap-2">
+                <div className="header-table flex flex-wrap gap-2 flex-1">
+                    <InputText
+                        type="search"
+                        style={{height: "2.5rem"}}
+                        placeholder="ລະຫັດ ພະນັກງານ"
+                        className="input-text"
+                        value={emcode}
+                        onChange={(e: any) => setEmcode(e.target.value)}
+                    />
+                </div>
+                <div className="flex gap-2 w-auto md:w-auto">
+                    <Create/>
+                </div>
+            </div>
+        </div>
+        
+    );
+
+    return (
+        
+        <div>
+            {header}
+            <DataTable dataKey="_key" size='small' rows={10} paginator ref={dt}
+                sortField="_key" sortOrder={1} 
+                value={workarea?.map((item, index) => ({ ...item, _key: item?.id }))}
+                selection={selectedItem}
+                onSelectionChange={(e: any) => setSelectedItem(e.value as any)}
+                rowsPerPageOptions={[10, 25, 30, 40, 50, 100]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Max"
+                // globalFilter={globalFilter || ''}
+                loading={loading}
+                emptyMessage={<EmptyData emptytext="ຂໍ້ມູນ ວ່າງເປົ່າ"/>}
+                responsiveLayout="scroll"
+            >
+               {GetColumns({onViewDoc}).map((column, index) => React.cloneElement(column, { key: `column-${index}` }))}
+            </DataTable>
+        </div>
+    );
+}

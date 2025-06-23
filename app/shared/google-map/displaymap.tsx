@@ -1,13 +1,13 @@
 import React from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { googleAPI_KEY } from "./constants-key";
 interface Props {
     lat: any, lng: any,
     width?: string, height?: string,
 }
 
 const GoogleMapShow: React.FC<Props> = ({  lat, lng,  width = '100%',  height = '70px' }) => {
-    const keygoogle = "AIzaSyAy7ry94bYKeM4ED8pJt5r_5soD0YlP_2Y"
-    const google_key_api = keygoogle;
+    const google_key_api = googleAPI_KEY;
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: google_key_api as string,

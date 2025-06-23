@@ -41,6 +41,15 @@ declare namespace Checkin {
         office: Office
         unit: Unit
     }
+
+    type WorkArea = {
+        id: any
+        area_name: string
+        latitude: number
+        longitude: number
+        radius_km: number
+    }
+
     type FieldWork = {
         fw_req_id:          number;
         emp_code:           string;
