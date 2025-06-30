@@ -2,6 +2,36 @@ import { EventApi, EventInput } from '@fullcalendar/core';
 import { number } from 'prop-types';
 
 declare namespace Checkin {
+    type Employee = {
+    id: number;
+    username: string;
+    employeeId: number;
+    employee_code: string | null;
+    createdAt: string;
+    updatedAt: string;
+    createdById: number | null;
+    status: string;
+    roleId: number;
+    rankId: number;
+    employee: {
+        id: number;
+        emp_code: string;
+        first_name: string;
+        last_name: string;
+        status: string;
+    };
+    rank: {
+        id: number;
+        rank_name: string;
+    };
+    role: {
+        id: number;
+        role_name: string;
+        role_code: string;
+        role_description: string;
+        authrole: string;
+    };
+    };
     type Department = {
         id: number
         department_name: string
@@ -41,6 +71,13 @@ declare namespace Checkin {
         office: Office
         unit: Unit
     }
+
+    type CheckinManual = {
+        emp_code: string;            
+        check_date: string | Date;   
+        status_in_out: 'in' | 'out'; 
+        comments?: string;
+    };
 
     type WorkArea = {
         id: any

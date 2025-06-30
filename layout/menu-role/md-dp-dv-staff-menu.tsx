@@ -33,6 +33,18 @@ export const adminmenu: any[] = [
                 ]
             },
             {
+                side_bar_id: 8,
+                side_bar_name: "Checkin Manual",
+                permissions: [
+                    {
+                        permission_id: 37763,
+                        role_id: 3,
+                        side_bar_id: 8,
+                        created_at: "2025-01-20T02:59:15.419Z",
+                    }
+                ]
+            },
+            {
                 side_bar_id: 7,
                 side_bar_name: "ການອະນຸມັດວຽກ",
                 permissions: [

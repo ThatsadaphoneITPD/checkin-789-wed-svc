@@ -126,6 +126,12 @@ export const menuItems: AppMenuItem[] = [
                 slugs: ['/mobile-user']
             },
             {
+                label: 'Checkin Manual',
+                icon: 'pi pi-user-plus',
+                to: '/checkin-manual',
+                slugs: ['/checkin-manual']
+            },
+            {
                 label: 'ການອະນຸມັດວຽກ',
                 icon: 'pi pi-verified',
                 to: '/aprove',
@@ -155,7 +161,7 @@ export const menuItems: AppMenuItem[] = [
             },
         ]
     },
-      {
+    {
         label: 'ສະຖານທີ ເຂົ້າ-ອອກວຽກ',
         items: [
             {
