@@ -13,7 +13,6 @@ import { useOvertimeStore } from '@/app/store';
 export default function SickLeaveTable() {
     // const {data, getSickLeaveData, getLeaveTypeData}= useSickLeaveStore()
     const {getOvertimeData, dataOvertime} = useOvertimeStore();
-    const { openModal } = useModal();
     const [selectedItem, setSelectedItem] = useState<any[]>([]);
     const [date, setDate] = useState<Nullable<Date>>(null);
     const [globalFilter, setGlobalFilter] = useState<string>('');

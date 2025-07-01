@@ -73,6 +73,7 @@ declare namespace Checkin {
     }
 
     type CheckinManual = {
+        id: any
         emp_code: string;            
         check_date: string | Date;   
         status_in_out: 'in' | 'out'; 

@@ -1,192 +1,264 @@
 'use client';
-import React, { useState } from 'react';
-import { Controller, SubmitHandler } from 'react-hook-form';
-import { useOutSideWorkStore, authenStore } from '@/app/store';
-import toast from 'react-hot-toast';
+
+import React, { useEffect, useMemo, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'primereact/button';
-import { Form } from '@/app/components/ui/form';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { RadioButton } from 'primereact/radiobutton';
-import { Checkin } from '@/types';
-import RocketFlamingIcon from '@/app/components/icons/rocket-flaming';
-import { createCheckinManaul, CreateCheckinManaulInput } from '@/utils/validators/create-checkin-manual.schema';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
-import { employeea } from './dummy-data';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { RadioButton } from 'primereact/radiobutton';
+import toast from 'react-hot-toast';
+
 import ClockDisplay from './clock';
-// import { CreateMobileUserkInput, createMobileUser } from '@/utils/validators/create-mobile-user.schema';
+import { employeea } from './dummy-data';
+import {
+  createCheckinManaul,
+  CreateCheckinManaulInput
+} from '@/utils/validators/create-checkin-manual.schema';
+import { Checkin } from '@/types';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface CreateOutSideWorkProps {
   rowItem?: Checkin.CheckinManual;
+  setRowData?: (v: Checkin.CheckinManual | null) => void;
 }
 
+export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
+  /* —————————————————————————————————— form setup —————————————————————————————————— */
+  const defaultValues = useMemo<CreateCheckinManaulInput>(
+    () => ({
+      emp_code: rowItem?.emp_code ?? '',
+      check_date: rowItem?.check_date
+        ? typeof rowItem.check_date === 'string'
+          ? rowItem.check_date
+          : rowItem.check_date.toISOString()
+        : '',
+      status_in_out: rowItem?.status_in_out ?? '',
+      reason: rowItem?.comments ?? ''
+    }),
+    [rowItem] // recompute when a new row is selected
+  );
 
-export default function Create({ rowItem }: CreateOutSideWorkProps) {
-  const [lang, setLang] = useState("LA");
-  const [reset, setReset] = useState({});
-  const {approveOutSideWork }= useOutSideWorkStore()
-  const {authData} = authenStore();
-  // 1 GB = 1 * 10^9 bytes // or 2 GB = 2 * 10^9 bytes
-//   const Gigabytes = 1 * (10 ** 9);
-  const [openModal, setopenModal] = useState(false)
-  const handOpen = () => { setopenModal(true) }
-  const handClose = () => { setopenModal(false) }
+  const { register,  watch,  control, handleSubmit, formState: { errors }, reset} = useForm<CreateCheckinManaulInput>({
+    resolver: zodResolver(createCheckinManaul), // 🔑  Type‑safe resolver
+    defaultValues
+  });
 
-  const onSubmit: SubmitHandler<CreateCheckinManaulInput> = async (data) => {
-    try {
-      const formattedData = {
-        ...data,
-      };
-      console.log("formattedData", formattedData)
-      // Create a new FormData object
-      const formData = new FormData();
-    
-      // Append each field to the FormData object
-      Object.entries(formattedData).forEach(([key, value]) => {
-        formData.append(key, value as string); // Convert to string if necessary
+  const [isResetting, setIsResetting] = useState(false);
+   /* whenever rowItem changes, push the new values into the form */
+  useEffect(() => reset(defaultValues), [defaultValues, reset]);
+  useEffect(() =>  console.log("errors", errors), [errors]);
+
+ 
+  const handleReset = () => {
+    setIsResetting(true);
+    setTimeout(() => {
+      reset({
+        emp_code: '',
+        check_date: '',
+        status_in_out: '',
+        reason: ''
       });
-  
-      approveOutSideWork(formData).then((res: any)=>{ console.log("res", res) 
-        if(res?.status == 201) {
-          if (res.approvething == "Approved") {
-            handClose();
-            toast.success(res.sms)
-          }else if (res.approvething == "Rejected") {
-            handClose();
-            toast(
-              `ໄດ້ປະຕິເສດ ການອອກວຽກນອກ ເລກທີ ${rowItem?.emp_code}`, { icon: <RocketFlamingIcon style={{width: "1.5rem", height: "1.5rem"}}/>, style: { border: '1px solid #FFA500', color: '#333', background: '#FFFAE5',  },  duration: 5000, }
-            );
-          }
-        }else { toast.error(res.sms)}
-      })
-      // setReset({});
-      console.log("sendAPI", formData);
-    } catch (err: any) {
-      console.log("errAPI", err.message);
-    }
-    // closeModal();
+      setRowData(null);
+      console.log("rowItem", rowItem)
+      
+      setIsResetting(false);
+    }, 600);
   };
-  // const taggle =()=> {
-  //   setLang("")
-  // }
-const fieldStatus = {
+
+  /* ———————————————————————————— helpers/derived data ———————————————————————————— */
+  const fieldStatus = {
     in: { status: 'check_in', l_status: 'ເຂົ້າ' },
-    out: { status: 'check_out', l_status: 'ອອກ' },
-} as const;
+    out: { status: 'check_out', l_status: 'ອອກ' }
+  } as const;
 
-const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
-    name: value.status,
-    la: value.l_status,
-    value: key
-}));
-
- const emps = Object.entries(employeea).map(([key, value]) => ({ ful_name: `${value?.employee?.first_name} ${value?.employee?.last_name} [${value?.employee?.emp_code}]`, id: value?.employee?.emp_code}));
-
- const FormCreate = (
-    <Form<CreateCheckinManaulInput> id="createExportForm" resetValues={reset} validationSchema={createCheckinManaul} onSubmit={onSubmit} className="p-fluid"
-        useFormProps={{
-          defaultValues: {
-              status_in_out: rowItem?.status_in_out ,
-              reason: "",
-          },
-        }}
-        >
-      {({ register, control, watch, formState: { errors } }) => {
-        console.log("err", errors)
-        // const watchto_md = watch("to_md");
-        // console.log("watchat_files", watchat_files)
-        const watch_check_date = watch("check_date");
-        let formattedTime = "";
-        if (watch_check_date) {
-          const date = new Date(watch_check_date);
-          const hours = date.getHours();
-          const minutes = date.getMinutes();
-          const ampm = hours >= 12 ? "PM" : "AM";
-          formattedTime = `${(hours % 12 || 12).toString().padStart(2, "0")}:${minutes
-            .toString()
-            .padStart(2, "0")} ${ampm}`;
-        }
-        return (
-          <div className="card">
-            <div key="approvedBy" className="field" style={{ marginTop: "0.6rem" }}>
-              <Controller
-                  name="emp_code"
-                  control={control}
-                  render={({ field: { name, value, onChange } }) => (
-                    <span className="contentfloat" style={{ width: "100%" }}>
-                      <Dropdown
-                        showClear
-                        filter
-                        onFilter={(e)=>{
-                          console.log("Filter input value:", e.filter);
-                        }}
-                        id={name} options={emps} value={value}  
-                        onChange={(e) => onChange(e.value)} 
-                        optionLabel="ful_name"  optionValue="id" placeholder="ເລືອກ ຄະນະ" className="w-full"
-                      />
-                      <label htmlFor={name}>ພະນັກງານ</label>
-                    </span>
-                  )}
-                />
-                {errors?.emp_code && <small className="p-invalid required-star">ເລືອກ ຄະນະທ່ານ ດ້ວຍ</small>}
-            </div>
-            <div className="grid" style={{ marginTop: "1.5rem", marginLeft: "0.02rem"}}>
-              <Controller key="check_date" name="check_date" control={control} render={({ field: { name, value, onChange } }) => (
-                <span className="contentfloat" style={{ width: "99.6%" }}>
-                  <Calendar
-                    id={name}
-                    showIcon className="calendar-create"
-                    showTime hourFormat="12"
-                    onChange={(e: any) => { onChange(e.value ? e.value.toISOString() : ''); }}
-                    value={value ? new Date(value) : null}
-                  />
-                  <label htmlFor={name}>ວັນທີ ເຂົ້າ-ອອກ<span className='required-star' >*</span>{errors?.check_date?.message && <small className="p-invalid required-star">ເລືອກວັນທີ</small>}</label>
-                </span>)}
-              />
-            </div>
-            <div  className='filed'>
-              <ClockDisplay formattedTime={formattedTime} />
-            </div>
-            <div style={{ marginTop: "0.5rem" }} className='filed'>
-              <label htmlFor="attachment_files" className='mt-2' style={{ color: "#2684FF", fontWeight: "bold" }}>ເລືອກການອະນຸມັດ</label>
-              <div className="grid p-fluid mt-1" style={{ width: "100%" }}>
-                <div className="field col-12 md:col-6 ">
-                    <div className="flex flex-wrap gap-3">
-                    {fieldstatus?.map((item: any, index: number) => (
-                        <Controller key={"status_in_out" + index} name="status_in_out" control={control} render={({ field: { name, value, onChange } }) => (
-                        <div key={index} className="flex align-items-center">
-                            <RadioButton inputId={item?.key} name={name} value={value} onChange={() => { onChange(item?.name); }} checked={value === item?.name} />
-                            <label htmlFor={item?.key} className="ml-2">{item?.la}</label>
-                        </div>
-                        )} />
-                    ))}
-                    </div>
-                </div>
-              </div>
-            </div>
-            <div key="reason" className="field" style={{ marginTop: "0.6rem" }}>
-              <span className="contentfloat" style={{ width: "100%" }}>
-                <InputTextarea  {...register("reason")} defaultValue={"ເຫັນດີ"} rows={5} cols={20} />
-                <label htmlFor="reason" >{lang === "LA" ? "ປ້ອນຄຳເຫັນ" : "Comments"} <span className='required-star' >*</span></label>
-              </span>
-              {errors?.reason?.message && <small className="p-invalid required-star">{errors?.reason?.message}</small>}
-            </div>
-          </div>
-        );
-      }}
-    </Form>
+ const fieldstatusOptions = useMemo(
+    () =>
+      Object.entries(fieldStatus).map(([key, v]) => ({
+        value: key as 'in' | 'out', // 'in' or 'out'
+        label: v.l_status
+      })),
+    []
   );
 
-  const DialogFooter = (
-    <>
-      <Button label="ບັນທຶກ" icon="pi pi-check" form="createExportForm" type="submit" />
-    </>
+  const emps = useMemo(
+    () =>
+      Object.values(employeea).map(e => ({
+        ful_name: `${e.employee.first_name} ${e.employee.last_name} [${e.employee.emp_code}]`,
+        id: e.employee.emp_code
+      })),
+    []
   );
-  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຄອບວຽກສະໜາມ ເລກທີ ({rowItem?.emp_code})</div></div>)
 
+  /* —————————————————————————————— submit —————————————————————————————— */
+  const watch_emp_code = watch("emp_code")
+  const onSubmit: SubmitHandler<CreateCheckinManaulInput> = async data => {
+   
+    const formData = new FormData();
+    Object.entries(data).forEach(([k, v]) => formData.append(k, v));
+    /* submit… */
+    console.log("defaultValues", defaultValues)
+    try {
+      if (defaultValues?.emp_code){
+        toast.success(`Edit! ${defaultValues?.emp_code}`);
+        handleReset()
+      } else{
+        toast.success(`Saved! ${watch_emp_code}`);
+        handleReset()
+      }
+    } catch (error) {
+      toast.error(error?.message)
+    }
+  };
+
+  /* ———————————————————————————— watch → clock ———————————————————————————— */
+  const watchCheckDate = watch('check_date');
+  const formattedTime = useMemo(() => {
+    if (!watchCheckDate) return '';
+    const date = new Date(watchCheckDate);
+    const h = date.getHours();
+    const m = date.getMinutes();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    return `${String(h % 12 || 12).padStart(2, '0')}:${String(m).padStart(
+      2,
+      '0'
+    )} ${ampm}`;
+  }, [watchCheckDate]);
+
+  /* ————————————————————————————— render ————————————————————————————— */
   return (
-    <>
-      {FormCreate}
-    </>
+    <form id="createExportForm" onSubmit={handleSubmit(onSubmit)} className="p-fluid">
+      <div className="card">
+        {/* 🔄 Reset icon */}
+        <div className="flex w-full justify-content-end mb-2">
+            <i
+              className={`pi  cursor-pointer text-2xl p-2 text-blue-600 hover:text-blue-800 absolute -mt-4 -mr-3 ${ isResetting ? 'pi-spin pi-spinner' : 'pi-refresh'}`}
+              onClick={handleReset}
+            />
+        </div>
+        
+        <div className="field">
+          <ClockDisplay formattedTime={formattedTime} />
+        </div>
+
+        {/* date */}
+        <div className="grid mt-5">
+          <Controller
+            name="check_date"
+            control={control}
+            render={({ field }) => (
+              <span className="contentfloat w-full">
+                <Calendar
+                  id={field.name}
+                  showIcon
+                  showTime
+                  hourFormat="24"
+                  value={field.value ? new Date(field.value) : null}
+                  onChange={e =>
+                    field.onChange(e.value ? e.value.toISOString() : '')
+                  }
+                  className="calendar-create w-full"
+                />
+                <label htmlFor={field.name}>
+                  ວັນທີ ເຂົ້າ-ອອກ
+                  <span className="required-star">*</span>
+                  {errors.check_date && (
+                    <small className="p-invalid required-star">ເລືອກວັນທີ</small>
+                  )}
+                </label>
+              </span>
+            )}
+          />
+        </div>
+
+        {/* employee dropdown */}
+        <div className="field mt-6">
+          <Controller
+            name="emp_code"
+            control={control}
+            render={({ field }) => (
+              <span className="contentfloat w-full">
+                <Dropdown
+                  id={field.name}
+                  value={field.value}
+                  options={emps}
+                  optionLabel="ful_name"
+                  optionValue="id"
+                  placeholder="ເລືອກ ພະນັກງານ"
+                  // showClear
+                  filter
+                  className="w-full"
+                  onChange={e => field.onChange(e.value)}
+                />
+                <label htmlFor={field.name}>
+                  ພະນັກງານ<span className="required-star">*</span>
+                  {errors.emp_code && (
+                    <small className="p-invalid required-star">
+                      ເລືອກດ້ວຍ
+                    </small>
+                  )}
+                </label>
+              </span>
+            )}
+          />
+        </div>
+
+        {/* in / out radio */}
+        <div className="field mt-4">
+          <label className="text-blue-600">ເລືອກ ເຂົ້າ-ອອກ
+            <span className="required-star">*</span> 
+            {errors.status_in_out && (
+                <small className="p-invalid required-star">
+                  {errors.status_in_out.message}
+                </small>
+              )}</label>
+          <div className="flex flex-wrap gap-3 mt-2">
+            <Controller
+              name="status_in_out"
+              control={control}
+              render={({ field }) => (
+                <div className="flex flex-wrap gap-3">
+                  {fieldstatusOptions.map(opt => (
+                    <div key={opt.value} className="flex align-items-center">
+                      <RadioButton
+                        inputId={opt.value}
+                        value={opt.value}
+                        checked={field.value === opt.value}
+                        onChange={e => field.onChange(e.value)}
+                      />
+                      <label htmlFor={opt.value} className="ml-2">
+                        {opt.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* reason */}
+        <div className="field mt-4">
+          <span className="contentfloat w-full">
+            <InputTextarea rows={4} {...register('reason')} />
+            <label htmlFor="reason">
+              ປ້ອນຄຳເຫັນ<span className="required-star">*</span>
+              {errors.reason && (
+                <small className="p-invalid required-star">
+                  {errors.reason.message}
+                </small>
+              )}
+            </label>
+          </span>
+        </div>
+
+        <Button
+          type="submit"
+          icon="pi pi-verified"
+          label="ບັນທຶກ ເຂົ້າ-ອອກ"
+          className="mt-4"
+        />
+      </div>
+    </form>
   );
 }

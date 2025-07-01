@@ -33,6 +33,41 @@ export const statusCases = (status: string): { statusla: string; bgcolor: string
     return { statusla, bgcolor, color, icon };
 };
 
+export const status_in_out = (
+  status: string
+): { statusla: string; bgcolor: string; color: string; icon: string } => {
+  let statusla = '';
+  let color = '';
+  let bgcolor = '';
+  let icon = '';
+
+  switch (status) {
+    case 'in':
+      statusla = 'ກົດເຂົ້າ';
+      bgcolor = '#E6FFFB';       // light teal background
+      color = '#13C2C2';         // teal text
+      icon = 'pi-sign-in';       // PrimeIcons sign‑in
+      break;
+
+    case 'out':
+      statusla = 'ກົດອອກ';
+      bgcolor = '#FFF1F0';       // light red background
+      color = '#FF4D4F';         // red text
+      icon = 'pi-sign-out';      // PrimeIcons sign‑out
+      break;
+
+    default:
+      statusla = 'ບໍ່ມີ';
+      bgcolor = '#F0F5FF';       // light blue background
+      color = '#2F54EB';         // blue text
+      icon = 'pi-info-circle';   // info icon
+      break;
+  }
+
+  return { statusla, bgcolor, color, icon };
+};
+
+
 export const statusTypeField = (statustype: string): { statusla: string; bgcolor: string; color: string; icon: string} => {
     let statusla: string = '';
     let bgcolor: any = "info";
