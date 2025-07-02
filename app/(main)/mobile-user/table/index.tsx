@@ -73,10 +73,10 @@ export default function MobileUserTable() {
     
 
     const onViewDoc = useCallback(
-        async (fw_req_id: any) => {
-            console.log("onViewDoc: ", fw_req_id);
+        async (id: any) => {
+            console.log("onViewDoc: ", id);
             openModal({
-                view: <div style={{ height: '100vh', maxHeight: '80vh' }}>{fw_req_id}</div>,
+                view: <div style={{ height: '100vh', maxHeight: '80vh' }}>{id}</div>,
                 className: "",
                 header: "ເອກະສານ",
                 customSize: "1000px",
@@ -87,7 +87,7 @@ export default function MobileUserTable() {
     );
 
     const header = (
-        <div className="card-no-bro flex justify-content-center">
+        <div className="card-no-bro flex justify-content-start">
             <div className='m-4'>
                 <InputText
                     type="search"

@@ -66,7 +66,7 @@ export const GetColumns = ({
 
     return [
         <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="2" field="description" header="ຊື່ - ນາມສະກຸນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
+        <Column key="2" field="description" header="ສະຖານທີ່ ເຮັດວຽກ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
         <Column key="3" field="longitude" header="ສັງກັດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="9" body={(rowData: Checkin.WorkArea) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];

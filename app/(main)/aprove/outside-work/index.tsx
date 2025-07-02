@@ -1,113 +1,168 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
-import { DataTable } from 'primereact/datatable';
+
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { InputText } from 'primereact/inputtext';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { GetColumns } from './columns';
-import toast from 'react-hot-toast';
-import { useModal } from '@/app/shared/modal-views/use-modal';
-import { Nullable } from 'primereact/ts-helpers';
 import { Calendar } from 'primereact/calendar';
+import { DataTable } from 'primereact/datatable';
+import { Nullable } from 'primereact/ts-helpers';
+
 import { useOutSideWorkStore } from '@/app/store/outside-work/outSideWorkStore';
 import EmptyData from '@/app/shared/empty-table/container';
-
+import { GetColumns } from './columns';
 
 export default function OutSideWorkTable() {
-    const {data, getOutSideWorkData }= useOutSideWorkStore()
-    const { openModal } = useModal();
-    const [selectedItem, setSelectedItem] = useState<any[]>([]);
-    const [date, setDate] = useState<Nullable<Date>>(null);
-    const [globalFilter, setGlobalFilter] = useState<string>('');
-    const [filteredData, setFilteredData] = useState<any[]>([]);
-    const typingTimeout = useRef<NodeJS.Timeout | null>(null);
-    const dt = useRef<DataTable<any>>(null);
+  const { data, getOutSideWorkData } = useOutSideWorkStore();
 
-    useEffect(() => {
-        getOutSideWorkData();
-    }, []);
-    
-    useEffect(() => {
-        setFilteredData(data);
-    }, [data]);
+  /* ------------------------------------------------------------------ */
+  /* State ------------------------------------------------------------- */
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
+  const [monthDate, setMonthDate] = useState<Nullable<Date>>(null); // keep if you still need month filtering
+  const [filtered, setFiltered] = useState<any[]>([]);
+  const [selectedItem, setSelectedItem] = useState<any[]>([]);
 
-    const onViewDoc = useCallback(async (file_path: any) => {
-        console.log("onViewDoc: ", file_path)
-    }, [openModal]);
+  const typingTimeout = useRef<NodeJS.Timeout | null>(null);
+  const dt = useRef<DataTable<any>>(null);
 
-    const searchGlobal = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* ------------------------------------------------------------------ */
+  /* Fetch initial data ------------------------------------------------ */
+  useEffect(() => {
+    getOutSideWorkData();
+  }, []);
 
-        const filterValue = e?.target.value;
-        setGlobalFilter(filterValue);
+  /* ------------------------------------------------------------------ */
+  /* Combined filter fn ------------------------------------------------ */
+  const applyFilters = useCallback(() => {
+    let list = data;
 
-        // Clear previous timeout
-        if (typingTimeout.current) {
-            clearTimeout(typingTimeout.current);
-        }
+    /* text search */
+    if (globalFilter.trim()) {
+      const lower = globalFilter.toLowerCase();
+      list = list.filter(
+        (i: any) =>
+          i.work_out_id?.toString().toLowerCase().includes(lower) ||
+          i.emp_code?.toLowerCase().includes(lower) ||
+          i.description?.toLowerCase().includes(lower)
+      );
+    }
 
-        // Set a new timeout to trigger filterData after 300ms of inactivity
-        typingTimeout.current = setTimeout(() => {
-            filterData(filterValue);
-        }, 300);
-    };
-    
-        // Filter data based on global filter (only on id and name)
-    const filterData = (filter: string) => {
-        if (!filter.trim()) {
-            setFilteredData(data);
-        } else {
-            const lowercasedFilter = filter.toLowerCase();
+    /* date‑range filter (inclusive) */
+    if (dateRange && dateRange.length === 2 && dateRange[0] && dateRange[1]) {
+      let [start, end] = dateRange as [Date, Date];
+      if (start > end) [start, end] = [end, start]; // order safety
 
-            const filtered = data?.filter((item: any) =>
-                item?.work_out_id?.toString().toLowerCase().includes(lowercasedFilter) ||
-                item?.emp_code?.toString().toLowerCase().includes(lowercasedFilter) ||
-                item?.description?.toLowerCase().includes(lowercasedFilter)
-            );
+      // include whole days
+      const startDay = new Date(start);
+      startDay.setHours(0, 0, 0, 0);
+      const endDay = new Date(end);
+      endDay.setHours(23, 59, 59, 999);
 
-            setFilteredData(filtered);
-        }
-    };
+      list = list.filter((i: any) => {
+        const d = new Date(i.punch_time);
+        return d >= startDay && d <= endDay;
+      });
+    }
 
-    useEffect(() => {
-        if (!date) {
-            setFilteredData(data || []);
-            return;
-        }
-        const filtered = (data || []).filter((item: any) => {
-            const createdAt = new Date(item.punch_time);
-            const sameMonth =  createdAt.getMonth() === date.getMonth() &&  createdAt.getFullYear() === date.getFullYear();
-            return sameMonth
-        });
-        setFilteredData(filtered);
-    }, [date]);
+    /* optional month filter */
+    if (monthDate) {
+      const mm = monthDate.getMonth();
+      const yy = monthDate.getFullYear();
+      list = list.filter((i: any) => {
+        const d = new Date(i.punch_time);
+        return d.getMonth() === mm && d.getFullYear() === yy;
+      });
+    }
 
-    const header = (
-        <div className="flex flex-wrap md:flex-nowrap justify-between items-start md:items-center gap-2">
-            <div className="header-table flex flex-wrap gap-2 flex-1">
-                <InputText type="search"  placeholder="ລະຫັດ" className="input-text flex-1 md:max-w-15rem max-w-20rem" value={globalFilter} onChange={searchGlobal} />
-                <Calendar showIcon showButtonBar className="w-auto calendar-search"  value={date}  onChange={(e: any) => setDate(e.value)}  view="month" dateFormat="mm/yy" />
-            </div>
-        </div>
-    );
+    setFiltered(list);
+  }, [data, globalFilter, dateRange, monthDate]);
 
-    return (
-        <div>
-            {header}
-            <DataTable dataKey="work_out_id" 
-                sortField="work_out_id" sortOrder={1} 
-                rows={10} paginator ref={dt}
-                value={filteredData?.map((item, index) => ({ ...item, _key: `${item?.work_out_id ?? 'row'}-${index}` }))}
-                selection={selectedItem}
-                onSelectionChange={(e: any) => setSelectedItem(e.value as any)}
-                rowsPerPageOptions={[10, 25, 30, 40, 50, 100]}
-                className="datatable-responsive"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Max"
-                // globalFilter={globalFilter || ''}
-                emptyMessage={<EmptyData/>} 
-                responsiveLayout="scroll"
-            >
-               {GetColumns({onViewDoc}).map((column, index) => React.cloneElement(column, { key: `column-${index}` }))}
-            </DataTable>
-        </div>
-    );
+  /* run every time deps change */
+  useEffect(() => applyFilters(), [applyFilters]);
+
+  /* ------------------------------------------------------------------ */
+  /* Handlers ---------------------------------------------------------- */
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setGlobalFilter(val);
+    if (typingTimeout.current) clearTimeout(typingTimeout.current);
+    typingTimeout.current = setTimeout(applyFilters, 300);
+  };
+
+  const onRangeChange = (e: { value: (Date | null)[] | null }) => {
+    setDateRange(e.value);
+  };
+
+  /* ------------------------------------------------------------------ */
+  /* Header UI --------------------------------------------------------- */
+  const header = (
+    <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
+      <div className="flex flex-wrap gap-2 flex-1">
+        <InputText
+          type="search"
+          placeholder="ຄົ້ນຫາ"
+          value={globalFilter}
+          onChange={onSearchChange}
+          className="input-text flex-1 md:max-w-15rem max-w-20rem"
+        />
+
+        {/* optional month picker */}
+        <Calendar
+          value={monthDate}
+          onChange={(e) => setMonthDate(e.value)}
+          view="month"
+          dateFormat="mm/yy"
+          showIcon
+          showButtonBar
+          className="w-auto calendar-search"
+        />
+
+        {/* date‑range picker */}
+        <Calendar
+          placeholder="ໄລຍະ ເລີ່ມ - ສຸດທ້າຍ"
+          selectionMode="range"
+          readOnlyInput
+          showButtonBar
+          showIcon
+          value={dateRange}
+          onChange={onRangeChange}
+          className="w-auto calendar-search"
+        />
+      </div>
+    </div>
+  );
+
+  /* ------------------------------------------------------------------ */
+  return (
+    <div>
+      {header}
+
+      <DataTable
+        dataKey="work_out_id"
+        value={filtered}
+        rows={10}
+        paginator
+        ref={dt}
+        sortField="work_out_id"
+        sortOrder={1}
+        rowsPerPageOptions={[10, 25, 50]}
+        selection={selectedItem}
+        onSelectionChange={(e) => setSelectedItem(e.value as any)}
+        className="datatable-responsive"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        emptyMessage={<EmptyData />}
+        responsiveLayout="scroll"
+      >
+        {GetColumns({}).map((col, idx) =>
+          React.cloneElement(col, { key: `col-${idx}` })
+        )}
+      </DataTable>
+    </div>
+  );
 }

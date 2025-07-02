@@ -15,7 +15,7 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
   const [Resetload, setResetload] = useState(false);
   const [ResetIDload, setResetIDload] = useState(false);
 
-  const handleUnload = () => {
+  const handleUnlock = () => {
     setUnload(true);
     setTimeout(() => setUnload(false), 800);
   };
@@ -32,7 +32,7 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
 
   return (
     <div className="wrap-button">
-      <button className="button unlock-button custom-target-des" data-pr-tooltip="ປົດລ໋ອກ" onClick={handleUnload} disabled={unlockLoad}>
+      <button className="button unlock-button custom-target-des" data-pr-tooltip="ປົດລ໋ອກ" onClick={handleUnlock} disabled={unlockLoad}>
         {unlockLoad ? <i className="pi pi-spin pi-cog" /> : <i className="pi pi-unlock" />}
       </button>
       <button className="button reset-button custom-target-des" data-pr-tooltip="ຣີ່ເຊັດ ລະຫັດຜ່ານ" onClick={handleReset} disabled={Resetload}>

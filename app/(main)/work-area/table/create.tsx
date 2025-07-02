@@ -143,7 +143,7 @@ const FormCreate = (
           </div>
 
           <div className="w-full">
-            ຈຸດພິກັດບ່ອນຊົມໃຊ້ໄຟ
+            ຈຸດພິກັດ ກົດເຂົ້າ-ອອກ
             <GoogleMapComponent radius_km={watchradius_km} setRadius={setRadius}  markerPosition={markerPosition} setMarkerPosition={setMarkerPosition}/>
           </div>
         </>
@@ -158,7 +158,7 @@ const FormCreate = (
       <Button label="ບັນທຶກ" icon="pi pi-check" form="createExportForm" type="submit" />
     </>
   );
-  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຄອບວຽກສະໜາມ ເລກທີ ({rowItem?.id})</div></div>)
+  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>{rowItem?.id && "ແກ້ໄຂ"} ສະຖານທີ ເຮັດວຽກ  {rowItem?.id && (rowItem?.id)}</div></div>)
 
   return (
     <>

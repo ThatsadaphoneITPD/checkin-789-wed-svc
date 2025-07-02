@@ -87,26 +87,26 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
         // console.log("watchat_files", watchat_files)
         return (
           <>
-            <div key="approvedBy" className="field" style={{ marginTop: "0.6rem" }}>
+            <div key="approvedBy" className="field" style={{ marginTop: "1.6rem" }}>
               <span className="contentfloat" style={{ width: "100%" }}>
                 <InputTextarea  defaultValue={rowItem?.reasons} disabled rows={2} cols={20} />
-                <label htmlFor="content" >{lang === "LA" ? "ເນື້ອໃນການຂອບວຽກ" : "Content"} <span className='required-star' >*</span></label>
+                <label htmlFor="content" >{lang === "LA" ? "ເນື້ອໃນ ການລາພັກ" : "Content"} <span className='required-star' >*</span></label>
               </span>
             </div>
             <div style={{ marginTop: "1rem" }} className='filed'>
               <label htmlFor="attachment_files" className='mt-2' style={{ color: "#2684FF", fontWeight: "bold" }}>ເລືອກການອະນຸມັດ</label>
               <div className="grid p-fluid mt-3" style={{ width: "100%" }}>
                 <div className="field col-12 md:col-6 ">
-                    <div className="flex flex-wrap gap-3">
-                    {fieldstatus?.map((item: any, index: number) => (
-                        <Controller key={"status" + index} name="status" control={control} render={({ field: { name, value, onChange } }) => (
-                        <div key={index} className="flex align-items-center">
+                  <Controller key={"status"} name="status" control={control} render={({ field: { name, value, onChange } }) => 
+                    (<div className="flex flex-wrap gap-3"> 
+                        {fieldstatus.map((item: any) => ( 
+                          <div key={item.value} className="flex align-items-center">
                             <RadioButton inputId={item?.key} name={name} value={value} onChange={() => { onChange(item?.name); }} checked={value === item?.name} />
                             <label htmlFor={item?.key} className="ml-2">{item?.la}</label>
-                        </div>
-                        )} />
-                    ))}
-                    </div>
+                          </div>
+                        ))}
+                      </div>
+                    )} />
                 </div>
               </div>
             </div>

@@ -13,13 +13,14 @@ import RocketFlamingIcon from '@/app/components/icons/rocket-flaming';
 import GlobalPhotoView from '@/app/shared/photo-view/container';
 import GoogleMapShow from '@/app/shared/google-map/displaymap';
 import { CreateMobileUserkInput, createMobileUser } from '@/utils/validators/create-mobile-user.schema';
+import { InputText } from 'primereact/inputtext';
 
-interface CreateOutSideWorkProps {
+interface CreateMobileUserProps {
     rowItem: Checkin.MobileUser;
 }
 
 
-export default function Create({ rowItem }: CreateOutSideWorkProps) {
+export default function Create({ rowItem }: CreateMobileUserProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
   const {approveOutSideWork }= useOutSideWorkStore()
@@ -86,6 +87,7 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
         useFormProps={{
             defaultValues: {
                 status: rowItem?.status || 'Pending',
+                ful_name: rowItem?.ful_name,
                 comments: "",
             },
         }}
@@ -97,44 +99,11 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
         const urltest = 'https://res.cloudinary.com/dp3zeejct/image/upload/v1655344187/cld-sample-2.jpg'
         return (
           <>
-            <div key="approvedBy" className="field" style={{ marginTop: "0.6rem" }}>
+            <div key="approvedBy" className="field" style={{ marginTop: "1.6rem" }}>
               <span className="contentfloat" style={{ width: "100%" }}>
-                <InputTextarea  defaultValue={rowItem?.ful_name} disabled rows={2} cols={20} />
-                <label htmlFor="content" >{lang === "LA" ? "ເນື້ອໃນການຂອບວຽກ" : "Content"} <span className='required-star' >*</span></label>
+                 <InputText {...register("ful_name")} />
+                <label htmlFor="content" >{lang === "LA" ? "ຊື່ ແລະ ນາມສະກຸນ" : "Content"} <span className='required-star' >*</span></label>
               </span>
-            </div>
-            <div className="grid">
-              <div className="col-6">
-                <img
-                  src={urltest}
-                  className="w-12rem h-12rem object-cover"
-                  alt=""
-                />
-              </div>
-            </div>
-            <div style={{ marginTop: "1rem" }} className='filed'>
-              <label htmlFor="attachment_files" className='mt-2' style={{ color: "#2684FF", fontWeight: "bold" }}>ເລືອກການອະນຸມັດ</label>
-              <div className="grid p-fluid mt-3" style={{ width: "100%" }}>
-                <div className="field col-12 md:col-6 ">
-                    <div className="flex flex-wrap gap-3">
-                    {fieldstatus?.map((item: any, index: number) => (
-                        <Controller key={"status" + index} name="status" control={control} render={({ field: { name, value, onChange } }) => (
-                        <div key={index} className="flex align-items-center">
-                            <RadioButton inputId={item?.key} name={name} value={value} onChange={() => { onChange(item?.name); }} checked={value === item?.name} />
-                            <label htmlFor={item?.key} className="ml-2">{item?.la}</label>
-                        </div>
-                        )} />
-                    ))}
-                    </div>
-                </div>
-              </div>
-            </div>
-            <div key="comments" className="field" style={{ marginTop: "0.6rem" }}>
-              <span className="contentfloat" style={{ width: "100%" }}>
-                <InputTextarea  {...register("comments")} defaultValue={"ເຫັນດີ"} rows={2} cols={20} />
-                <label htmlFor="comments" >{lang === "LA" ? "ປ້ອນຄຳເຫັນ" : "Comments"} <span className='required-star' >*</span></label>
-              </span>
-              {errors?.comments?.message && <small className="p-invalid required-star">{errors?.comments?.message}</small>}
             </div>
           </>
         );
@@ -147,7 +116,7 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
       <Button label="ບັນທຶກ" icon="pi pi-check" form="createExportForm" type="submit" />
     </>
   );
-  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຄອບວຽກສະໜາມ ເລກທີ ({rowItem?.id})</div></div>)
+  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຂໍ້ມູນ ຜູ້ໃຊ້ ({rowItem?.emp_code})</div></div>)
 
   return (
     <>

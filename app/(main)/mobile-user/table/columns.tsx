@@ -70,6 +70,6 @@ export const GetColumns = ({
         <Column key="2" field="description" header="ຊື່ - ນາມສະກຸນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
         <Column key="3" field="longitude" header="ສັງກັດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="4" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
-       <Column key="5"  body={(rowData: Checkin.MobileUser) => (   <ActionButtons rowData={rowData} openViewDoc={openViewDoc}  />  )} headerStyle={{ minWidth: '5rem' }}/>
+        <Column key="5"  body={(rowData: Checkin.MobileUser) => (   <ActionButtons rowData={rowData} openViewDoc={openViewDoc}  />  )} headerStyle={{ minWidth: '5rem' }}/>
     ];
 };

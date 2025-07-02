@@ -127,138 +127,140 @@ export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
 
   /* ————————————————————————————— render ————————————————————————————— */
   return (
-    <form id="createExportForm" onSubmit={handleSubmit(onSubmit)} className="p-fluid">
-      <div className="card">
-        {/* 🔄 Reset icon */}
-        <div className="flex w-full justify-content-end mb-2">
-            <i
-              className={`pi  cursor-pointer text-2xl p-2 text-blue-600 hover:text-blue-800 absolute -mt-4 -mr-3 ${ isResetting ? 'pi-spin pi-spinner' : 'pi-refresh'}`}
-              onClick={handleReset}
-            />
-        </div>
-        
-        <div className="field">
-          <ClockDisplay formattedTime={formattedTime} />
-        </div>
+    <div className='surface-card ' style={{ borderRadius: '15px', padding: '0.3rem', background: 'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}>
+      <div  className="surface-card py-3 px-4 sm:px-5"   style={{ borderRadius: '15px',  }} >
+        <form id="createExportForm" onSubmit={handleSubmit(onSubmit)} className="p-fluid">
+          {/* 🔄 Reset icon */}
+          <div className="flex w-full justify-content-end mb-2">
+              <i
+                className={`pi  cursor-pointer text-2xl p-2 text-blue-600 hover:text-blue-800 absolute -mt-3 -mr-4 ${ isResetting ? 'pi-spin pi-spinner' : 'pi-refresh'}`}
+                onClick={handleReset}
+              />
+          </div>
+          
+          <div className="field">
+            <ClockDisplay formattedTime={formattedTime} />
+          </div>
 
-        {/* date */}
-        <div className="grid mt-5">
-          <Controller
-            name="check_date"
-            control={control}
-            render={({ field }) => (
-              <span className="contentfloat w-full">
-                <Calendar
-                  id={field.name}
-                  showIcon
-                  showTime
-                  hourFormat="24"
-                  value={field.value ? new Date(field.value) : null}
-                  onChange={e =>
-                    field.onChange(e.value ? e.value.toISOString() : '')
-                  }
-                  className="calendar-create w-full"
-                />
-                <label htmlFor={field.name}>
-                  ວັນທີ ເຂົ້າ-ອອກ
-                  <span className="required-star">*</span>
-                  {errors.check_date && (
-                    <small className="p-invalid required-star">ເລືອກວັນທີ</small>
-                  )}
-                </label>
-              </span>
-            )}
-          />
-        </div>
-
-        {/* employee dropdown */}
-        <div className="field mt-6">
-          <Controller
-            name="emp_code"
-            control={control}
-            render={({ field }) => (
-              <span className="contentfloat w-full">
-                <Dropdown
-                  id={field.name}
-                  value={field.value}
-                  options={emps}
-                  optionLabel="ful_name"
-                  optionValue="id"
-                  placeholder="ເລືອກ ພະນັກງານ"
-                  // showClear
-                  filter
-                  className="w-full"
-                  onChange={e => field.onChange(e.value)}
-                />
-                <label htmlFor={field.name}>
-                  ພະນັກງານ<span className="required-star">*</span>
-                  {errors.emp_code && (
-                    <small className="p-invalid required-star">
-                      ເລືອກດ້ວຍ
-                    </small>
-                  )}
-                </label>
-              </span>
-            )}
-          />
-        </div>
-
-        {/* in / out radio */}
-        <div className="field mt-4">
-          <label className="text-blue-600">ເລືອກ ເຂົ້າ-ອອກ
-            <span className="required-star">*</span> 
-            {errors.status_in_out && (
-                <small className="p-invalid required-star">
-                  {errors.status_in_out.message}
-                </small>
-              )}</label>
-          <div className="flex flex-wrap gap-3 mt-2">
+          {/* date */}
+          <div className="grid mt-5">
             <Controller
-              name="status_in_out"
+              name="check_date"
               control={control}
               render={({ field }) => (
-                <div className="flex flex-wrap gap-3">
-                  {fieldstatusOptions.map(opt => (
-                    <div key={opt.value} className="flex align-items-center">
-                      <RadioButton
-                        inputId={opt.value}
-                        value={opt.value}
-                        checked={field.value === opt.value}
-                        onChange={e => field.onChange(e.value)}
-                      />
-                      <label htmlFor={opt.value} className="ml-2">
-                        {opt.label}
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                <span className="contentfloat w-full">
+                  <Calendar
+                    id={field.name}
+                    showIcon
+                    showTime
+                    hourFormat="24"
+                    value={field.value ? new Date(field.value) : null}
+                    onChange={e =>
+                      field.onChange(e.value ? e.value.toISOString() : '')
+                    }
+                    className="calendar-create w-full"
+                  />
+                  <label htmlFor={field.name}>
+                    ວັນທີ ເຂົ້າ-ອອກ
+                    <span className="required-star">*</span>
+                    {errors.check_date && (
+                      <small className="p-invalid required-star">ເລືອກວັນທີ</small>
+                    )}
+                  </label>
+                </span>
               )}
             />
           </div>
-        </div>
 
-        {/* reason */}
-        <div className="field mt-4">
-          <span className="contentfloat w-full">
-            <InputTextarea rows={4} {...register('reason')} />
-            <label htmlFor="reason">
-              ປ້ອນຄຳເຫັນ<span className="required-star">*</span>
-              {errors.reason && (
-                <small className="p-invalid required-star">
-                  {errors.reason.message}
-                </small>
+          {/* employee dropdown */}
+          <div className="field mt-6">
+            <Controller
+              name="emp_code"
+              control={control}
+              render={({ field }) => (
+                <span className="contentfloat w-full">
+                  <Dropdown
+                    id={field.name}
+                    value={field.value}
+                    options={emps}
+                    optionLabel="ful_name"
+                    optionValue="id"
+                    placeholder="ເລືອກ ພະນັກງານ"
+                    // showClear
+                    filter
+                    className="w-full"
+                    onChange={e => field.onChange(e.value)}
+                  />
+                  <label htmlFor={field.name}>
+                    ພະນັກງານ<span className="required-star">*</span>
+                    {errors.emp_code && (
+                      <small className="p-invalid required-star">
+                        ເລືອກດ້ວຍ
+                      </small>
+                    )}
+                  </label>
+                </span>
               )}
-            </label>
-          </span>
-        </div>
+            />
+          </div>
 
-        <Button
-          type="submit"
-          icon="pi pi-verified"
-          label="ບັນທຶກ ເຂົ້າ-ອອກ"
-          className="mt-4"
-        />
+          {/* in / out radio */}
+          <div className="field mt-4">
+            <label className="text-blue-600">ເລືອກ ເຂົ້າ-ອອກ
+              <span className="required-star">*</span> 
+              {errors.status_in_out && (
+                  <small className="p-invalid required-star">
+                    {errors.status_in_out.message}
+                  </small>
+                )}</label>
+            <div className="flex flex-wrap gap-3 mt-2">
+              <Controller
+                name="status_in_out"
+                control={control}
+                render={({ field }) => (
+                  <div className="flex flex-wrap gap-3">
+                    {fieldstatusOptions.map(opt => (
+                      <div key={opt.value} className="flex align-items-center">
+                        <RadioButton
+                          inputId={opt.value}
+                          value={opt.value}
+                          checked={field.value === opt.value}
+                          onChange={e => field.onChange(e.value)}
+                        />
+                        <label htmlFor={opt.value} className="ml-2">
+                          {opt.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              />
+            </div>
+          </div>
+
+          {/* reason */}
+          <div className="field mt-4">
+            <span className="contentfloat w-full">
+              <InputTextarea rows={4} {...register('reason')} />
+              <label htmlFor="reason">
+                ປ້ອນຄຳເຫັນ<span className="required-star">*</span>
+                {errors.reason && (
+                  <small className="p-invalid required-star">
+                    {errors.reason.message}
+                  </small>
+                )}
+              </label>
+            </span>
+          </div>
+
+          <Button
+            type="submit"
+            icon="pi pi-verified"
+            label="ບັນທຶກ ເຂົ້າ-ອອກ"
+            className="mt-4"
+          />
+        </form>
       </div>
-    </form>
+    </div>
   );
 }

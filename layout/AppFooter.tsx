@@ -8,7 +8,7 @@ const AppFooter = () => {
 
     return (
         <div className="layout-footer" style={{color: "#2f54eb"}}>
-            <img src={`/layout/images/logo-${layoutConfig.colorScheme === 'light' ? 'dark' : 'white'}.svg`} alt="Logo" height="20" className="mr-2" />
+            <img src={`/layout/images/edl_logo.svg`} alt="Logo" height="27" className="mr-2" />
             by
             <span className="font-medium ml-2" > Application Division</span>
         </div>
