@@ -90,7 +90,7 @@ export default function SickLeaveTable() {
         <div>
             {header}
             <DataTable dataKey="ot_id" rows={10} paginator ref={dt}
-                sortField="ot_id" sortOrder={1} 
+                sortField="ot_id" sortOrder={-1} 
                 value={filteredData?.map((item, index) => ({ ...item, _key: `${item?.leave_req_id ?? 'row'}-${index}` }))}
                 selection={selectedItem}
                 onSelectionChange={(e: any) => setSelectedItem(e.value as any)}

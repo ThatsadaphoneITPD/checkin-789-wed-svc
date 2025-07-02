@@ -155,7 +155,7 @@ export default function SickLeaveTable() {
         paginator
         ref={dt}
         sortField="leave_req_id"
-        sortOrder={1}
+        sortOrder={-1}
         rowsPerPageOptions={[10, 25, 50]}
         selection={selectedItem}
         onSelectionChange={(e) => setSelectedItem(e.value as any)}

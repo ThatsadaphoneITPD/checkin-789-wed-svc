@@ -150,7 +150,7 @@ export default function OutSideWorkTable() {
         paginator
         ref={dt}
         sortField="work_out_id"
-        sortOrder={1}
+        sortOrder={-1}
         rowsPerPageOptions={[10, 25, 50]}
         selection={selectedItem}
         onSelectionChange={(e) => setSelectedItem(e.value as any)}

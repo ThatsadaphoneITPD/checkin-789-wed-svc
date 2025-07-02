@@ -145,7 +145,7 @@ const onViewDoc = useCallback(async (fw_req_id: any) => {
         paginator
         ref={dt}
         sortField="fw_req_id"
-        sortOrder={1}
+        sortOrder={-1}
         rowsPerPageOptions={[10, 25, 50]}
         selection={selectedItem}
         onSelectionChange={(e) => setSelectedItem(e.value as any)}

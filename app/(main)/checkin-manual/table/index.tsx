@@ -179,7 +179,7 @@ const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
             paginator
             ref={dt}
             sortField="id"
-            sortOrder={1}
+            sortOrder={-1}
             selection={selectedItem}
             onSelectionChange={(e) => setSelectedItem(e.value as any)}
             rowsPerPageOptions={[10, 25, 50]}
