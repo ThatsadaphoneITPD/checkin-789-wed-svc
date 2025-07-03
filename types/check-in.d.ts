@@ -174,6 +174,19 @@ declare namespace Checkin {
         totalLeaveDays: any
     }
 
+    type Attendance = {
+        empCode: string
+        fullname: string | null
+        department: string | null
+        division: string | null
+        office: string | null
+        unit: string | null
+        totalLateMinute: number | null
+        totalLeaveDays: number | null
+        totalOvertime: number | null
+        totalFingerScanDays: number | null
+    }
+
     type Overtime = {
         ot_id: number
         emp_code: string

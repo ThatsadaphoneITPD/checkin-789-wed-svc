@@ -110,6 +110,18 @@ export const adminmenu: any[] = [
                     }
                 ]
             },
+            {
+                side_bar_id: 7,
+                side_bar_name: "ວັນງານ ເຂົ້າ-ອອກ",
+                permissions: [
+                    {
+                        permission_id: 37763,
+                        role_id: 3,
+                        side_bar_id: 8,
+                        created_at: "2025-01-20T02:59:15.419Z",
+                    }
+                ]
+            },
         ]
     },
 ];

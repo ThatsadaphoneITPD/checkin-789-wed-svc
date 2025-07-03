@@ -22,9 +22,9 @@ const DriveDocument = () => {
         <>
             <DateComponent />
             <TabView>
-                <TabPanel header={translate(contant, 'tabview', 'monthly_report', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
+                {/* <TabPanel header={translate(contant, 'tabview', 'monthly_report', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
                     <MonthlyTable/>
-                </TabPanel>
+                </TabPanel> */}
                 <TabPanel header={translate(contant, 'tabview', 'employee_daily', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
                     <EmployeeTable/>
                 </TabPanel>

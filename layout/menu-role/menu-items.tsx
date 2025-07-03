@@ -181,6 +181,12 @@ export const menuItems: AppMenuItem[] = [
                 to: '/report',
                 slugs: []
             },
+            {
+                label: 'ວັນງານ ເຂົ້າ-ອອກ',
+                icon: 'pi pi-arrow-right-arrow-left',
+                to: '/report/attendance',
+                slugs: []
+            },
         ]
     },
 ];
