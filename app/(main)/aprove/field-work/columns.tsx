@@ -10,8 +10,11 @@ import { Tag } from 'primereact/tag';
 import CreateFiledWork from './create-field-work';
 import { Tooltip } from 'primereact/tooltip';
 import moment from 'moment';
+import GlobalPhotoView from '@/app/shared/photo-view/container';
+import { useFileCheckStore } from '@/app/store';
+import ActionBody from './actionBody';
 type ColumnsProps = {
-    onViewDoc?: (fw_req_id: number) => void;
+    onViewDoc?: (file_path: string) => void;
     onEditItem?: (rowData: Checkin.FieldWork) => void;
 };
 
@@ -32,7 +35,7 @@ const codeBody = (rowData: Checkin.FieldWork) => {
 const titleBody = (rowData: Checkin.FieldWork) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.emp_code}
+        {rowData?.fullName ? <>{rowData?.fullName}[{rowData?.emp_code}]</>: rowData?.emp_code }
     </>
 );
 
@@ -94,35 +97,12 @@ const totalDaysBody = (rowData: Checkin.FieldWork) => (
     </>
 );
 
-// Action body with dropdown menu
-const actionBody = (
-    rowData: Checkin.FieldWork,
-    openViewDoc: (fw_req_id: number) => void,
-    // editFieldWork: (rowData: Checkin.FieldWork) => any,
-) => {
-    return (
-        <div className="wrap-button">
-            {/* <Button
-                icon={<i className='pi pi-briefcase' style={{fontSize: '1.5rem', color: "#ffff"}} />}
-                rounded
-                style={{height: "2.5rem", width: "2.5rem", backgroundColor: "#3a6cb7"}}
-                text
-                raised
-                severity="secondary"
-                className="p-button-rounded"
-                onClick={() => openViewDoc(rowData?.fw_req_id)}
-            /> */}
-            <CreateFiledWork rowItem={rowData}/>
-        </div>
-    );
-};
-
 export const GetColumns = ({
     onViewDoc,
 }: ColumnsProps) => {
-    const openViewDoc = (fw_req_id: number) => {
+    const openViewDoc = (file_path: string) => {
         if (onViewDoc) {
-            onViewDoc(fw_req_id);
+            onViewDoc(file_path);
         }
     };
 
@@ -137,6 +117,6 @@ export const GetColumns = ({
         <Column key="5" field="total_days" header="ຈຳນວນ" body={totalDaysBody} headerStyle={{ minWidth: '1rem' }} />,
         <Column key="6" field="create_at" header="ວັນທີຮ້ອງຂໍ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} />,
-        <Column key="8" body={(rowData: Checkin.FieldWork) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="8" body={(rowData: Checkin.FieldWork) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} />,
     ];
 };

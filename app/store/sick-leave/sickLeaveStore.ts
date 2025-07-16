@@ -9,6 +9,7 @@ type SickLeaveStore = {
     data: Checkin.SickLeave[];
     dataType: Checkin.LeaveType[];
     getSickLeaveData: () => Promise<void>;
+    getSickLeavePath: (path?: string) => Promise<void>;
     getLeaveTypeData: () => Promise<void>;
     approveSickLeave: (itemAprove: Checkin.ApproveField) => Promise<void>;
 
@@ -23,11 +24,32 @@ export const useSickLeaveStore = create<SickLeaveStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get('api/LeaveRequest/GetLeaveRequests');
-            // console.log("SickLeave-data",response )
+            console.log("SickLeave-data",response )
             set({ ...initialState, success: true, data: Array.isArray(response?.data) && response?.data.length ? response?.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);
             set({ ...initialState, error: true });
+        }
+    },
+    getSickLeavePath: async (path: string) => {
+        const apiPath = path?.trim() ? path : "GetLeaveRequests";
+        set({ ...initialState, loading: true });
+
+        try {
+            const response = await axiosClient.get(`api/LeaveRequest/${apiPath}`);
+
+            const data = Array.isArray(response?.data) ? response.data : [];
+
+            set({ ...initialState, success: true, data: data.length > 0 ? data : [],});
+        } catch (error: any) {
+            console.error("❌ Error fetching data:", error);
+            // If 404 or any error, treat it as empty data
+            const status = error?.response?.status;
+            if (status === 404) {
+                set({ ...initialState, success: true, data: [],});
+            } else {
+                set({ ...initialState, error: true, data: [],});
+            }
         }
     },
     getLeaveTypeData: async () => {

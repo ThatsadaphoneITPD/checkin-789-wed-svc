@@ -11,12 +11,19 @@ import React, {
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
 import { DataTable } from 'primereact/datatable';
-import { Nullable } from 'primereact/ts-helpers';
 
 import Create from './create';
 import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
 import { Checkin } from '@/types';
+import { MenuItem } from 'primereact/menuitem';
+import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+
+interface JustifyOption {
+    icon: string;
+    name: string;
+    value: string;
+}
 
 export default function CheckinManual() {
   /* ------------------------------------------------------------------ */
@@ -67,7 +74,7 @@ export default function CheckinManual() {
   const [rowData, setRowdata] = useState<Checkin.CheckinManual | null>(null);
 
  // 1️⃣ state – an array (0‑, 1‑, or 2‑element) or null
-const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
+  const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
 
   const [globalFilter, setGlobalFilter] = useState<string>('');
 
@@ -75,11 +82,16 @@ const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
 
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
   const dt = useRef<DataTable<any>>(null);
+  const [activeIndex, setActiveIndex] = useState<JustifyOption>(null);
+  const items: JustifyOption[] = [
+      { value: 'in', name: "ກົດເຂົ້າ", icon: 'pi pi-sign-in' },
+      { value: 'out', name: "ກົດອອກ", icon: 'pi pi-sign-out' },
+  ];
 
   /* ------------------------------------------------------------------ */
   /* Filtering --------------------------------------------------------- */
   const applyFilters = useCallback(() => {
-    let data = dataManual;
+  let data = dataManual;
 
     /* text filter */
     if (globalFilter.trim()) {
@@ -134,6 +146,10 @@ const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
 
   /* ------------------------------------------------------------------ */
   /* Header ------------------------------------------------------------ */
+  const justifyTemplate = (option: JustifyOption) => {
+    return <i className={option?.icon}> {option?.name}</i>;
+  }
+  
   const header = (
     <div className="flex flex-wrap md:flex-nowrap justify-between items-start md:items-center gap-2">
       <div className="header-table flex flex-wrap gap-2 flex-1">
@@ -155,6 +171,7 @@ const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
           showIcon
           className="w-auto calendar-search"
         />
+        <SelectButton value={activeIndex} onChange={(e: SelectButtonChangeEvent) => setActiveIndex(e.value)} itemTemplate={justifyTemplate} optionLabel="value" options={items} />
       </div>
     </div>
   );

@@ -4,11 +4,12 @@ import { Checkin } from '@/types';
 import { formatDateLao, formatDayMonth } from '@/app/(main)/utilities/format-date';
 import { Tag } from 'primereact/tag';
 import CreateOvertime from './create';
-import { useOvertimeStore } from '@/app/store';
+import { useFileCheckStore, useOvertimeStore } from '@/app/store';
 import { Tooltip } from 'primereact/tooltip';
 import { statusCases, statusLeaveType } from '@/app/(main)/utilities/format-status';
 import OpenMapOutSideWork from './open-map';
 import GlobalPhotoView from '@/app/shared/photo-view/container';
+import ActionBody from './actionBody';
 type ColumnsProps = {
     onViewDoc?: (file_path: string) => void;
     onEditItem?: (rowData: Checkin.Overtime) => void;
@@ -33,7 +34,7 @@ const codeBody = (rowData: Checkin.Overtime) => {
 const titleBody = (rowData: Checkin.Overtime) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.emp_code}
+        {rowData?.fullName ? <>{rowData?.fullName}[{rowData?.emp_code}]</>: rowData?.emp_code }
     </>
 );
 
@@ -42,8 +43,8 @@ const descBody = (rowData: Checkin.Overtime) => (
         <span className="p-column-title">description</span>
         <div>
             <Tooltip target=".custom-target-des" />
-            <span className="custom-target-des"   data-pr-tooltip={rowData?.description === "" ? "---" : rowData?.description}   data-pr-position="bottom"  >
-                <span style={{ display: "inline-block",  maxWidth: "8rem",  whiteSpace: "nowrap",  overflow: "hidden",  textOverflow: "ellipsis",  verticalAlign: "middle" }}>
+            <span className="custom-target-des" data-pr-tooltip={rowData?.description === "" ? "---" : rowData?.description} data-pr-position="bottom"  >
+                <span style={{ display: "inline-block", maxWidth: "8rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", verticalAlign: "middle" }}>
                     {rowData?.description === "" ? "---" : rowData?.description}
                 </span>
             </span>
@@ -70,41 +71,15 @@ const LocateBody = (rowData: Checkin.Overtime) => (
 const reqestTimeBody = (rowData: Checkin.Overtime) => (
     <>
         <span className="p-column-title">created_at</span>
-         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.punch_time)}`}/>
+        <Tag style={{ background: `#d6e4ff`, color: `#2f54eb` }} value={`${formatDateLao(rowData?.punch_time)}`} />
     </>
 );
-
-// Action body with dropdown menu
-const actionBody = (
-    rowData: Checkin.Overtime,
-    openViewDoc: (file_path: string) => void,
-    // editOvertime: (rowData: Checkin.Overtime) => any,
-) => {
-
-     const urltest = 'https://res.cloudinary.com/dp3zeejct/image/upload/v1679296309/Emagi/chedar_SourCream_yw9meg.jpg'
-        return (
-            <div className="wrap-button">
-                <GlobalPhotoView
-                    image={urltest}
-                    // image={rowData?.file_path}
-                    render={() => (
-                        <button className="button">
-                        <i className="pi pi-images" />
-                        </button>
-                    )}
-                />
-                <CreateOvertime rowItem={rowData} />
-            </div>
-        );
-};
-
-
 
 
 export const GetColumns = ({
     onViewDoc,
 }: ColumnsProps) => {
-   const openViewDoc = (file_path: string) => {
+    const openViewDoc = (file_path: string) => {
         if (onViewDoc) {
             onViewDoc(file_path);
         }
@@ -117,7 +92,7 @@ export const GetColumns = ({
         <Column key="2" field="description" header="ເຫດຜົນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
         <Column key="3" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="4" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
-        <Column key="5" field="create_at" header="ວັນທີຮ້ອງຂໍ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="6" body={(rowData: Checkin.Overtime) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
+        <Column key="5" field="create_at" header="ເວລາ OT ກົດເຂົ້າ-ອອກ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="6" body={(rowData: Checkin.Overtime) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];
 };

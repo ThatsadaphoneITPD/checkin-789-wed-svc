@@ -16,9 +16,20 @@ import { Nullable } from 'primereact/ts-helpers';
 import { useOutSideWorkStore } from '@/app/store/outside-work/outSideWorkStore';
 import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import { useFileCheckStore } from '@/app/store';
+import toast from 'react-hot-toast';
+import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+interface JustifyOption {
+  icon: string;
+  name?: string;
+  value?: string;
+}
 
 export default function OutSideWorkTable() {
-  const { data, getOutSideWorkData } = useOutSideWorkStore();
+  const { data, getOutSideWorkData, getOutSideWorkPath } = useOutSideWorkStore();
+  const { openModal } = useModal();
+  const { getFile } = useFileCheckStore();
 
   /* ------------------------------------------------------------------ */
   /* State ------------------------------------------------------------- */
@@ -27,15 +38,22 @@ export default function OutSideWorkTable() {
   const [monthDate, setMonthDate] = useState<Nullable<Date>>(null); // keep if you still need month filtering
   const [filtered, setFiltered] = useState<any[]>([]);
   const [selectedItem, setSelectedItem] = useState<any[]>([]);
-
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
   const dt = useRef<DataTable<any>>(null);
+  const items: JustifyOption[] = [
+    { value: 'GetAllPending', name: "ລໍຖ້າອະນຸມັດ", icon: 'pi pi-hourglass' },
+    { value: 'GetWorkOutsides', name: "ທັງໝົດ", icon: 'pi pi-check-circle' },
+  ];
+
+  // ✅ Set first item as default
+  const [activeIndex, setActiveIndex] = useState<JustifyOption | null>(items[0]);
 
   /* ------------------------------------------------------------------ */
   /* Fetch initial data ------------------------------------------------ */
   useEffect(() => {
-    getOutSideWorkData();
-  }, []);
+    // getOutSideWorkData();
+    getOutSideWorkPath(activeIndex?.value)
+  }, [activeIndex]);
 
   /* ------------------------------------------------------------------ */
   /* Combined filter fn ------------------------------------------------ */
@@ -100,10 +118,16 @@ export default function OutSideWorkTable() {
   };
 
   /* ------------------------------------------------------------------ */
+  const justifyTemplate = (option: JustifyOption) => (
+    <div className="flex align-items-center gap-2 py-0">
+      <i className={option.icon}></i>
+      <span className="font-semibold text-sm">{option.name}</span>
+    </div>
+  );
   /* Header UI --------------------------------------------------------- */
   const header = (
-    <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
-      <div className="flex flex-wrap gap-2 flex-1">
+    <div className="flex flex-wrap md:flex-nowrap justify-between items-start md:items-center gap-2">
+      <div className="header-table flex flex-wrap gap-2 flex-1">
         <InputText
           type="search"
           placeholder="ຄົ້ນຫາ"
@@ -134,20 +158,61 @@ export default function OutSideWorkTable() {
           onChange={onRangeChange}
           className="w-auto calendar-search"
         />
+        <SelectButton
+          className="p-button-outlined"
+          value={activeIndex?.value}
+          onChange={(e: SelectButtonChangeEvent) => {
+            const selectedOption = items.find((item) => item.value === e.value);
+            if (selectedOption) setActiveIndex(selectedOption);
+          }}
+          itemTemplate={justifyTemplate}
+          optionLabel="name"
+          options={items}
+        />
       </div>
     </div>
   );
+
+  const onViewDoc = useCallback(async (file_path: any) => {
+    console.log("onViewDoc: ", file_path);
+    const fileDoc = await getFile("WorkOutside", file_path);
+
+    if (!fileDoc) {
+      toast.error("ຮູບບໍ່ພົບເຫັນ 🔍");
+      return;
+    }
+
+    const fileUrl = URL.createObjectURL(fileDoc);
+    const isPDF = file_path.toLowerCase().endsWith(".pdf");
+
+    const PdfView = (
+      <embed
+        src={fileUrl}
+        type="application/pdf"
+        width="100%"
+        height="100%"
+        style={{ border: "none" }}
+      />
+    );
+
+    if (isPDF) {
+      openModal({
+        view: <div style={{ height: "100vh", maxHeight: "80vh" }}>{PdfView}</div>,
+        className: "",
+        header: "ເອກະສານ",
+        customSize: "1000px",
+        dialogFooter: null,
+      });
+    }
+  }, [openModal]);
 
   /* ------------------------------------------------------------------ */
   return (
     <div>
       {header}
 
-      <DataTable
-        dataKey="work_out_id"
-        value={filtered}
-        rows={10}
-        paginator
+      <DataTable dataKey="work_out_id" value={filtered}
+        rows={10} paginator
         ref={dt}
         sortField="work_out_id"
         sortOrder={-1}
@@ -159,7 +224,7 @@ export default function OutSideWorkTable() {
         emptyMessage={<EmptyData />}
         responsiveLayout="scroll"
       >
-        {GetColumns({}).map((col, idx) =>
+        {GetColumns({ onViewDoc }).map((col, idx) =>
           React.cloneElement(col, { key: `col-${idx}` })
         )}
       </DataTable>

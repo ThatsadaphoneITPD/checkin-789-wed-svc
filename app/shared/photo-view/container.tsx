@@ -5,7 +5,7 @@ import React from 'react';
 
 type GlobalPhotoViewProps = {
   image: string;
-  render: () => React.ReactElement;
+  render?: () => React.ReactElement;
   speed?: (open: number) => number;
   easing?: (type: number) => string;
 };
@@ -22,7 +22,7 @@ export default function GlobalPhotoView({
       easing={easing}
     >
       <PhotoView src={image}>
-        {render()}
+        {render && render()}
       </PhotoView>
     </PhotoProvider>
   );

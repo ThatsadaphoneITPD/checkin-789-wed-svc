@@ -8,6 +8,7 @@ import { Checkin } from '@/types';
 type OutSideWorkStore = {
     data: Checkin.OutSideWork[];
     getOutSideWorkData: () => Promise<void>;
+    getOutSideWorkPath: (path?: string) => Promise<void>;
     getOutSideWorkByOutSideWorkId: (OutSideWorkId: number) => Promise<void>;
     getOutSideWorkById: (OutSideWorkId: number) => any;
     addOutSideWork: (newBranch: Checkin.OutSideWork) => void;
@@ -29,6 +30,27 @@ export const useOutSideWorkStore = create<OutSideWorkStore, []>((set, get) => ({
         } catch (error) {
             console.error('Error fetching data:', error);
             set({ ...initialState, error: true });
+        }
+    },
+    getOutSideWorkPath: async (path: string) => {
+        const apiPath = path?.trim() ? path : "GetWorkOutsides";
+        set({ ...initialState, loading: true });
+
+        try {
+            const response = await axiosClient.get(`api/WorkOutside/${apiPath}`);
+
+            const data = Array.isArray(response?.data) ? response.data : [];
+
+            set({ ...initialState, success: true, data: data.length > 0 ? data : [],});
+        } catch (error: any) {
+            console.error("❌ Error fetching data:", error);
+            // If 404 or any error, treat it as empty data
+            const status = error?.response?.status;
+            if (status === 404) {
+                set({ ...initialState, success: true, data: [],});
+            } else {
+                set({ ...initialState, error: true, data: [],});
+            }
         }
     },
     approveOutSideWork: async (itemAprove: Checkin.ApproveOutSideWork) => {

@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Column } from 'primereact/column';
 import { Checkin } from '@/types';
-import { formatDateLao, formatDayMonth } from '@/app/(main)/utilities/format-date';
+import { formatDateLao } from '@/app/(main)/utilities/format-date';
 import { Tag } from 'primereact/tag';
 import { Tooltip } from 'primereact/tooltip';
-import { status_in_out, statusLeaveType } from '@/app/(main)/utilities/format-status';
-import GlobalPhotoView from '@/app/shared/photo-view/container';
+import { status_in_out } from '@/app/(main)/utilities/format-status';
 type ColumnsProps = {
     onViewDoc?: (rowData: Checkin.CheckinManual) => void;
     onEditItem?: (rowData: Checkin.CheckinManual) => void;

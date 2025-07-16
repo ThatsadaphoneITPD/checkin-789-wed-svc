@@ -12,6 +12,8 @@ import GoogleMapShow from '@/app/shared/google-map/displaymap';
 import OpenMapOutSideWork from './open-map';
 import { Tooltip } from 'primereact/tooltip';
 import GlobalPhotoView from '@/app/shared/photo-view/container';
+import { useFileCheckStore } from '@/app/store';
+import ActionBody from './actionBody';
 
 type ColumnsProps = {
     onViewDoc?: (work_out_id: string) => void;
@@ -39,7 +41,7 @@ const codeBody = (rowData: Checkin.OutSideWork) => {
 const titleBody = (rowData: Checkin.OutSideWork) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.emp_code}
+        {rowData?.fullName ? <>{rowData?.fullName}[{rowData?.emp_code}]</>: rowData?.emp_code }
     </>
 );
 
@@ -77,31 +79,6 @@ const reqestStartEndBody = (rowData: Checkin.OutSideWork) => (
     </div>
 );
 
-
-// Action body with dropdown menu
-const actionBody = (
-    rowData: Checkin.OutSideWork,
-    openViewDoc: (file_path: string) => void,
-    // editOutSideWork: (rowData: Checkin.OutSideWork) => any,
-) => {
-    const urltest = 'https://res.cloudinary.com/dp3zeejct/image/upload/v1679296309/Emagi/chedar_SourCream_yw9meg.jpg'
-    return (
-         <div className="wrap-button">
-            <GlobalPhotoView
-                image={urltest}
-                // image={rowData?.file_path}
-                render={() => (
-                    <button className="button">
-                    <i className="pi pi-images" />
-                    </button>
-                )}
-            />
-            <CreateOutSideWork rowItem={rowData} />
-        </div>
-    );
-};
-
-
 export const GetColumns = ({
     onViewDoc,
 }: ColumnsProps) => {
@@ -113,11 +90,11 @@ export const GetColumns = ({
 
     return [
         <Column key="0" field="work_out_id" header="ເລກທີ" body={(rowData: Checkin.OutSideWork) => codeBody(rowData)} headerStyle={{ minWidth: '3rem' }} />,
-        <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="1" field="emp_code" header="ຊື່-ນາມສະກຸນ ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="3" field="description" header="ລາຍລະອຽດ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
         <Column key="4" field="punch_time" header="ເວລາ-ຮ້ອງຂໍ" body={reqestStartEndBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="6" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
-        <Column key="8" body={(rowData: Checkin.OutSideWork) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="8" body={(rowData: Checkin.OutSideWork) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} />,
     ];
 };

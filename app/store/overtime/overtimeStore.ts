@@ -8,6 +8,7 @@ import { Checkin } from '@/types';
 type OvertimeStore = {
     dataOvertime: Checkin.Overtime[];
     getOvertimeData: () => Promise<void>;
+    getOvertimePath: (path: string) => Promise<void>;
     getOvertimeByOvertimeId: (OvertimeId: number) => Promise<void>;
     getOvertimeById: (OvertimeId: number) => any;
     addOvertime: (newBranch: Checkin.Overtime) => void;
@@ -29,6 +30,28 @@ export const useOvertimeStore = create<OvertimeStore, []>((set, get) => ({
         } catch (error) {
             console.error('Error fetching data:', error);
             set({ ...initialState, error: true });
+        }
+    },
+    getOvertimePath: async (path: string) => {
+        const apiPath = path?.trim() ? path : "GetOvertimes";
+        set({ ...initialState, loading: true });
+
+        try {
+            const response = await axiosClient.get(`api/Overtime/${apiPath}`);
+             console.log("response:", response);
+
+            const data = Array.isArray(response?.data) ? response.data : [];
+
+            set({ ...initialState, success: true, dataOvertime: data.length > 0 ? data : [],});
+        } catch (error: any) {
+            console.error("❌ Error fetching data:", error);
+            // If 404 or any error, treat it as empty data
+            const status = error?.response?.status;
+            if (status === 404) {
+                set({ ...initialState, success: true, dataOvertime: [],});
+            } else {
+                set({ ...initialState, error: true, dataOvertime: [],});
+            }
         }
     },
     approveOvertime: async (itemAprove: Checkin.ApproveOvertime) => {

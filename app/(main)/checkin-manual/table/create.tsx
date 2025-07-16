@@ -213,7 +213,7 @@ export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
                     {errors.status_in_out.message}
                   </small>
                 )}</label>
-            <div className="flex flex-wrap gap-3 mt-2">
+            <div className="flex flex-wrap gap-3 my-1">
               <Controller
                 name="status_in_out"
                 control={control}

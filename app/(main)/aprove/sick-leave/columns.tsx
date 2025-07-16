@@ -6,11 +6,11 @@ import { Checkin } from '@/types';
 import { formatDateLao, formatDayMonth } from '@/app/(main)/utilities/format-date';
 import { statusCases, statusLeaveType } from '../../utilities/format-status';
 import { Tag } from 'primereact/tag';
-import CreateSickLeave from './create-sick-leave';
 import { useSickLeaveStore } from '@/app/store/sick-leave/sickLeaveStore';
 import { Tooltip } from 'primereact/tooltip';
+import ActionBody from './actionBody';
 type ColumnsProps = {
-    onViewDoc?: (fw_req_id: number) => void;
+    onViewDoc?: (file_path: string) => void;
     onEditItem?: (rowData: Checkin.SickLeave) => void;
 };
 
@@ -33,7 +33,7 @@ const codeBody = (rowData: Checkin.SickLeave) => {
 const titleBody = (rowData: Checkin.SickLeave) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.emp_code}
+        {rowData?.fullName ? <>{rowData?.fullName}[{rowData?.emp_code}]</>: rowData?.emp_code }
     </>
 );
 
@@ -92,28 +92,12 @@ const reqestTimeBody = (rowData: Checkin.SickLeave) => (
     </>
 );
 
-// Action body with dropdown menu
-const actionBody = (
-    rowData: Checkin.SickLeave,
-    openViewDoc: (fw_req_id: number) => void,
-    // editSickLeave: (rowData: Checkin.SickLeave) => any,
-) => {
-    return (
-        <div className="wrap-button">
-            <CreateSickLeave rowItem={rowData} />
-        </div>
-    );
-};
-
-
-
-
 export const GetColumns = ({
     onViewDoc,
 }: ColumnsProps) => {
-    const openViewDoc = (fw_req_id: number) => {
+    const openViewDoc = (file_path: string) => {
         if (onViewDoc) {
-            onViewDoc(fw_req_id);
+            onViewDoc(file_path);
         }
     };
     const { dataType } = useSickLeaveStore()
@@ -128,6 +112,6 @@ export const GetColumns = ({
         <Column key="5" field="total_days" header="ຈຳນວນວັນ" body={totalDaysBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
         <Column key="8" field="create_at" header="ວັນທີຮ້ອງຂໍ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="9" body={(rowData: Checkin.SickLeave) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
+        <Column key="9" body={(rowData: Checkin.SickLeave) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];
 };

@@ -12,7 +12,27 @@
   font-size: 0.9rem;
   padding: 0.25rem 0.75rem;
 }
+.p-selectbutton .p-button {
+  border: 1px solid #2f54eb;
+  padding: 0.35rem 1.10rem;
+  color: #2f54eb;
+  font-weight: 200;
+  background-color: white;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
 
+/* Hover style */
+.p-selectbutton .p-button:hover {
+  background-color: #2f54eb;
+  color: white;
+}
+
+/* Selected/active style */
+.p-selectbutton .p-button.p-highlight {
+  background-color: #2f54eb;
+  color: white;
+  font-weight: 600;
+}
 
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
   font-size: 0.9rem;

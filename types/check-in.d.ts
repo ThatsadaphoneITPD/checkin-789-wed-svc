@@ -91,6 +91,7 @@ declare namespace Checkin {
     type FieldWork = {
         fw_req_id:          number;
         emp_code:           string;
+        fullName:           string
         field_work_type:    string;
         description:        string;
         workplace:          string;
@@ -112,6 +113,7 @@ declare namespace Checkin {
     type OutSideWork = {
         work_out_id: number
         emp_code: string
+        fullName: string
         description: string
         punch_time: string
         latitude: number
@@ -129,6 +131,7 @@ declare namespace Checkin {
     type SickLeave = {
         leave_req_id: number
         emp_code: string
+        fullName: string
         leave_type_id: number
         reasons: string
         start_date: string
@@ -190,6 +193,7 @@ declare namespace Checkin {
     type Overtime = {
         ot_id: number
         emp_code: string
+        fullName: string
         description: string
         punch_time: string
         latitude: number

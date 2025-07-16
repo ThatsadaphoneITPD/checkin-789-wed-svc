@@ -16,9 +16,18 @@ import { useFieldWorkStore } from '@/app/store/field-work/fieldWorkStore';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
+import { useFileCheckStore } from '@/app/store';
+import toast from 'react-hot-toast';
+import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+interface JustifyOption {
+  icon: string;
+  name?: string;
+  value?: string;
+}
 
 export default function FieldWorkTable() {
-  const { data, getFieldWorkData } = useFieldWorkStore();
+  const { data, getFieldWorkData, getFieldWorkPath} = useFieldWorkStore();
+  const { getFile } = useFileCheckStore();
   const { openModal } = useModal();
 
   /* ------------------------------- state -------------------------------- */
@@ -30,11 +39,19 @@ export default function FieldWorkTable() {
 
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
   const dt = useRef<DataTable<any>>(null);
+  const items: JustifyOption[] = [
+    { value: 'GetAllPending', name: "ລໍຖ້າອະນຸມັດ", icon: 'pi pi-hourglass' },
+    { value: 'GetFieldWorkRequests', name: "ທັງໝົດ", icon: 'pi pi-check-circle' },
+  ];
+
+  // ✅ Set first item as default
+  const [activeIndex, setActiveIndex] = useState<JustifyOption | null>(items[0]);
 
   /* ------------------------------- fetch -------------------------------- */
   useEffect(() => {
-    getFieldWorkData();
-  }, []);
+    // getFieldWorkData();
+    getFieldWorkPath(activeIndex?.value)
+  }, [activeIndex]);
 
   /* --------------------------- combined filter -------------------------- */
   const applyFilters = useCallback(() => {
@@ -67,7 +84,7 @@ export default function FieldWorkTable() {
       if (start > end) [start, end] = [end, start];
 
       const startDay = new Date(start); startDay.setHours(0, 0, 0, 0);
-      const endDay   = new Date(end);   endDay.setHours(23, 59, 59, 999);
+      const endDay = new Date(end); endDay.setHours(23, 59, 59, 999);
 
       list = list.filter((i: any) => {
         const d = new Date(i.created_at);
@@ -92,10 +109,45 @@ export default function FieldWorkTable() {
     setDateRange(e.value);
   };
 
-const onViewDoc = useCallback(async (fw_req_id: any) => {
-        console.log("onViewDoc: ", fw_req_id)
-        openModal({ view: <div style={{ height: '100vh', maxHeight: '80vh' }}>{fw_req_id}</div>, className: "", header: "ເອກະສານ", customSize: "1000px", dialogFooter: null });
-    }, [openModal]);
+  const onViewDoc = useCallback(async (file_path: any) => {
+    console.log("onViewDoc: ", file_path);
+    const fileDoc = await getFile("FieldWorkRequest", file_path);
+
+    if (!fileDoc) {
+      toast.error("ຮູບບໍ່ພົບເຫັນ 🔍");
+      return;
+    }
+
+    const fileUrl = URL.createObjectURL(fileDoc);
+    const isPDF = file_path.toLowerCase().endsWith(".pdf");
+
+    const PdfView = (
+      <embed
+        src={fileUrl}
+        type="application/pdf"
+        width="100%"
+        height="100%"
+        style={{ border: "none" }}
+      />
+    );
+
+    if (isPDF) {
+      openModal({
+        view: <div style={{ height: "100vh", maxHeight: "80vh" }}>{PdfView}</div>,
+        className: "",
+        header: "ເອກະສານ",
+        customSize: "1000px",
+        dialogFooter: null,
+      });
+    }
+  }, [openModal]);
+
+  const justifyTemplate = (option: JustifyOption) => (
+    <div className="flex align-items-center gap-2 py-0">
+      <i className={option.icon}></i>
+      <span className="font-semibold text-sm">{option.name}</span>
+    </div>
+  );
 
   /* ------------------------------- header ------------------------------ */
   const header = (
@@ -128,6 +180,17 @@ const onViewDoc = useCallback(async (fw_req_id: any) => {
           value={dateRange}
           onChange={onRangeChange}
           className="w-auto calendar-search"
+        />
+        <SelectButton
+          className="p-button-outlined"
+          value={activeIndex?.value}
+          onChange={(e: SelectButtonChangeEvent) => {
+            const selectedOption = items.find((item) => item.value === e.value);
+            if (selectedOption) setActiveIndex(selectedOption);
+          }}
+          itemTemplate={justifyTemplate}
+          optionLabel="name"
+          options={items}
         />
       </div>
     </div>
