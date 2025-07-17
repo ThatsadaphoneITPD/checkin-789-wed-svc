@@ -33,10 +33,12 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     }));
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('eoffice_token');
+        localStorage.removeItem('eoffice_token');
         localStorage.removeItem('authStore');
         localStorage.removeItem('sideMenu');
         // localStorage.removeItem('ally-supports-cache');
-        document.cookie = 'token=; authStore=; sideMenu=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'token=; eoffice_token=; authStore=; sideMenu=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         router.replace('/auth/login');
 
     };

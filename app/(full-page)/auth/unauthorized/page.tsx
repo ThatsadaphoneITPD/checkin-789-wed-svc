@@ -9,6 +9,7 @@ const AccessDeniedPage = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('eoffice_token');
         localStorage.removeItem('authStore');
         localStorage.removeItem('sideMenu');
         // localStorage.removeItem('ally-supports-cache');

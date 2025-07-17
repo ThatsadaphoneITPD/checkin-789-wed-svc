@@ -5,13 +5,14 @@ import { useOutSideWorkStore, authenStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { Button } from 'primereact/button';
 import { Form } from '@/app/components/ui/form';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { RadioButton } from 'primereact/radiobutton';
+// import { InputTextarea } from 'primereact/inputtextarea';
+// import { RadioButton } from 'primereact/radiobutton';
 import { Dialog } from 'primereact/dialog';
 import { Checkin } from '@/types';
 import RocketFlamingIcon from '@/app/components/icons/rocket-flaming';
-import GlobalPhotoView from '@/app/shared/photo-view/container';
-import GoogleMapShow from '@/app/shared/google-map/displaymap';
+// import GlobalPhotoView from '@/app/shared/photo-view/container';
+// import GoogleMapShow from '@/app/shared/google-map/displaymap';
+import { LiaMapMarkedAltSolid } from "react-icons/lia";
 import { CreateMobileUserkInput, createMobileUser } from '@/utils/validators/create-mobile-user.schema';
 import { InputText } from 'primereact/inputtext';
 
@@ -34,8 +35,6 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
   const onSubmit: SubmitHandler<CreateMobileUserkInput> = async (data) => {
     try {
       const formattedData = {
-        workOutId: `${rowItem?.id}`,
-        approvedBy: authData?.user_id,
         ...data,
       };
       console.log("formattedData", formattedData)
@@ -47,19 +46,19 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
         formData.append(key, value as string); // Convert to string if necessary
       });
   
-      approveOutSideWork(formData).then((res: any)=>{ console.log("res", res) 
-        if(res?.status == 201) {
-          if (res.approvething == "Approved") {
-            handClose();
-            toast.success(res.sms)
-          }else if (res.approvething == "Rejected") {
-            handClose();
-            toast(
-              `ໄດ້ປະຕິເສດ ການອອກວຽກນອກ ເລກທີ ${rowItem?.id}`, { icon: <RocketFlamingIcon style={{width: "1.5rem", height: "1.5rem"}}/>, style: { border: '1px solid #FFA500', color: '#333', background: '#FFFAE5',  },  duration: 5000, }
-            );
-          }
-        }else { toast.error(res.sms)}
-      })
+      // approveOutSideWork(formData).then((res: any)=>{ console.log("res", res) 
+      //   if(res?.status == 201) {
+      //     if (res.approvething == "Approved") {
+      //       handClose();
+      //       toast.success(res.sms)
+      //     }else if (res.approvething == "Rejected") {
+      //       handClose();
+      //       toast(
+      //         `ໄດ້ປະຕິເສດ ການອອກວຽກນອກ ເລກທີ ${rowItem?.user_id}`, { icon: <RocketFlamingIcon style={{width: "1.5rem", height: "1.5rem"}}/>, style: { border: '1px solid #FFA500', color: '#333', background: '#FFFAE5',  },  duration: 5000, }
+      //       );
+      //     }
+      //   }else { toast.error(res.sms)}
+      // })
       // setReset({});
       console.log("sendAPI", formData);
     } catch (err: any) {
@@ -86,8 +85,7 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
     <Form<CreateMobileUserkInput> id="createExportForm" resetValues={reset} validationSchema={createMobileUser} onSubmit={onSubmit} className="p-fluid"
         useFormProps={{
             defaultValues: {
-                status: rowItem?.status || 'Pending',
-                ful_name: rowItem?.ful_name,
+                ful_name: rowItem?.fullname,
                 comments: "",
             },
         }}
@@ -123,11 +121,9 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
       <Dialog visible={openModal} header={header} footer={DialogFooter} onHide={handClose} style={{ width: "600px", padding: "none", marginBottom: "none" }} modal className={`modal-form `}>
         {FormCreate}
       </Dialog>
-        <button  className="button custom-target-des" data-pr-tooltip="ແກ້ໄຂ"   
-            onClick={() =>  handOpen()}
-            >
-            <i className='pi pi-user-edit' ></i>
-        </button>
+      <button  className="button custom-target-des" data-pr-tooltip="ຈຸດເຂົ້າວຽກ" onClick={() =>  handOpen()}>
+          <LiaMapMarkedAltSolid size={20}/>
+      </button>
     </>
   );
 }

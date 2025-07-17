@@ -23,7 +23,7 @@ export default function SignInForm() {
     const router = useRouter();
     const [isLoading, setLoading] = useState(false);
     const { setAuthData } = authenStore();
-    const { loginUser } = useUsersStore();
+    const { loginUser, loginEoffice } = useUsersStore();
 
     const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
         try {
@@ -34,6 +34,12 @@ export default function SignInForm() {
                 localStorage.setItem('token', resp?.data?.accessToken);
                 document.cookie = `token=${resp?.data?.accessToken}; path=/;`;
                 setAuthData(resp?.data?.user);
+                if (resp?.data?.user?.role == "admin"){
+                    const resp_eoffce: any = await loginEoffice({username: "appcheckin", password: "EDL1234"})
+                    localStorage.setItem('eoffice_token', resp_eoffce?.data?.token);
+                    document.cookie = `eoffice_token=${resp_eoffce?.data?.token}; path=/;`;
+                }
+
                 setTimeout(() => {
                     router.push('/');
                     setLoading(false);

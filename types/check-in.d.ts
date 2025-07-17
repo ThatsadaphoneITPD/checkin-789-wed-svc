@@ -62,14 +62,14 @@ declare namespace Checkin {
         officeId: any
     };
     type MobileUser = {
-        id: number
+        user_id: number
         emp_code: string
-        ful_name: string
-        status: string
-        department: Department
-        division: Division
-        office: Office
-        unit: Unit
+        fullname: string
+        position: string
+        division: string
+        department: string
+        device_id: string
+        role_id: number
     }
 
     type CheckinManual = {

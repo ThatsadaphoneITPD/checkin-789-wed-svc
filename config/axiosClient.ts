@@ -44,6 +44,7 @@ axiosClient.interceptors.response.use(
         console.warn('Token expired or unauthorized, redirecting to login...');
         document.cookie ='token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         localStorage.removeItem('token');
+        localStorage.removeItem('eoffice_token');
         localStorage.removeItem('authStore');
         localStorage.removeItem('sideMenu');
         window.location.replace('/auth/login');

@@ -1,17 +1,18 @@
 'use client';
 import React, { useEffect } from 'react'
 import MobileUserTable from './table';
-import { useUsersStore } from '@/app/store/user/usersStore';
+import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
+import { useEffectOnce } from 'react-use';
 
 export default function Page() {
-  const {getUsersData} = useUsersStore();
-
+  const {getDepartmentData} = useDepartmentStore()
   useEffect(() => {
-    getUsersData();
+    getDepartmentData()
   }, []);
+
   return (
     <div>
-      <MobileUserTable/>
+      <MobileUserTable />
     </div>
   )
 }

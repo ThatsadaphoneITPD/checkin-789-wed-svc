@@ -4,6 +4,8 @@
 import React, { useState } from 'react';
 import { Checkin } from '@/types';
 import Create from './create';
+import { useUsersStore } from '@/app/store/user/usersStore';
+import toast from 'react-hot-toast';
 
 type Props = {
   rowData: Checkin.MobileUser;
@@ -14,6 +16,7 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
   const [unlockLoad, setUnload] = useState(false);
   const [Resetload, setResetload] = useState(false);
   const [ResetIDload, setResetIDload] = useState(false);
+  const { resetDeviceId } = useUsersStore();
 
   const handleUnlock = () => {
     setUnload(true);
@@ -25,20 +28,29 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
     setTimeout(() => setResetload(false), 800);
   };
 
-  const handleResetID = () => {
+  const handleResetDeviceID = async () => {
     setResetIDload(true);
-    setTimeout(() => setResetIDload(false), 800);
-  };
-
+    resetDeviceId(rowData?.user_id).then((res: any) => {
+      setTimeout(() => {
+        if (res?.status === 201 || res?.status === 200) {
+          toast.success(res.sms);
+        } else {
+          toast.error(res?.sms);
+        }
+        setResetIDload(false)
+      },
+        800);
+    })
+  }
   return (
     <div className="wrap-button">
-      <button className="button unlock-button custom-target-des" data-pr-tooltip="ປົດລ໋ອກ" onClick={handleUnlock} disabled={unlockLoad}>
+      {/* <button className="button unlock-button custom-target-des" data-pr-tooltip="ປົດລ໋ອກ" onClick={handleUnlock} disabled={unlockLoad}>
         {unlockLoad ? <i className="pi pi-spin pi-cog" /> : <i className="pi pi-unlock" />}
-      </button>
-      <button className="button reset-button custom-target-des" data-pr-tooltip="ຣີ່ເຊັດ ລະຫັດຜ່ານ" onClick={handleReset} disabled={Resetload}>
+      </button> */}
+      <button className="button reset-button custom-target-des" data-pr-tooltip="Reset" onClick={handleReset} disabled={Resetload}>
         {Resetload ? <i className="pi pi-spin pi-cog" /> : <i className="pi pi-refresh" />}
       </button>
-      <button className="button resetMobileId-button custom-target-des" data-pr-tooltip="ລ້າງ Id ອຸປະກອບ" onClick={handleResetID} disabled={ResetIDload}>
+      <button className="button resetMobileId-button custom-target-des" data-pr-tooltip="Device" onClick={handleResetDeviceID} disabled={ResetIDload}>
         {ResetIDload ? <i className="pi pi-spin pi-cog" /> : <i className="pi pi-mobile" />}
       </button>
       <Create rowItem={rowData} />
