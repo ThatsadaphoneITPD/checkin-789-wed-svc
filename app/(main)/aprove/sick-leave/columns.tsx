@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Column } from 'primereact/column';
 import { Checkin } from '@/types';
 import { formatDateLao, formatDayMonth } from '@/app/(main)/utilities/format-date';
-import { statusCases, statusLeaveType } from '../../utilities/format-status';
+import { statusCases, statusLeaveType, statusLeaveTypeName } from '../../utilities/format-status';
 import { Tag } from 'primereact/tag';
 import { useSickLeaveStore } from '@/app/store/sick-leave/sickLeaveStore';
 import { Tooltip } from 'primereact/tooltip';
@@ -33,7 +33,7 @@ const codeBody = (rowData: Checkin.SickLeave) => {
 const titleBody = (rowData: Checkin.SickLeave) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.fullName ? <>{rowData?.fullName}[{rowData?.emp_code}]</>: rowData?.emp_code }
+        {rowData?.fullname ? <>{`${rowData?.fullname} [${rowData?.emp_code}]`}</>: rowData?.emp_code }
     </>
 );
 
@@ -60,19 +60,23 @@ const StatusBody = (rowData: Checkin.SickLeave) => (
         />
     </div>
 );
-const TypeBody = (rowData: Checkin.SickLeave, dataType?: Checkin.LeaveType[]) => {
-    const leaveTypeName = dataType?.find(type => type.leave_type_id === rowData.leave_type_id)?.leave_type_name || 'N/A';
-    const { color, bgcolor, icon } = statusLeaveType(rowData.leave_type_id)
-    return (
-        <div style={{ ...bodyStyle }}>
-            <Tag
-                style={{ background: `${bgcolor}`, color: `${color}` }}
-                icon={`pi ${icon}`}
-                value={leaveTypeName}
-            />
-        </div>
-    );
+const TypeBody = ( rowData: Checkin.SickLeave, dataType?: Checkin.LeaveType[]) => {
+  const hasTypeId = !!rowData?.leave_type_id;
+  const leaveTypeName = dataType?.find((type) => type.leave_type_id === rowData.leave_type_id) ?.leave_type_name || rowData?.leave_type_name || 'N/A';
+
+  const { color, bgcolor, icon } = hasTypeId ? statusLeaveType(rowData.leave_type_id) : statusLeaveTypeName(rowData.leave_type_name);
+
+  return (
+    <div style={{ ...bodyStyle }}>
+      <Tag
+        style={{ background: bgcolor, color }}
+        icon={`pi ${icon}`}
+        value={leaveTypeName}
+      />
+    </div>
+  );
 };
+
 const reqestStartEndBody = (rowData: Checkin.SickLeave) => (
     <div style={{ ...bodyStyle }}>
         <Tag style={{ background: `#d6e4ff`, color: `#2f54eb` }} value={`${formatDayMonth(rowData?.start_date)} - ${formatDayMonth(rowData?.end_date)}`} />
@@ -88,7 +92,7 @@ const totalDaysBody = (rowData: Checkin.SickLeave) => (
 const reqestTimeBody = (rowData: Checkin.SickLeave) => (
     <>
         <span className="p-column-title">created_at</span>
-         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.created_at)}`}/>
+         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.start_date)}`}/>
     </>
 );
 

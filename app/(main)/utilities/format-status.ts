@@ -148,3 +148,55 @@ export const statusLeaveType = (statusLeave_type_id: number): { bgcolor: string;
     }
     return { color, bgcolor, icon };
 };
+
+export const statusLeaveTypeName = (statusLeave_type_name: string): { bgcolor: string; color: string; icon: string} => {
+    // let statusla: string = '';
+    let bgcolor: any = "info";
+    let color: any = "info";
+    let icon: any = "pi-info-circle";
+    switch (statusLeave_type_name) {
+        case "ລາພັກເຈັບປ່ວຍ":
+            // statusla = "ລາພັກເຈັບປ່ວຍ Sick";
+            bgcolor = "#d6e4ff";
+            color = "#1d39c4";
+            icon = "pi-heart";
+            break;
+        case "ລາພັກປະຈຳປີ": 
+            // statusla = "ລາພັກປະຈຳປີ";
+            bgcolor = "#fffb8f";
+            color = "#876800";
+            icon = "pi-calendar";
+            break;
+        case "ລາພັກເກີດລູກ": 
+            // statusla = "ລາພັກເກີດລູກ";
+            bgcolor = "#ffd6e7";
+            color = "#c41d7f";
+            icon = "pi-star";
+            break;
+        case "ລາພັກແຕ່ງງານ": 
+            // statusla = "ລາພັກແຕ່ງງານ";
+            bgcolor = "#f4ffb8";
+            color = "#3a3d00";
+            icon = "pi-heart-fill";
+            break;
+        case "ລາພັກຄອບຄົວເສຍຊີວິດ": 
+            // statusla = "ລາພັກຄອບຄົວເສຍຊີວິດ";
+            bgcolor = "#ffccc7";
+            color = "#a8071a";
+            icon = "pi-exclamation-circle";
+            break;
+        case "ລາພັກບໍ່ເອົາເງິນເດືອນ": 
+            // statusla = "ລາພັກບໍ່ເອົາເງິນເດືອນ";
+            bgcolor = "#d9f7be";
+            color = "#135200";
+            icon = "pi-wallet";
+            break;
+        default:
+            // statusla = "ປະເພດບໍ່ທຣາບ";
+            bgcolor = "#d3adf7";
+            color = "#722ed1";
+            icon = "pi-question-circle";
+            break;
+    }
+    return { color, bgcolor, icon };
+};

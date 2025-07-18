@@ -62,6 +62,7 @@ declare namespace Checkin {
         officeId: any
     };
     type MobileUser = {
+        _key: number
         user_id: number
         emp_code: string
         fullname: string
@@ -81,17 +82,19 @@ declare namespace Checkin {
     };
 
     type WorkArea = {
-        id: any
+        work_area_id: number
         area_name: string
         latitude: number
         longitude: number
         radius_km: number
+        created_at: string
+        employeeWorkAreas: any | null
     }
 
     type FieldWork = {
         fw_req_id:          number;
         emp_code:           string;
-        fullName:           string
+        fullname:           string
         field_work_type:    string;
         description:        string;
         workplace:          string;
@@ -113,7 +116,7 @@ declare namespace Checkin {
     type OutSideWork = {
         work_out_id: number
         emp_code: string
-        fullName: string
+        fullname: string
         description: string
         punch_time: string
         latitude: number
@@ -131,8 +134,9 @@ declare namespace Checkin {
     type SickLeave = {
         leave_req_id: number
         emp_code: string
-        fullName: string
+        fullname: string
         leave_type_id: number
+        leave_type_name: string
         reasons: string
         start_date: string
         end_date: string
@@ -193,7 +197,7 @@ declare namespace Checkin {
     type Overtime = {
         ot_id: number
         emp_code: string
-        fullName: string
+        fullname: string
         description: string
         punch_time: string
         latitude: number

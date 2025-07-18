@@ -158,7 +158,7 @@ const FormCreate = (
       <Button label="ບັນທຶກ" icon="pi pi-check" form="createExportForm" type="submit" />
     </>
   );
-  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>{rowItem?.id && "ແກ້ໄຂ"} ສະຖານທີ ເຮັດວຽກ  {rowItem?.id && (rowItem?.id)}</div></div>)
+  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>{rowItem?.work_area_id && "ແກ້ໄຂ"} ສະຖານທີ ເຮັດວຽກ  {rowItem?.work_area_id && (rowItem?.work_area_id)}</div></div>)
 
   return (
     <>

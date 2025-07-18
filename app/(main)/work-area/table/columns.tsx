@@ -19,7 +19,7 @@ const bodyStyle: React.CSSProperties = { display: "flex", justifyContent: "cente
 const titleBody = (rowData: Checkin.WorkArea) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.id}
+        {rowData?.work_area_id}
     </>
 );
 

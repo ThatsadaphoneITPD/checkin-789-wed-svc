@@ -35,7 +35,7 @@ const codeBody = (rowData: Checkin.FieldWork) => {
 const titleBody = (rowData: Checkin.FieldWork) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.fullName ? <>{rowData?.fullName}[{rowData?.emp_code}]</>: rowData?.emp_code }
+        {rowData?.fullname ? <>{rowData?.fullname}[{rowData?.emp_code}]</>: rowData?.emp_code }
     </>
 );
 
@@ -62,7 +62,7 @@ const workplaceBody = (rowData: Checkin.FieldWork) => (
 const reqestTimeBody = (rowData: Checkin.FieldWork) => (
     <>
         <span className="p-column-title">created_at</span>
-         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.created_at)}`}/>
+         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.start_date)}`}/>
     </>
 );
 const StatusBody = (rowData: Checkin.FieldWork) => (

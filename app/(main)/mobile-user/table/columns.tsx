@@ -14,12 +14,12 @@ type ColumnsProps = {
     onEditItem?: (rowData: Checkin.MobileUser) => void;
 };
 
-const bodyStyle: React.CSSProperties = { display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "100%" }
+const bodyStyle: React.CSSProperties = { display: "flex", justifyContent: "start", alignItems: "start", flexDirection: "column", height: "100%" }
 
 const titleID = (rowData: Checkin.MobileUser) => (
     <>
         <span className="p-column-title">ID</span>
-        {rowData?.user_id}
+        {rowData?._key}
     </>
 );
 const titleBody = (rowData: Checkin.MobileUser) => (
@@ -43,12 +43,14 @@ const descBody = (rowData: Checkin.MobileUser) => (
     </>
 );
 
-const LocateBody = (rowData: Checkin.MobileUser) => (
+const LocateDepartment = (rowData: Checkin.MobileUser) => (
     <div style={{ ...bodyStyle }}>
-        {rowData?.department != null ? `
-            ${rowData?.department != null ? `${rowData?.department}, ` : ""} 
-            ${rowData?.division != null ? `${rowData?.division}, ` : ""}
-        `: "" }
+        {rowData?.department != null ? ` ${rowData?.department != null ? `${rowData?.department}` : ""} `: "--" }
+    </div>
+);
+const LocateDivision = (rowData: Checkin.MobileUser) => (
+    <div style={{ ...bodyStyle }}>
+        {rowData?.division != null ? ` ${rowData?.division != null ? `${rowData?.division}` : ""} `: "--" }
     </div>
 );
 const StatusBody = (rowData: Checkin.MobileUser) => (
@@ -72,11 +74,12 @@ export const GetColumns = ({
     };
 
     return [
-        <Column key="1" field="ID" header="ID" body={titleID} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="1" field="ID" header="NO" body={titleID} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="2" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="3" field="description" header="ຊື່ - ນາມສະກຸນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
-        <Column key="4" field="longitude" header="ສັງກັດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
-        <Column key="5" field="ລະຫັດ ເຄື່ຶັອງ" header="ເລກເຄື່ອງ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
+        <Column key="4" field="longitude" header="ຝ່າຍ" body={LocateDepartment} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="4" field="longitude" header="ພະແນກ" body={LocateDivision} headerStyle={{ minWidth: '2rem' }}  />,
+        <Column key="5" field="ລະຫັດ ເຄື່ຶັອງ" header="ເລກເຄື່ອງ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="6"  body={(rowData: Checkin.MobileUser) => (   <ActionButtons rowData={rowData} openViewDoc={openViewDoc}  />  )} headerStyle={{ minWidth: '5rem' }}/>
     ];
 };

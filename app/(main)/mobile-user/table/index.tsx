@@ -138,9 +138,9 @@ export default function MobileUserTable() {
                 rows={pageSize}
                 totalRecords={totalCount}
                 onPage={onPage}
-                value={filtered.map((item) => ({
+                value={filtered.map((item, index) => ({
                     ...item,
-                    _key: item?.emp_code || crypto.randomUUID(),
+                    _key: (page - 1) * pageSize + index + 1,
                 }))}
                 selection={selectedItem}
                 onSelectionChange={(e) => setSelectedItem(e.value)}

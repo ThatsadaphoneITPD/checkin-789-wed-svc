@@ -2,6 +2,15 @@ import { EventApi, EventInput } from '@fullcalendar/core';
 import { number } from 'prop-types';
 
 declare namespace Basics {
+    type WorkArea = {
+        work_area_id: number
+        area_name: string
+        latitude: number
+        longitude: number
+        radius_km: number
+        created_at: string
+        employeeWorkAreas: any | null
+    }
     type Unit = {
         id: number
         unit_name: string
