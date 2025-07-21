@@ -41,7 +41,7 @@ const codeBody = (rowData: Checkin.OutSideWork) => {
 const titleBody = (rowData: Checkin.OutSideWork) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.fullName ? <>{rowData?.fullName}[{rowData?.emp_code}]</>: rowData?.emp_code }
+        {rowData?.fullname ? <>{rowData?.fullname}[{rowData?.emp_code}]</>: rowData?.emp_code }
     </>
 );
 
