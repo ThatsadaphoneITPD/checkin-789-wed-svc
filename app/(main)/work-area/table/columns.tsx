@@ -19,7 +19,7 @@ const bodyStyle: React.CSSProperties = { display: "flex", justifyContent: "cente
 const titleBody = (rowData: Checkin.WorkArea) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.work_area_id}
+        {rowData?._key}
     </>
 );
 
@@ -28,9 +28,7 @@ const descBody = (rowData: Checkin.WorkArea) => (
         <div>
             <Tooltip target=".custom-target-des" />
             <span className="custom-target-des"   data-pr-tooltip={rowData?.area_name === "" ? "---" : rowData?.area_name}   data-pr-position="bottom"  >
-                <span style={{ display: "inline-block",  maxWidth: "8rem",  whiteSpace: "nowrap",  overflow: "hidden",  textOverflow: "ellipsis",  verticalAlign: "middle" }}>
-                    {rowData?.area_name === "" ? "---" : rowData?.area_name}
-                </span>
+               {rowData?.area_name === "" ? "---" : rowData?.area_name}
             </span>
         </div>
     </>

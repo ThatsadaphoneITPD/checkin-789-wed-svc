@@ -82,6 +82,7 @@ declare namespace Checkin {
     };
 
     type WorkArea = {
+        _key: number
         work_area_id: number
         area_name: string
         latitude: number

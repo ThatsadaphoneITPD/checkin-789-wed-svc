@@ -91,9 +91,9 @@ export default function MobileUserTable() {
         ref={dt}
         sortField="id"
         sortOrder={1}
-        value={filteredWorkarea.map((w) => ({
+        value={filteredWorkarea.map((w, index) => ({
           ...w,
-          _key: w.id, // Ensure unique key per row
+          _key: index + 1, // Ensure unique key per row
         }))}
         selection={selectedItem}
         onSelectionChange={(e) => setSelectedItem(e.value)}

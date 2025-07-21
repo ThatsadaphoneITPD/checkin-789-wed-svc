@@ -810,9 +810,9 @@
     left: 0;
     right: 0;
     width: 100%;
-    border-radius: 10px;
+    border-radius: 0; /* optional: remove border-radius for full edge-to-edge */
     background-color: #05459e;
-    background-image: url('/layout/images/wave-line-techno.webp');
+    background-image: url('/layout/images/wav_wave.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

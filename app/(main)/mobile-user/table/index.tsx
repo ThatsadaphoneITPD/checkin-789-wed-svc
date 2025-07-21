@@ -77,7 +77,6 @@ export default function MobileUserTable() {
             <div className="m-4">
                 <InputText
                     type="search"
-                    
                     placeholder="ລະຫັດ ພະນັກງານ"
                     value={emcode || ''}
                     onChange={(e) => setEmcode(e.target.value)}

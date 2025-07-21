@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler } from 'react-hook-form';
-import { useOutSideWorkStore, authenStore } from '@/app/store';
+import { useOutSideWorkStore, authenStore, useWorkAreaStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { Button } from 'primereact/button';
 import { Form } from '@/app/components/ui/form';
@@ -21,10 +21,14 @@ interface CreateOutSideWorkProps {
 export default function Create({ rowItem }: CreateOutSideWorkProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
-  const {authData} = authenStore();
+  const {addWorkArea, updateWorkArea} = useWorkAreaStore();
   const [openModal, setopenModal] = useState(false)
+  const [load, setLoading] = useState(false)
   const handOpen = () => { setopenModal(true) }
   const handClose = () => { setopenModal(false) }
+  const handleLoadig = (value?: boolean) =>{
+    setLoading(value)
+  }
 
   const onSubmit: SubmitHandler<CreateWorkAreaInput> = async (data) => {
     try {
@@ -39,6 +43,31 @@ export default function Create({ rowItem }: CreateOutSideWorkProps) {
       Object.entries(formattedData).forEach(([key, value]) => {
         formData.append(key, value as string); // Convert to string if necessary
       });
+      if (!rowItem) {
+        addWorkArea(formData).then((res: any)=>{ 
+          if(res?.status == 201 || res?.status === 200) {
+            handleLoadig(false);
+            toast.success(res.sms)
+            setReset({});
+            handClose()
+          } else {
+            handleLoadig(false);
+            toast.error(`${res.sms}-${res?.status}`)
+          }
+        })
+      } else{
+        updateWorkArea(formData, data?.work_area_id).then((res: any)=>{ 
+          if(res?.status == 201 || res?.status === 200) {
+            handleLoadig(false);
+            toast.success(res.sms)
+            setReset({});
+            handClose()
+          } else {
+            handleLoadig(false);
+            toast.error(`${res.sms}-${res?.status}`)
+          }
+        })
+      }
   
       // approveOutSideWork(formData).then((res: any)=>{ console.log("res", res) 
       //   if(res?.status == 201) {
@@ -71,14 +100,16 @@ const FormCreate = (
     className="p-fluid"
     useFormProps={{
       defaultValues: {
+        work_area_id: rowItem?.work_area_id,
         area_name: rowItem?.area_name,
         latitude: rowItem?.latitude,
         longitude: rowItem?.longitude,
-        radius_km: rowItem?.radius_km,
+        radius_km: rowItem?.radius_km || 0.11,
       },
     }}
   >
     {({ register, control, watch, setValue, formState: { errors } }) => {
+      console.log("errors", errors)
       const watchlatitude = watch('latitude');
       const watchlongitude = watch('longitude');
       const watchradius_km = watch('radius_km');
@@ -167,7 +198,7 @@ const FormCreate = (
       </Dialog>
       { rowItem ?  
         <button  className="button custom-target-des" data-pr-tooltip="ແກ້ໄຂ" onClick={() => handOpen()} >
-          <i className='pi pi-user-edit' ></i>
+          <i className='pi pi-map-marker' ></i>
         </button>
         :
         <span className="">

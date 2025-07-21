@@ -1,44 +1,70 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { googleAPI_KEY } from "./constants-key";
+
 interface Props {
-    lat: any, lng: any,
-    width?: string, height?: string,
+    lat: number | string;
+    lng: number | string;
+    width?: string;
+    height?: string;
 }
 
-const GoogleMapShow: React.FC<Props> = ({  lat, lng,  width = '100%',  height = '70px' }) => {
-    const google_key_api = googleAPI_KEY;
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: google_key_api as string,
+const GoogleMapShow: React.FC<Props> = ({
+    lat,
+    lng,
+    width = "100%",
+    height = "70px",
+}) => {
+    const mapRef = useRef<google.maps.Map | null>(null);
+    const [center, setCenter] = useState<{ lat: number; lng: number }>({
+        lat: parseFloat(lat as string),
+        lng: parseFloat(lng as string),
     });
-    const handleMapLoad = (map: any) => {
+
+    const { isLoaded } = useJsApiLoader({
+        id: "google-map-script",
+        googleMapsApiKey: googleAPI_KEY,
+    });
+
+    useEffect(() => {
+        const parsedLat = parseFloat(lat as string);
+        const parsedLng = parseFloat(lng as string);
+
+        if (!isNaN(parsedLat) && !isNaN(parsedLng)) {
+            setCenter({ lat: parsedLat, lng: parsedLng });
+
+            if (mapRef.current) {
+                mapRef.current.panTo({ lat: parsedLat, lng: parsedLng });
+            }
+        }
+    }, [lat, lng]);
+
+    const handleMapLoad = (map: google.maps.Map) => {
+        mapRef.current = map;
         map.setOptions({
-            enableMyLocation: true,
+            disableDefaultUI: true,
         });
     };
-    const containerStyle = { width, height, borderRadius: '5px', };
+
+    const containerStyle = {
+        width,
+        height,
+        borderRadius: "5px",
+    };
 
     return (
         <div>
             {isLoaded ? (
-                <div>
-                    {/* <div >
-                        {parseFloat(props.lng).toFixed(6) + "," + parseFloat(props.lng).toFixed(6)}
-                    </div> */}
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
-                        zoom={15}
-                        onLoad={handleMapLoad} // Set the onLoad callback
-                    >
-                        <Marker
-                            position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
-                        />
-                    </GoogleMap>
-                </div>
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={center}
+                    zoom={15}
+                    onLoad={handleMapLoad}
+                >
+                    <Marker position={center} />
+                </GoogleMap>
             ) : (
-                <div>Loading...</div>
+                <div>Loading map...</div>
             )}
         </div>
     );
