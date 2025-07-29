@@ -1,7 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Controller, SubmitHandler } from 'react-hook-form';
-import { useOutSideWorkStore, authenStore } from '@/app/store';
+import { useLocationStore, useWorkAreaStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { Button } from 'primereact/button';
 import { Form } from '@/app/components/ui/form';
@@ -15,19 +15,22 @@ import RocketFlamingIcon from '@/app/components/icons/rocket-flaming';
 import { LiaMapMarkedAltSolid } from "react-icons/lia";
 import { CreateMobileUserkInput, createMobileUser } from '@/utils/validators/create-mobile-user.schema';
 import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
+import { useUsersStore } from '@/app/store/user/usersStore';
 
 interface CreateMobileUserProps {
-    rowItem: Checkin.MobileUser;
+  rowItem: Checkin.MobileUser;
 }
 
 
 export default function Create({ rowItem }: CreateMobileUserProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
-  const {approveOutSideWork }= useOutSideWorkStore()
-  const {authData} = authenStore();
+  const { moveUserWorkArea } = useUsersStore();
+  const { dataLocation } = useLocationStore();
+  const { dataworkarea, getzWorkAreaByLocationId } = useWorkAreaStore();
   // 1 GB = 1 * 10^9 bytes // or 2 GB = 2 * 10^9 bytes
-//   const Gigabytes = 1 * (10 ** 9);
+  //   const Gigabytes = 1 * (10 ** 9);
   const [openModal, setopenModal] = useState(false)
   const handOpen = () => { setopenModal(true) }
   const handClose = () => { setopenModal(false) }
@@ -35,72 +38,132 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
   const onSubmit: SubmitHandler<CreateMobileUserkInput> = async (data) => {
     try {
       const formattedData = {
-        ...data,
+        work_area_id: data.work_area_id,
       };
       console.log("formattedData", formattedData)
       // Create a new FormData object
       const formData = new FormData();
-    
+
       // Append each field to the FormData object
       Object.entries(formattedData).forEach(([key, value]) => {
-        formData.append(key, value as string); // Convert to string if necessary
+        formData.append(key, value !== undefined && value !== null ? String(value) : "");
       });
-  
-      // approveOutSideWork(formData).then((res: any)=>{ console.log("res", res) 
-      //   if(res?.status == 201) {
-      //     if (res.approvething == "Approved") {
-      //       handClose();
-      //       toast.success(res.sms)
-      //     }else if (res.approvething == "Rejected") {
-      //       handClose();
-      //       toast(
-      //         `ໄດ້ປະຕິເສດ ການອອກວຽກນອກ ເລກທີ ${rowItem?.user_id}`, { icon: <RocketFlamingIcon style={{width: "1.5rem", height: "1.5rem"}}/>, style: { border: '1px solid #FFA500', color: '#333', background: '#FFFAE5',  },  duration: 5000, }
-      //       );
-      //     }
-      //   }else { toast.error(res.sms)}
-      // })
-      // setReset({});
+
+      moveUserWorkArea(data?.user_id, formData).then((res: any)=>{ console.log("res", res) 
+        if(res?.status == 200) {
+            handClose();
+            toast.success(res.sms);
+        }else { 
+          toast.error(res.sms)
+        }
+      })
       console.log("sendAPI", formData);
     } catch (err: any) {
       console.log("errAPI", err.message);
     }
     // closeModal();
   };
-  // const taggle =()=> {
-  //   setLang("")
-  // }
-const fieldStatus = {
-    Approved : { status: 'Approved', l_status: 'ອະນຸມັດ' },
-    Rejected: { status: 'Rejected', l_status: 'ບໍ່ອະນຸມັດ' },
-} as const;
-
-const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
-    name: value.status,
-    la: value.l_status,
-    value: key
-}));
 
 
- const FormCreate = (
+  const optionLocations = useMemo(
+    () =>
+      Object?.values(dataLocation).map(e => ({
+        ful_name: `${e.location_name}`,
+        id: e.location_id
+      })),
+    [dataLocation]
+  );
+
+  const optionWorkAreas = useMemo(
+    () =>
+      Object?.values(dataworkarea).map(e => ({
+        ful_name: `${e.area_name}`,
+        id: e.work_area_id
+      })),
+    [dataworkarea]
+  );
+
+  const FormCreate = (
     <Form<CreateMobileUserkInput> id="createExportForm" resetValues={reset} validationSchema={createMobileUser} onSubmit={onSubmit} className="p-fluid"
-        useFormProps={{
-            defaultValues: {
-                ful_name: rowItem?.fullname,
-                comments: "",
-            },
-        }}
-        >
-      {({ register, control, watch, formState: { errors } }) => {
+      useFormProps={{
+        defaultValues: {
+          user_id: rowItem?.user_id,
+          location_id: rowItem?.location_id || null,
+        },
+      }}
+    >
+      {({ register, control, watch, setValue, formState: { errors } }) => {
         console.log("err", errors)
-        // const watchto_md = watch("to_md");
-        // console.log("watchat_files", watchat_files)
-        const urltest = 'https://res.cloudinary.com/dp3zeejct/image/upload/v1655344187/cld-sample-2.jpg'
+
         return (
           <>
             <div key="approvedBy" className="field" style={{ marginTop: "1.6rem" }}>
               <span className="contentfloat" style={{ width: "100%" }}>
-                 <InputText {...register("ful_name")} />
-                <label htmlFor="content" >{lang === "LA" ? "ຊື່ ແລະ ນາມສະກຸນ" : "Content"} <span className='required-star' >*</span></label>
+                <Controller
+                  name="location_id"
+                  control={control}
+                  render={({ field }) => (
+                    <span className="contentfloat w-full">
+                      <Dropdown
+                        id={field.name}
+                        value={field.value}
+                        options={optionLocations}
+                        optionLabel="ful_name"
+                        optionValue="id"
+                        placeholder="ເລືອກ ສັງກັດ-ຫ້ອງການ"
+                        // showClear
+                        filter
+                        className="w-full"
+                        onChange={e => {
+                          const selected = e.value ?? null;
+                          field.onChange(selected);
+                          if (selected) {
+                            getzWorkAreaByLocationId(selected);
+                          }
+                          setValue("work_area_id", null);
+                        }}
+                      />
+                      <label htmlFor={field.name}>
+                        ສັງກັດ ຝ່າຍ/ສາຂາ<span className="required-star">*</span>
+                        {errors.location_id && (
+                          <small className="p-invalid required-star">
+                            ເລືອກດ້ວຍ
+                          </small>
+                        )}
+                      </label>
+                    </span>
+                  )}
+                />
+                <div className="mt-5">
+                  <Controller
+                    name="work_area_id"
+                    control={control}
+                    render={({ field }) => (
+                      <span className="contentfloat w-full">
+                        <Dropdown
+                          id={field.name}
+                          value={field.value}
+                          options={optionWorkAreas}
+                          optionLabel="ful_name"
+                          optionValue="id"
+                          placeholder="ເລືອກ ສະຖານທີ"
+                          // showClear
+                          filter
+                          className="w-full"
+                          onChange={e => { field.onChange(e.value) }}
+                        />
+                        <label htmlFor={field.name}>
+                          ສະຖານທີ ເຮັດວຽກ<span className="required-star">*</span>
+                          {errors.location_id && (
+                            <small className="p-invalid required-star">
+                              ເລືອກດ້ວຍ
+                            </small>
+                          )}
+                        </label>
+                      </span>
+                    )}
+                  />
+                </div>
               </span>
             </div>
           </>
@@ -121,8 +184,8 @@ const fieldstatus = Object.entries(fieldStatus).map(([key, value]) => ({
       <Dialog visible={openModal} header={header} footer={DialogFooter} onHide={handClose} style={{ width: "600px", padding: "none", marginBottom: "none" }} modal className={`modal-form `}>
         {FormCreate}
       </Dialog>
-      <button  className="button custom-target-des" data-pr-tooltip="ຈຸດເຂົ້າວຽກ" onClick={() =>  handOpen()}>
-          <LiaMapMarkedAltSolid size={20}/>
+      <button className="button custom-target-des" data-pr-tooltip="ຈຸດເຂົ້າວຽກ" onClick={() => handOpen()}>
+        <LiaMapMarkedAltSolid size={20} />
       </button>
     </>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
 import { Nullable } from 'primereact/ts-helpers';
@@ -9,11 +9,14 @@ import { GetColumns } from './columns';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import { useUsersStore } from '@/app/store/user/usersStore';
 import Create from './create';
-import { useWorkAreaStore } from '@/app/store';
+import { useLocationStore, useWorkAreaStore } from '@/app/store';
+import { Dropdown } from 'primereact/dropdown';
 
 export default function MobileUserTable() {
   const { loading } = useUsersStore();
   const { dataworkarea, getzWorkAreaData } = useWorkAreaStore();
+  const { dataLocation, getzLocationData } = useLocationStore();
+  const [selectedDep, setSelectedDep] = useState<Nullable<number>>(null);
 
   const { openModal } = useModal();
   const [selectedItem, setSelectedItem] = useState<any[]>([]);
@@ -24,26 +27,42 @@ export default function MobileUserTable() {
 
   // Fetch initial data
   useEffect(() => {
+    getzLocationData()
     getzWorkAreaData();
   }, [getzWorkAreaData]);
+  
+  const optionLocations = useMemo(
+    () =>
+      Object?.values(dataLocation).map(e => ({
+        option_name: `${e.location_name}`,
+        id: e.location_id
+      })),
+    [dataLocation]
+  );
 
   // Debounce + filter logic
   useEffect(() => {
     const timeout = setTimeout(() => {
       const keyword = workplace?.toLowerCase().trim() || '';
-      if (!keyword) {
-        setFilteredWorkarea(dataworkarea);
-      } else {
-        setFilteredWorkarea(
-          dataworkarea.filter((w) =>
-            w.area_name.toLowerCase().includes(keyword)
-          )
+      let filtered = [...dataworkarea];
+
+      if (keyword) {
+        filtered = filtered.filter((w) =>
+          w.area_name.toLowerCase().includes(keyword)
         );
       }
+
+      if (selectedDep !== null) {
+        filtered = filtered.filter((w) => w.location_id === selectedDep);
+      }
+
+      setFilteredWorkarea(filtered);
     }, 150);
 
     return () => clearTimeout(timeout);
-  }, [workplace, dataworkarea]);
+  }, [workplace, dataworkarea, selectedDep]);
+
+
 
   // Open modal to view document
   const onViewDoc = useCallback(
@@ -66,11 +85,22 @@ export default function MobileUserTable() {
         <div className="header-table flex flex-wrap gap-2 flex-1">
           <InputText
             type="search"
-            style={{ height: '2.5rem' }}
             placeholder="ຄົ້ນຫາ ຊື່ສະຖານທີ"
             className="input-text"
             value={workplace ?? ''}
             onChange={(e) => setWorkplace(e.target.value)}
+          />
+          <Dropdown
+            showClear
+            options={optionLocations}
+            value={selectedDep}
+            onChange={(e: any) => {
+              setSelectedDep(e.value ?? null);
+            }}
+            optionLabel="option_name"
+            optionValue="id"
+            placeholder="ເລືອກ ຝ່າຍ/ສາຂາ"
+            className="w-full ml-2 md:w-10rem"
           />
         </div>
         <div className="flex gap-2">

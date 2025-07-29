@@ -2,10 +2,9 @@ import { z } from 'zod';
 
 // form zod validation schema
 export const createMobileUser = z.object({
-    emp_code: z.string().optional(),
-    ful_name: z.string().optional(),
-    status: z.string().min(1, { message: "ຂໍ້ມູນວ່າງເປົ່າ" }).min(3, { message: "ເລຶອກສະຖານາ" }),
-    comments: z.string().min(1, { message: "ປະກອບຄຳເຫັນ ດ້ວຍ" }).min(3, { message: "ປ້ອນຄຳເຫັນ" }),
+    user_id: z.number().optional(),
+    location_id: z.number({ required_error: "ກະລຸນາເລືອກສະຖານທີ່" }),
+    work_area_id: z.number({ required_error: "ກະລຸນາເລືອກສະຖານທີ່" }),
 });
 
 // generate form types from zod validation schema

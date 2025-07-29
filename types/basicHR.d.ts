@@ -4,12 +4,13 @@ import { number } from 'prop-types';
 declare namespace Basics {
     type WorkArea = {
         work_area_id: number
+        location_name: string
         area_name: string
         latitude: number
         longitude: number
         radius_km: number
+        location_id: number
         created_at: string
-        employeeWorkAreas: any | null
     }
     type Unit = {
         id: number
@@ -31,7 +32,7 @@ declare namespace Basics {
         division: Division
         units: any[]
     };
-     type Division = {
+    type Division = {
         id: number
         division_name: string
         division_code: string

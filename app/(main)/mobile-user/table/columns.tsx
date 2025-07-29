@@ -56,11 +56,11 @@ const positionBody = (rowData: Checkin.MobileUser) => (
     </>
 );
 
-// const LocateDepartment = (rowData: Checkin.MobileUser) => (
-//     <div style={{ ...bodyStyle }}>
-//         {rowData?.department != null ? ` ${rowData?.department != null ? `${rowData?.department}` : ""} `: "--" }
-//     </div>
-// );
+const LocateWorkArea = (rowData: Checkin.MobileUser) => (
+    <div>
+        {rowData?.work_area_id ? `${rowData?.area_name} [${rowData?.work_area_id}]` : ""} 
+    </div>
+);
 const LocateDivision = (rowData: Checkin.MobileUser) => (
     <div style={{ ...bodyStyle }}>
         <Tooltip target=".custom-target-dep" />
@@ -93,7 +93,7 @@ export const GetColumns = ({
         <Column key="4" field="position" header="ຕຳແໜ່ງ" body={positionBody} headerStyle={{ minWidth: '8rem' }} />,
         // <Column key="4" field="longitude" header="ຝ່າຍ" body={LocateDepartment} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="5" field="longitude" header="ພະແນກ" body={LocateDivision} headerStyle={{ minWidth: '2rem' }} />,
-        // <Column key="6" field="ລະຫັດ ເຄື່ຶັອງ" header="ເລກເຄື່ອງ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="6" field="work_area_id" header="ສະຖານທີ ເຮັດວຽກ" body={LocateWorkArea} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="7" body={(rowData: Checkin.MobileUser) => (<ActionButtons rowData={rowData} openViewDoc={openViewDoc} />)} headerStyle={{ minWidth: '5rem' }} />
     ];
 };

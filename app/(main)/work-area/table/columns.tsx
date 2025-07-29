@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { Column } from 'primereact/column';
 import { Checkin } from '@/types';
 import { statusCases } from '../../utilities/format-status';
@@ -27,8 +27,10 @@ const descBody = (rowData: Checkin.WorkArea) => (
     <>
         <div>
             <Tooltip target=".custom-target-des" />
-            <span className="custom-target-des"   data-pr-tooltip={rowData?.area_name === "" ? "---" : rowData?.area_name}   data-pr-position="bottom"  >
-               {rowData?.area_name === "" ? "---" : rowData?.area_name}
+            <span className="custom-target-des" data-pr-tooltip={rowData?.area_name === "" ? "---" : rowData?.area_name} data-pr-position="bottom"  >
+                <span style={{ display: "inline-block", maxWidth: "15rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", verticalAlign: "middle" }}>
+                    {rowData?.area_name === "" ? "---" : rowData?.area_name}
+                </span>
             </span>
         </div>
     </>
@@ -37,6 +39,12 @@ const descBody = (rowData: Checkin.WorkArea) => (
 const LocateBody = (rowData: Checkin.WorkArea) => (
     <div style={{ ...bodyStyle }}>
         <OpenMapOutSideWork rowItem={rowData} />
+    </div>
+);
+
+const LocateDepBranchBody = (rowData: Checkin.WorkArea) => (
+    <div >
+        {rowData?.location_name ? `${rowData?.location_name} [${rowData?.location_id}]` : '---'}
     </div>
 );
 
@@ -64,7 +72,8 @@ export const GetColumns = ({
 
     return [
         <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="2" field="description" header="ສະຖານທີ່ ເຮັດວຽກ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
+        <Column key="2" field="description" header="ສະຖານທີ່ ເຮັດວຽກ" body={descBody} headerStyle={{ minWidth: '10rem' }} />,
+        <Column key="2" field="description" header="ສະຖານທີ່ ເຮັດວຽກ" body={LocateDepBranchBody} headerStyle={{ minWidth: '4rem' }} />,
         <Column key="3" field="longitude" header="ສັງກັດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="9" body={(rowData: Checkin.WorkArea) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];

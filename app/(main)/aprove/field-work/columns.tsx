@@ -1,17 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
 import { Checkin } from '@/types';
-import { formatDate, formatDayMonth, formatDay, formatMonth, formatDateLao } from '@/app/(main)/utilities/format-date';
+import { formatDate, formatDateLao } from '@/app/(main)/utilities/format-date';
 import { statusCases, statusTypeField } from '../../utilities/format-status';
 import { Tag } from 'primereact/tag';
-import CreateFiledWork from './create-field-work';
 import { Tooltip } from 'primereact/tooltip';
-import moment from 'moment';
-import GlobalPhotoView from '@/app/shared/photo-view/container';
-import { useFileCheckStore } from '@/app/store';
 import ActionBody from './actionBody';
 type ColumnsProps = {
     onViewDoc?: (file_path: string) => void;

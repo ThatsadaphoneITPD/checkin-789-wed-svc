@@ -20,6 +20,7 @@ type UsersStore = {
     loginUser: (userLogin: any) => Promise<void>;
     getUsersData: (params?: { empCode?: string; division_id?: string; department_id?: string; page?: number; pageSize?: number; }) => Promise<void>;
     resetDeviceId: (user_id: number) => Promise<void>;
+    moveUserWorkArea: (user_id: number, work_area: any) => Promise<void>;
 };
 
 // create the store
@@ -131,92 +132,38 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             return { status, sms: message };
         }
     },
+    moveUserWorkArea: async (user_id: number, work_area: any) => {
+    try {
+        const response = await axiosClient.put(`api/EmpWorkArea/UpdateEmpWorkArea/${user_id}`, work_area);
+
+        if (response.status === 200 && response.data?.message === "Updated successfully!") {
+            const updatedWorkAreaId = response.data?.data?.work_area_id;
+
+            set((state) => ({
+                dataUser: state.dataUser.map((user) =>
+                    user.user_id === user_id ? { ...user, work_area_id: updatedWorkAreaId } : user
+                ),
+            }));
+
+            return {
+                status: response.status,
+                sms: response.data?.message,
+            };
+        } else {
+            return {
+                status: response.status,
+                sms: response?.data?.message,
+            };
+        }
+    } catch (error: any) {
+        console.error('Error updating work area:', error);
+
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'Unknown error';
+
+        return { status, sms: message };
+    }
+},
+
 
 }));
-
-
-// getUserByUserId: (UserId: number) => Promise<void>;
-// getUserById: (UserId: number) => any;
-// addUser: (newUser: Users.User) => void;
-// updateUser: (updatedUser: Users.User) => void;
-// deleteUser: (UserId: number) => void;
-
-
-// getUserByUserId: async (UserId) => {
-//     set({ ...initialState, loading: true });
-//     try {
-//         const response = await axiosClient.get('/Users/byUsers/' + UserId);
-//         set({ ...initialState, success: true, dataUser: response.status === 200 ? response.data : [] });
-//     } catch (error) {
-//         console.error('Error fetching data by province ID:', error);
-//         set({ ...initialState, error: true });
-//     }
-// },
-// getUserById: async (UserId) => {
-//     try {
-//         // Make API call to get center details by ID from the server
-//         const response = await axiosClient.get(`/Users/byId/${UserId}`);
-//         // Check if the API call was successful (status code 200)
-//         if (response.status === 200) {
-//             // Return the retrieved news details
-//             return response.data.data;
-//         } else {
-//             console.error('Failed to fetch news details. Status:', response.status);
-//             return null;
-//         }
-//     } catch (error) {
-//         console.error('Error fetching news details:', error);
-//         return null;
-//     }
-// },
-// addUser: async (newUser) => {
-//     try {
-//         // Make API call to add a new center on the server
-//         const response = await axiosClient.post( '/Users/add', newUser);
-//         // Check if the API call was successful (status code 201)
-//         if (response.status === 200) {
-//             // Update the local state with the new center
-//             set((state) => ({ dataUser: [...state.dataUser, response.data] }));
-//         } else {
-//             console.error('Failed to add center. Status:', response.status);
-//         }
-//     } catch (error) {
-//         console.error('Error adding center:', error);
-//     }
-// },
-// updateUser: async (updatedUser) => {
-//     try {
-//         // Make API call to update the center on the server
-//         const response = await axiosClient.put( `/Users/update`, updatedUser);
-//         // Check if the API call was successful (status code 200)
-//         if (response.status === 200) {
-//             // Update the local state with the updated center
-//             set((state) => ({
-//                 dataUser: state.dataUser.map((center) =>
-//                     center.id === updatedUser.id ? updatedUser : center
-//                 ),
-//             }));
-//         } else {
-//             console.error('Failed to update center. Status:', response.status);
-//         }
-//     } catch (error) {
-//         console.error('Error updating center:', error);
-//     }
-// },
-// deleteUser: async (UserId) => {
-//     try {
-//         // Make API call to delete the center on the server
-//         const response = await axiosClient.delete( `/Users/del/${UserId}`);
-//         // Check if the API call was successful (status code 200)
-//         if (response.status === 200) {
-//             // Update the local state by removing the deleted center
-//             set((state) => ({
-//                 dataUser: state.dataUser.filter((center) => center.id !== UserId),
-//             }));
-//         } else {
-//             console.error('Failed to delete center. Status:', response.status);
-//         }
-//     } catch (error) {
-//         console.error('Error deleting center:', error);
-//     }
-// }

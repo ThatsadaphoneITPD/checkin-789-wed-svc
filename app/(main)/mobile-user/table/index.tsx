@@ -11,9 +11,12 @@ import { useUsersStore } from '@/app/store/user/usersStore';
 import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
 import { Dropdown } from 'primereact/dropdown';
 import { useDivisionStore } from '@/app/store/divisions/divisionStore';
+import { useLocationStore, useWorkAreaStore } from '@/app/store';
 
 export default function MobileUserTable() {
     const { dataUser, getUsersData, page, totalCount, pageSize } = useUsersStore();
+    const { getzWorkAreaData } = useWorkAreaStore();
+    const { getzLocationData } = useLocationStore();
     const { datadep } = useDepartmentStore();
     const { datadiv, getDivisionByDepId } = useDivisionStore();
 
@@ -36,6 +39,11 @@ export default function MobileUserTable() {
         option_name: `${div?.division_name}[${div?.id}]`,
         id: div?.id
     }));
+
+    useEffect(() => {
+        getzLocationData()
+        getzWorkAreaData();
+    }, [getzWorkAreaData, getzLocationData]);
 
     // Debounce empcode input
     useEffect(() => {
@@ -101,7 +109,7 @@ export default function MobileUserTable() {
                     showClear
                     options={finaldiv}
                     value={selectedDiv}
-                    onChange={(e: any) =>{
+                    onChange={(e: any) => {
                         setEmcode('');
                         setSelectedDiv(e.value)
                     }}

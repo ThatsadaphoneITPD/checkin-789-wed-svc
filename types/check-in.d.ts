@@ -3,34 +3,34 @@ import { number } from 'prop-types';
 
 declare namespace Checkin {
     type Employee = {
-    id: number;
-    username: string;
-    employeeId: number;
-    employee_code: string | null;
-    createdAt: string;
-    updatedAt: string;
-    createdById: number | null;
-    status: string;
-    roleId: number;
-    rankId: number;
-    employee: {
         id: number;
-        emp_code: string;
-        first_name: string;
-        last_name: string;
+        username: string;
+        employeeId: number;
+        employee_code: string | null;
+        createdAt: string;
+        updatedAt: string;
+        createdById: number | null;
         status: string;
-    };
-    rank: {
-        id: number;
-        rank_name: string;
-    };
-    role: {
-        id: number;
-        role_name: string;
-        role_code: string;
-        role_description: string;
-        authrole: string;
-    };
+        roleId: number;
+        rankId: number;
+        employee: {
+            id: number;
+            emp_code: string;
+            first_name: string;
+            last_name: string;
+            status: string;
+        };
+        rank: {
+            id: number;
+            rank_name: string;
+        };
+        role: {
+            id: number;
+            role_name: string;
+            role_code: string;
+            role_description: string;
+            authrole: string;
+        };
     };
     type Department = {
         id: number
@@ -52,7 +52,7 @@ declare namespace Checkin {
         office_status: string
         divisionId: number
     }
-    type Unit =  {
+    type Unit = {
         id: number
         unit_name: string
         unit_code: string
@@ -71,48 +71,59 @@ declare namespace Checkin {
         department: string
         device_id: string
         role_id: number
+        location_id: number
+        work_area_id: number
+        area_name: string
+        location_name: number
     }
 
     type CheckinManual = {
         id: any
-        emp_code: string;            
-        check_date: string | Date;   
-        status_in_out: 'in' | 'out'; 
+        emp_code: string;
+        check_date: string | Date;
+        status_in_out: 'in' | 'out';
         comments?: string;
     };
+
+    type Location = {
+        location_id: number
+        location_name: string
+        created_at: string
+    }
 
     type WorkArea = {
         _key: number
         work_area_id: number
+        location_name: string
         area_name: string
         latitude: number
         longitude: number
         radius_km: number
+        location_id: number
         created_at: string
-        employeeWorkAreas: any | null
     }
 
     type FieldWork = {
-        fw_req_id:          number;
-        emp_code:           string;
-        fullname:           string
-        field_work_type:    string;
-        description:        string;
-        workplace:          string;
-        start_date:         Date;
-        end_date:           Date;
-        total_days:         number;
-        file_path:          string;
-        status:             string;
-        created_at:         string | null;
-        updated_at:         string | null;
+        fw_req_id: number;
+        emp_code: string;
+        fullname: string
+        field_work_type: string;
+        description: string;
+        workplace: string;
+        start_date: Date;
+        end_date: Date;
+        total_days: number;
+        file_path: string;
+        status: string;
+        created_at: string | null;
+        updated_at: string | null;
         fieldWorkApprovals: null;
     }
     type ApproveField = FormData | {
-        fwReq_id:   string;
+        fwReq_id: string;
         approvedBy: string;
-        status:     string;
-        comments:   string;
+        status: string;
+        comments: string;
     }
     type OutSideWork = {
         work_out_id: number
@@ -127,10 +138,10 @@ declare namespace Checkin {
         workOutsideApprovals: any | null
     }
     type ApproveOutSideWork = FormData | {
-        workOutId:   string;
+        workOutId: string;
         approvedBy: string;
-        status:     string;
-        comments:   string;
+        status: string;
+        comments: string;
     }
     type SickLeave = {
         leave_req_id: number
@@ -150,10 +161,10 @@ declare namespace Checkin {
         leaveApprovals: any
     }
     type ApproveSickLeave = FormData | {
-        leaveReqId:   string;
+        leaveReqId: string;
         approvedBy: string;
-        status:     string;
-        comments:   string;
+        status: string;
+        comments: string;
     }
     type LeaveType = {
         leave_type_id: number
@@ -165,7 +176,7 @@ declare namespace Checkin {
         leaveBalances: any
         leaveRequests: any
     }
-    
+
     // ----- Report Check-In -----
     type EmployeeReport = {
         emp_code: string
@@ -209,9 +220,9 @@ declare namespace Checkin {
     }
 
     type ApproveOvertime = FormData | {
-        otid:   string;
+        otid: string;
         approvedBy: string;
-        status:     string;
-        comments:   string;
+        status: string;
+        comments: string;
     }
 }
