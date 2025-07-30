@@ -6,3 +6,4 @@ export * from "./overtime/overtimeStore";
 export * from "./files-checkin/filesCheckinStore";
 export * from "./work-area/workAreaStore";
 export * from "./location/locationStore";
+export * from "./checkin-manual/manualStore";

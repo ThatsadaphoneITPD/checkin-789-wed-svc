@@ -1,155 +1,87 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
 import { DataTable } from 'primereact/datatable';
-
 import Create from './create';
 import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
 import { Checkin } from '@/types';
-import { MenuItem } from 'primereact/menuitem';
-import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+import { useCheckinManualStore } from '@/app/store';
 
 interface JustifyOption {
-    icon: string;
-    name: string;
-    value: string;
+  icon: string;
+  name: string;
+  value: string;
 }
 
 export default function CheckinManual() {
-  /* ------------------------------------------------------------------ */
-  /* Static sample data ------------------------------------------------ */
-  const dataManual = useMemo(
-    () => [
-      {
-        id: 1,
-        emp_code: '44697',
-        check_date: '2025-07-01T06:08:00',
-        status_in_out: 'in',
-        comments: 'Arrived early to prep meeting',
-      },
-      {
-        id: 2,
-        emp_code: '44334',
-        check_date: '2025-07-02T15:09:00',
-        status_in_out: 'out',
-        comments: 'Left after project hand‑off',
-      },
-      {
-        id: 3,
-        emp_code: '17698',
-        check_date: '2025-07-03T06:06:00',
-        status_in_out: 'in',
-      },
-      {
-        id: 4,
-        emp_code: '28893',
-        check_date: '2025-07-04T08:30:00',
-        status_in_out: 'out',
-        comments: 'Stayed late for system patch',
-      },
-      {
-        id: 5,
-        emp_code: '44276',
-        check_date: '2025-07-17T07:07:30',
-        status_in_out: 'in',
-        comments: 'Traffic delay — informed supervisor',
-      },
-    ],
-    []
-  );
+  const { dataCheckinManual, getzCheckinManualData, } = useCheckinManualStore();
 
   /* ------------------------------------------------------------------ */
-  /* State ------------------------------------------------------------- */
   const [selectedItem, setSelectedItem] = useState<any[]>([]);
   const [rowData, setRowdata] = useState<Checkin.CheckinManual | null>(null);
-
- // 1️⃣ state – an array (0‑, 1‑, or 2‑element) or null
   const [dateRange, setDateRange] = useState<(Date | null)[] | null>(null);
-
   const [globalFilter, setGlobalFilter] = useState<string>('');
-
-  const [filteredData, setFilteredData] = useState<any[]>(dataManual);
-
+  const [filteredData, setFilteredData] = useState<any[]>([]);
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
   const dt = useRef<DataTable<any>>(null);
-  const [activeIndex, setActiveIndex] = useState<JustifyOption>(null);
-  const items: JustifyOption[] = [
-      { value: 'in', name: "ກົດເຂົ້າ", icon: 'pi pi-sign-in' },
-      { value: 'out', name: "ກົດອອກ", icon: 'pi pi-sign-out' },
-  ];
 
   /* ------------------------------------------------------------------ */
-  /* Filtering --------------------------------------------------------- */
+  // 🔁 Initial API fetch once
+  useEffect(() => {
+    getzCheckinManualData('');
+  }, []);
+
+  /* 🔍 Filter by date range */
   const applyFilters = useCallback(() => {
-  let data = dataManual;
+    let data = dataCheckinManual;
 
-    /* text filter */
-    if (globalFilter.trim()) {
-      const lower = globalFilter.toLowerCase();
-      data = data.filter((item) =>
-        item.emp_code.toLowerCase().includes(lower)
-      );
-    }
-
-    /* date‑range filter */
-   if (dateRange && dateRange.length === 2 && dateRange[0] && dateRange[1]) {
-      // always make start <= end
-      let [start, end] = dateRange as [Date, Date];
+    if (dateRange && dateRange.length === 2 && dateRange[0] && dateRange[1]) {
+      let [start, end] = dateRange;
       if (start > end) [start, end] = [end, start];
 
-      // set start to 00:00 and end to 23:59 so whole days are included
       const startDay = new Date(start); startDay.setHours(0, 0, 0, 0);
-      const endDay   = new Date(end);   endDay.setHours(23, 59, 59, 999);
+      const endDay = new Date(end); endDay.setHours(23, 59, 59, 999);
 
       data = data.filter((item) => {
-        const d = new Date(item.check_date);
+        const d = new Date(item.punch_time);
         return d >= startDay && d <= endDay;
       });
     }
 
-
     setFilteredData(data);
-  }, [dataManual, globalFilter, dateRange]);
+  }, [dataCheckinManual, dateRange]);
 
-  /* run filters when deps change */
   useEffect(() => {
     applyFilters();
   }, [applyFilters]);
 
   /* ------------------------------------------------------------------ */
-  /* Handlers ---------------------------------------------------------- */
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setGlobalFilter(val);
 
-    /* debounce to reduce re‑filtering on every keystroke */
     if (typingTimeout.current) clearTimeout(typingTimeout.current);
-    typingTimeout.current = setTimeout(() => applyFilters(), 300);
+    typingTimeout.current = setTimeout(() => {
+      getzCheckinManualData(val.trim());
+    }, 300);
   };
 
-  // 2️⃣ handler accepts PrimeReact’s event
-  const onDateChange = (e: { value: (Date | null)[] | null }) => { setDateRange(e.value as (Date | null)[] | null);};
+  const onDateChange = (e: { value: (Date | null)[] | null }) => {
+    setDateRange(e.value);
+  };
 
-  const onViewDoc = useCallback(async (rowData: any) => {
+  const onViewDoc = useCallback((rowData: any) => {
     setRowdata(rowData);
   }, []);
 
-  /* ------------------------------------------------------------------ */
-  /* Header ------------------------------------------------------------ */
-  const justifyTemplate = (option: JustifyOption) => {
-    return <i className={option?.icon}> {option?.name}</i>;
-  }
-  
   const header = (
     <div className="flex flex-wrap md:flex-nowrap justify-between items-start md:items-center gap-2">
       <div className="header-table flex flex-wrap gap-2 flex-1">
@@ -162,7 +94,7 @@ export default function CheckinManual() {
         />
 
         <Calendar
-          placeholder='ໄລຍະ ເລີ່ນ - ສຸດທ້າຍ '
+          placeholder='ໄລຍະ ເລີ່ນ - ສຸດທ້າຍ'
           value={dateRange}
           onChange={onDateChange}
           selectionMode="range"
@@ -171,7 +103,7 @@ export default function CheckinManual() {
           showIcon
           className="w-auto calendar-search"
         />
-        <SelectButton value={activeIndex} onChange={(e: SelectButtonChangeEvent) => setActiveIndex(e.value)} itemTemplate={justifyTemplate} optionLabel="value" options={items} />
+
       </div>
     </div>
   );
@@ -190,12 +122,12 @@ export default function CheckinManual() {
 
         <div className="card_manual mt-2">
           <DataTable
-            dataKey="id"
+            dataKey="checkin_id"
             value={filteredData}
             rows={10}
             paginator
             ref={dt}
-            sortField="id"
+            sortField="checkin_id"
             sortOrder={-1}
             selection={selectedItem}
             onSelectionChange={(e) => setSelectedItem(e.value as any)}

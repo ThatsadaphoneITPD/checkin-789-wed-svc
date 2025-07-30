@@ -58,7 +58,7 @@ const positionBody = (rowData: Checkin.MobileUser) => (
 
 const LocateWorkArea = (rowData: Checkin.MobileUser) => (
     <div>
-        {rowData?.work_area_id ? `${rowData?.area_name} [${rowData?.work_area_id}]` : ""} 
+        {rowData?.workAreas?.length ? `${rowData?.workAreas?.[0]?.area_name}` : ""} 
     </div>
 );
 const LocateDivision = (rowData: Checkin.MobileUser) => (

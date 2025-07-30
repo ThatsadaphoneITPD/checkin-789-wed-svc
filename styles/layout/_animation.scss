@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lalezar|Pacifico');
-
+@import url("https://fonts.googleapis.com/css?family=Lalezar|Pacifico");
 
 .day-night {
   margin: 0;
@@ -7,19 +6,19 @@
   overflow: hidden; // Changed `none` to `hidden` as `none` is invalid for `overflow`.
 
   .night {
-    font-family: 'Lalezar', cursive;
+    font-family: "Lalezar", cursive;
     font-size: 1.8em;
   }
 
   .day {
-    font-family: 'Pacifico', cursive;
+    font-family: "Pacifico", cursive;
     font-size: 1.5em;
   }
 
   * {
     transition: 1s all;
   }
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     display: none;
 
     + label {
@@ -168,5 +167,97 @@
         }
       }
     }
+  }
+}
+
+
+.content-emp {
+  overflow: hidden;
+  color: #163da0;
+
+  &__container {
+    font-weight: 600;
+    overflow: hidden;
+    height: 3rem;
+    padding: 0 0.2rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:before,
+    &:after {
+      position: absolute;
+      top: 0;
+      color: #163da0;
+      font-size: 2rem;
+      line-height: 40px;
+    }
+
+    &:before {
+      content: '[';
+      left: 0;
+    }
+
+    &:after {
+      content: ']';
+      right: 0;
+    }
+
+    &__text {
+      margin-right: 0.5rem;
+      font-size: 1.5rem;
+      transition: all 0.4s ease;
+    }
+
+    &__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      text-align: left;
+
+      &__item {
+        line-height: 1.8rem;
+        font-size: 1.1rem;
+        transition: all 0.4s ease;
+      }
+    }
+  }
+
+  // Animate IN
+  .animate-in {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeSlideIn 0.4s ease-out forwards;
+  }
+
+  // Animate OUT
+  .animate-out {
+    opacity: 0;
+    transform: translateY(-10%);
+    animation: fadeSlideOut 0.4s ease-out forwards;
+  }
+}
+
+// Animations
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-10%);
   }
 }

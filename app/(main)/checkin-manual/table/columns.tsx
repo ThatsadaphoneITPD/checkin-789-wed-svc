@@ -19,7 +19,7 @@ const codeBody = (rowData: Checkin.CheckinManual) => {
             <span className="p-column-title">ID</span>
             <div className="rownew-container">
                 <div>
-                    <span>{rowData?.id}</span>
+                    <span>{rowData?.checkin_id}</span>
                 </div>
             </div>
         </>
@@ -50,9 +50,9 @@ const descBody = (rowData: Checkin.CheckinManual) => (
 const StatusBody = (rowData: Checkin.CheckinManual) => (
     <div style={{ ...bodyStyle }}>
         <Tag
-            style={{ background: `${status_in_out(rowData?.status_in_out).bgcolor}`, color: `${status_in_out(rowData?.status_in_out).color}` }}
-            icon={`pi ${status_in_out(rowData?.status_in_out).icon}`}
-            value={status_in_out(rowData?.status_in_out).statusla}
+            style={{ background: `${status_in_out(rowData?.status).bgcolor}`, color: `${status_in_out(rowData?.status).color}` }}
+            icon={`pi ${status_in_out(rowData?.status).icon}`}
+            value={status_in_out(rowData?.status).statusla}
         />
     </div>
 );
@@ -66,7 +66,7 @@ const LocateBody = (rowData: Checkin.CheckinManual) => (
 const reqestTimeBody = (rowData: Checkin.CheckinManual) => (
     <>
         <span className="p-column-title">created_at</span>
-         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.check_date)}`}/>
+         <Tag style={{background: `#d6e4ff`, color: `#2f54eb`}} value={`${formatDateLao(rowData?.punch_time)}`}/>
     </>
 );
 

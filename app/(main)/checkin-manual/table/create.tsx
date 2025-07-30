@@ -1,121 +1,112 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
-import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { RadioButton } from 'primereact/radiobutton';
 import toast from 'react-hot-toast';
 
 import ClockDisplay from './clock';
-import { employeea } from './dummy-data';
 import {
   createCheckinManaul,
   CreateCheckinManaulInput
 } from '@/utils/validators/create-checkin-manual.schema';
 import { Checkin } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCheckinManualStore } from '@/app/store';
+import { InputText } from 'primereact/inputtext';
 
 interface CreateOutSideWorkProps {
   rowItem?: Checkin.CheckinManual;
   setRowData?: (v: Checkin.CheckinManual | null) => void;
 }
 
-export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
-  /* —————————————————————————————————— form setup —————————————————————————————————— */
+export default function Create({ rowItem, setRowData }: CreateOutSideWorkProps) {
+  const { manunalEmployee, getzManualEmps, clearManualEmps, addCheckinManaul } = useCheckinManualStore();
+  const typingTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const defaultValues = useMemo<CreateCheckinManaulInput>(
     () => ({
-      emp_code: rowItem?.emp_code ?? '',
-      check_date: rowItem?.check_date
-        ? typeof rowItem.check_date === 'string'
-          ? rowItem.check_date
-          : rowItem.check_date.toISOString()
+      EmpCode: rowItem?.emp_code ?? '',
+      Punch_time: rowItem?.punch_time
+        ? typeof rowItem.punch_time === 'string'
+          ? rowItem.punch_time
+          : rowItem.punch_time.toISOString()
         : '',
-      status_in_out: rowItem?.status_in_out ?? '',
-      reason: rowItem?.comments ?? ''
+      Comments: rowItem?.comments ?? ''
     }),
-    [rowItem] // recompute when a new row is selected
+    [rowItem]
   );
 
-  const { register,  watch,  control, handleSubmit, formState: { errors }, reset} = useForm<CreateCheckinManaulInput>({
-    resolver: zodResolver(createCheckinManaul), // 🔑  Type‑safe resolver
+  const {
+    register,
+    watch,
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<CreateCheckinManaulInput>({
+    resolver: zodResolver(createCheckinManaul),
     defaultValues
   });
 
-  const [isResetting, setIsResetting] = useState(false);
-   /* whenever rowItem changes, push the new values into the form */
-  useEffect(() => reset(defaultValues), [defaultValues, reset]);
-  useEffect(() =>  console.log("errors", errors), [errors]);
 
- 
+  const watchPunchTime = watch('Punch_time');
+
+  const [isResetting, setIsResetting] = useState(false);
+
+  useEffect(() => {
+    reset(defaultValues)
+    if (defaultValues.EmpCode) {
+      getzManualEmps(defaultValues.EmpCode);
+    }
+  }, [defaultValues, reset]);
+  useEffect(() => console.log('errors', errors), [errors]);
+
+  // Watch EmpCode with debounce, call getzManualEmps if length > 5
+
   const handleReset = () => {
     setIsResetting(true);
+    clearManualEmps();
     setTimeout(() => {
       reset({
-        emp_code: '',
-        check_date: '',
-        status_in_out: '',
-        reason: ''
+        EmpCode: '',
+        Punch_time: '',
+        Comments: ''
       });
-      setRowData(null);
-      console.log("rowItem", rowItem)
-      
+      setRowData?.(null);
       setIsResetting(false);
     }, 600);
   };
 
-  /* ———————————————————————————— helpers/derived data ———————————————————————————— */
-  const fieldStatus = {
-    in: { status: 'check_in', l_status: 'ເຂົ້າ' },
-    out: { status: 'check_out', l_status: 'ອອກ' }
-  } as const;
-
- const fieldstatusOptions = useMemo(
-    () =>
-      Object.entries(fieldStatus).map(([key, v]) => ({
-        value: key as 'in' | 'out', // 'in' or 'out'
-        label: v.l_status
-      })),
-    []
-  );
-
-  const emps = useMemo(
-    () =>
-      Object.values(employeea).map(e => ({
-        ful_name: `${e.employee.first_name} ${e.employee.last_name} [${e.employee.emp_code}]`,
-        id: e.employee.emp_code
-      })),
-    []
-  );
-
-  /* —————————————————————————————— submit —————————————————————————————— */
-  const watch_emp_code = watch("emp_code")
   const onSubmit: SubmitHandler<CreateCheckinManaulInput> = async data => {
-   
     const formData = new FormData();
     Object.entries(data).forEach(([k, v]) => formData.append(k, v));
-    /* submit… */
-    console.log("defaultValues", defaultValues)
     try {
-      if (defaultValues?.emp_code){
-        toast.success(`Edit! ${defaultValues?.emp_code}`);
-        handleReset()
-      } else{
-        toast.success(`Saved! ${watch_emp_code}`);
-        handleReset()
-      }
-    } catch (error) {
-      toast.error(error?.message)
+      console.log("data", data)
+      // if (defaultValues?.EmpCode) {
+      //   toast.success(`Edit! ${defaultValues?.EmpCode}`);
+      // } else {
+      //   toast.success(`Saved! ${watch_emp_code}`);
+      // }
+      // --------------------- API --------------------
+      addCheckinManaul(formData).then((res: any)=>{
+        if(res?.status == 200 || 201) {
+          toast.success(res.sms);
+        }else { 
+          toast.error(res.sms)
+        }
+      })
+      handleReset();
+    } catch (error: any) {
+      toast.error(error?.message || 'Error occurred');
     }
   };
 
-  /* ———————————————————————————— watch → clock ———————————————————————————— */
-  const watchCheckDate = watch('check_date');
   const formattedTime = useMemo(() => {
-    if (!watchCheckDate) return '';
-    const date = new Date(watchCheckDate);
+    if (!watchPunchTime) return '';
+    const date = new Date(watchPunchTime);
     const h = date.getHours();
     const m = date.getMinutes();
     const ampm = h >= 12 ? 'PM' : 'AM';
@@ -123,21 +114,35 @@ export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
       2,
       '0'
     )} ${ampm}`;
-  }, [watchCheckDate]);
+  }, [watchPunchTime]);
 
-  /* ————————————————————————————— render ————————————————————————————— */
   return (
-    <div className='surface-card ' style={{ borderRadius: '15px', padding: '0.3rem', background: 'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}>
-      <div  className="surface-card py-3 px-4 sm:px-5"   style={{ borderRadius: '15px',  }} >
-        <form id="createExportForm" onSubmit={handleSubmit(onSubmit)} className="p-fluid">
-          {/* 🔄 Reset icon */}
+    <div
+      className="surface-card"
+      style={{
+        borderRadius: '15px',
+        padding: '0.3rem',
+        background:
+          'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)',
+        boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
+      }}
+    >
+      <div
+        className="surface-card py-3 px-4 sm:px-5"
+        style={{ borderRadius: '15px' }}
+      >
+        <form
+          id="createExportForm"
+          onSubmit={handleSubmit(onSubmit)}
+          className="p-fluid"
+        >
           <div className="flex w-full justify-content-end mb-2">
-              <i
-                className={`pi  cursor-pointer text-2xl p-2 text-blue-600 hover:text-blue-800 absolute -mt-3 -mr-4 ${ isResetting ? 'pi-spin pi-spinner' : 'pi-refresh'}`}
-                onClick={handleReset}
-              />
+            <i
+              className={`pi cursor-pointer text-2xl p-2 text-blue-600 hover:text-blue-800 absolute -mt-3 -mr-4 ${isResetting ? 'pi-spin pi-spinner' : 'pi-refresh'}`}
+              onClick={handleReset}
+            />
           </div>
-          
+
           <div className="field">
             <ClockDisplay formattedTime={formattedTime} />
           </div>
@@ -145,7 +150,7 @@ export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
           {/* date */}
           <div className="grid mt-5">
             <Controller
-              name="check_date"
+              name="Punch_time"
               control={control}
               render={({ field }) => (
                 <span className="contentfloat w-full">
@@ -155,47 +160,30 @@ export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
                     showTime
                     hourFormat="24"
                     value={field.value ? new Date(field.value) : null}
-                    onChange={e =>
-                      field.onChange(e.value ? e.value.toISOString() : '')
-                    }
+                    onChange={(e) => {
+                      const localDate = e.value as Date;
+                      const pad = (n: number) => n.toString().padStart(2, '0');
+                      const toLocalISO = (date: Date) => {
+                        return (
+                          date.getFullYear() +
+                          '-' + pad(date.getMonth() + 1) +
+                          '-' + pad(date.getDate()) +
+                          'T' + pad(date.getHours()) +
+                          ':' + pad(date.getMinutes()) +
+                          ':' + pad(date.getSeconds())
+                        );
+                      };
+                      const formatted = toLocalISO(localDate); // e.g. "2025-07-30T17:00:00"
+                      field.onChange(formatted);
+                    }}
                     className="calendar-create w-full"
                   />
                   <label htmlFor={field.name}>
                     ວັນທີ ເຂົ້າ-ອອກ
                     <span className="required-star">*</span>
-                    {errors.check_date && (
-                      <small className="p-invalid required-star">ເລືອກວັນທີ</small>
-                    )}
-                  </label>
-                </span>
-              )}
-            />
-          </div>
-
-          {/* employee dropdown */}
-          <div className="field mt-6">
-            <Controller
-              name="emp_code"
-              control={control}
-              render={({ field }) => (
-                <span className="contentfloat w-full">
-                  <Dropdown
-                    id={field.name}
-                    value={field.value}
-                    options={emps}
-                    optionLabel="ful_name"
-                    optionValue="id"
-                    placeholder="ເລືອກ ພະນັກງານ"
-                    // showClear
-                    filter
-                    className="w-full"
-                    onChange={e => field.onChange(e.value)}
-                  />
-                  <label htmlFor={field.name}>
-                    ພະນັກງານ<span className="required-star">*</span>
-                    {errors.emp_code && (
+                    {errors.Punch_time && (
                       <small className="p-invalid required-star">
-                        ເລືອກດ້ວຍ
+                        ເລືອກວັນທີ
                       </small>
                     )}
                   </label>
@@ -204,49 +192,79 @@ export default function Create({ rowItem, setRowData}: CreateOutSideWorkProps) {
             />
           </div>
 
-          {/* in / out radio */}
-          <div className="field mt-4">
-            <label className="text-blue-600">ເລືອກ ເຂົ້າ-ອອກ
-              <span className="required-star">*</span> 
-              {errors.status_in_out && (
-                  <small className="p-invalid required-star">
-                    {errors.status_in_out.message}
-                  </small>
-                )}</label>
-            <div className="flex flex-wrap gap-3 my-1">
-              <Controller
-                name="status_in_out"
-                control={control}
-                render={({ field }) => (
-                  <div className="flex flex-wrap gap-3">
-                    {fieldstatusOptions.map(opt => (
-                      <div key={opt.value} className="flex align-items-center">
-                        <RadioButton
-                          inputId={opt.value}
-                          value={opt.value}
-                          checked={field.value === opt.value}
-                          onChange={e => field.onChange(e.value)}
-                        />
-                        <label htmlFor={opt.value} className="ml-2">
-                          {opt.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              />
+          {/* employee input */}
+          <div className="field mt-2">
+            <div className="w-full text-center">
+              <div className="content-emp mt-3">
+                <div className="content-emp__container">
+                  {manunalEmployee ? (
+                    <>
+                      <i className="content-emp__container__text pi pi-users animate-in"></i>
+                      <ul className="content-emp__container__list text-center">
+                        <li className="content-emp__container__list__item animate-in text-sm">
+                          {manunalEmployee}
+                        </li>
+                      </ul>
+                    </>
+                  ) : (
+                    <>
+                      <i className="content-emp__container__text pi pi-search animate-out"></i>
+                      <ul className="content-emp__container__list text-center">
+                        <li className="content-emp__container__list__item animate-out">
+                          ---ບໍ່ພົບ---
+                        </li>
+                      </ul>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="field mt-4">
+            <Controller
+              name="EmpCode"
+              control={control}
+              render={({ field }) => (
+                <span className="contentfloat w-full">
+                  <InputText
+                    id={field.name}
+                    type="search"
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      const keyword = e.target.value?.trim() ?? '';
+                      if (keyword.length >= 5) {
+                        typingTimeout.current = setTimeout(() => {
+                          console.log("EmpCode", keyword)
+                          getzManualEmps(keyword);
+                        }, 300);
+                      }
+                      if (keyword.length < 5) {
+                        clearManualEmps();
+                      }
+                    }}
+                    className={`w-full ${errors.EmpCode ? 'p-invalid' : ''}`}
+                  />
+                  <label htmlFor={field.name}>
+                    ພະນັກງານ<span className="required-star">*</span>
+                  </label>
+                  {errors.EmpCode && (
+                    <small className="p-invalid required-star">ເລືອກດ້ວຍ</small>
+                  )}
+                </span>
+              )}
+            />
           </div>
 
           {/* reason */}
           <div className="field mt-4">
             <span className="contentfloat w-full">
-              <InputTextarea rows={4} {...register('reason')} />
+              <InputTextarea rows={4} {...register('Comments')} />
               <label htmlFor="reason">
                 ປ້ອນຄຳເຫັນ<span className="required-star">*</span>
-                {errors.reason && (
+                {errors.Comments && (
                   <small className="p-invalid required-star">
-                    {errors.reason.message}
+                    {errors.Comments.message}
                   </small>
                 )}
               </label>

@@ -49,6 +49,20 @@ export const status_in_out = (
       icon = 'pi-sign-in';       // PrimeIcons sign‑in
       break;
 
+    case 'normal':
+      statusla = 'ທຳມະດາ';
+      bgcolor = '#E6FFFB';       // light teal background
+      color = '#13C2C2';         // teal text
+      icon = 'pi-sign-in';       // PrimeIcons sign‑in
+      break;
+
+    case 'manual':
+      statusla = 'Manual';
+      bgcolor = '#f0f5ff';       // light red background
+      color = '#2f54eb';         // red text
+      icon = 'pi-sign-out';      // PrimeIcons sign‑out
+      break;
+
     case 'out':
       statusla = 'ກົດອອກ';
       bgcolor = '#FFF1F0';       // light red background

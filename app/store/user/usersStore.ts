@@ -37,7 +37,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             throw error;
         }
     },
-    loginEoffice: async (userLogin) => { 
+    loginEoffice: async (userLogin) => {
         try {
             const response = await axiosClientEoffice.post('/api/login', userLogin);
             return response;
@@ -133,37 +133,37 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
         }
     },
     moveUserWorkArea: async (user_id: number, work_area: any) => {
-    try {
-        const response = await axiosClient.put(`api/EmpWorkArea/UpdateEmpWorkArea/${user_id}`, work_area);
+        try {
+            const response = await axiosClient.put(`api/EmpWorkArea/UpdateEmpWorkArea/${user_id}`, work_area);
+            console.log("move", response.data)
+            if (response.status === 200 && response.data?.message === "Updated successfully!") {
+                const updatedWorkAreaId = response?.data?.workAreas;
 
-        if (response.status === 200 && response.data?.message === "Updated successfully!") {
-            const updatedWorkAreaId = response.data?.data?.work_area_id;
+                set((state) => ({
+                    dataUser: state.dataUser.map((user) =>
+                        user.user_id === user_id ? { ...user, workAreas: updatedWorkAreaId } : user
+                    ),
+                }));
 
-            set((state) => ({
-                dataUser: state.dataUser.map((user) =>
-                    user.user_id === user_id ? { ...user, work_area_id: updatedWorkAreaId } : user
-                ),
-            }));
+                return {
+                    status: response.status,
+                    sms: response.data?.message,
+                };
+            } else {
+                return {
+                    status: response.status,
+                    sms: response?.data?.message,
+                };
+            }
+        } catch (error: any) {
+            console.error('Error updating work area:', error);
 
-            return {
-                status: response.status,
-                sms: response.data?.message,
-            };
-        } else {
-            return {
-                status: response.status,
-                sms: response?.data?.message,
-            };
+            const status = error.response?.status || 500;
+            const message = error.response?.data?.message || error.message || 'Unknown error';
+
+            return { status, sms: message };
         }
-    } catch (error: any) {
-        console.error('Error updating work area:', error);
-
-        const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message || 'Unknown error';
-
-        return { status, sms: message };
-    }
-},
+    },
 
 
 }));

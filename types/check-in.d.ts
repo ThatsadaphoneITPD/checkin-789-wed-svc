@@ -71,18 +71,18 @@ declare namespace Checkin {
         department: string
         device_id: string
         role_id: number
-        location_id: number
-        work_area_id: number
-        area_name: string
-        location_name: number
+        workAreas: WorkArea[]
     }
 
     type CheckinManual = {
-        id: any
-        emp_code: string;
-        check_date: string | Date;
-        status_in_out: 'in' | 'out';
-        comments?: string;
+        checkin_id: number
+        emp_code: string
+        punch_time:  string | Date;
+        device_id: string
+        latitude: number
+        longitude: number
+        status: string
+        comments: string
     };
 
     type Location = {

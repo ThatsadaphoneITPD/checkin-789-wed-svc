@@ -5,16 +5,10 @@ import { useLocationStore, useWorkAreaStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { Button } from 'primereact/button';
 import { Form } from '@/app/components/ui/form';
-// import { InputTextarea } from 'primereact/inputtextarea';
-// import { RadioButton } from 'primereact/radiobutton';
 import { Dialog } from 'primereact/dialog';
 import { Checkin } from '@/types';
-import RocketFlamingIcon from '@/app/components/icons/rocket-flaming';
-// import GlobalPhotoView from '@/app/shared/photo-view/container';
-// import GoogleMapShow from '@/app/shared/google-map/displaymap';
 import { LiaMapMarkedAltSolid } from "react-icons/lia";
 import { CreateMobileUserkInput, createMobileUser } from '@/utils/validators/create-mobile-user.schema';
-import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { useUsersStore } from '@/app/store/user/usersStore';
 
@@ -24,7 +18,6 @@ interface CreateMobileUserProps {
 
 
 export default function Create({ rowItem }: CreateMobileUserProps) {
-  const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
   const { moveUserWorkArea } = useUsersStore();
   const { dataLocation } = useLocationStore();
@@ -49,7 +42,7 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
         formData.append(key, value !== undefined && value !== null ? String(value) : "");
       });
 
-      moveUserWorkArea(data?.user_id, formData).then((res: any)=>{ console.log("res", res) 
+      moveUserWorkArea(data?.user_id, formData).then((res: any)=>{
         if(res?.status == 200) {
             handClose();
             toast.success(res.sms);
@@ -88,7 +81,8 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
       useFormProps={{
         defaultValues: {
           user_id: rowItem?.user_id,
-          location_id: rowItem?.location_id || null,
+          location_id: rowItem?.workAreas?.length && rowItem?.workAreas?.[0]?.location_id || null,
+          work_area_id: rowItem?.workAreas?.length && rowItem?.workAreas?.[0]?.work_area_id || null,
         },
       }}
     >
