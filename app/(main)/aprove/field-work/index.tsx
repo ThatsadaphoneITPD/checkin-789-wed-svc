@@ -158,7 +158,7 @@ export default function FieldWorkTable() {
           placeholder="ຄົ້ນຫາ"
           value={globalFilter}
           onChange={onSearchChange}
-          className="input-text flex-1 md:max-w-15rem max-w-20rem"
+          className="input-text w-full md:w-10rem"
         />
 
         <Calendar
@@ -168,7 +168,7 @@ export default function FieldWorkTable() {
           dateFormat="mm/yy"
           showIcon
           showButtonBar
-          className="w-auto calendar-search"
+          className="w-full md:w-12rem  calendar-search"
         />
 
         <Calendar
@@ -179,7 +179,7 @@ export default function FieldWorkTable() {
           showIcon
           value={dateRange}
           onChange={onRangeChange}
-          className="w-auto calendar-search"
+          className="w-full md:w-14rem calendar-search"
         />
         <SelectButton
           className="p-button-outlined"

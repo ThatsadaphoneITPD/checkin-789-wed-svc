@@ -30,7 +30,7 @@ export default function MobileUserTable() {
     getzLocationData()
     getzWorkAreaData();
   }, [getzWorkAreaData]);
-  
+
   const optionLocations = useMemo(
     () =>
       Object?.values(dataLocation).map(e => ({
@@ -100,7 +100,7 @@ export default function MobileUserTable() {
             optionLabel="option_name"
             optionValue="id"
             placeholder="ເລືອກ ຝ່າຍ/ສາຂາ"
-            className="w-full ml-2 md:w-10rem"
+            className="w-full ml-0 md:ml-2 md:w-10rem"
           />
         </div>
         <div className="flex gap-2">
@@ -110,8 +110,17 @@ export default function MobileUserTable() {
     </div>
   );
 
+  const TitleComponent = () => {
+    return (
+      <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+        <span style={{color: "#2f54eb"}} className="text-xl font-bold">ຈັດການ-ຕັ້ງຄ່າ ພີກັດຫ້ອງການ</span>
+      </div>
+    );
+  };
+
   return (
     <div>
+      <TitleComponent/>
       {header}
       <DataTable
         dataKey="_key"

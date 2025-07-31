@@ -64,7 +64,7 @@ export default function EmployeeTable() {
                 type="search"
                 style={{height: "2.5rem"}}
                 placeholder="ລະຫັດ ພະນັກງານ"
-                className="input-text"
+                className="input-text mb-3"
                 value={emcode}
                 onChange={(e: any) => setEmcode(e.target.value)}
             />

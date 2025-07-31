@@ -97,15 +97,16 @@ export default function AttendTable() {
 
   /* ------------------------- table header --------------------------- */
   const header = (
-    <div className="card-no-bro flex flex-wrap gap-3 justify-content-start">
-        <InputText
+    <div className="card-no-bro">
+        <div className="flex flex-wrap gap-1 justify-content-start p-4">
+          <InputText
             type="search"
             placeholder="ຄົ້ນຫາ ລະຫັດ"
-            className="input-text calendar-search w-auto m-3"
+            className="input-text calendar-search w-full md:w-10rem"
             value={globalFilter}
             onChange={onSearchChange}
-        />
-        <Calendar
+          />
+          <Calendar
             value={date}
             onChange={(e) => setDate(e.value)}
             view="month"
@@ -113,8 +114,9 @@ export default function AttendTable() {
             placeholder="ເລືອກເດືອນ"
             showIcon
             showButtonBar
-            className="calendar-search w-auto m-3"
-        />
+            className="calendar-search w-full md:w-14rem"
+          />
+        </div>
     </div>
   );
 
@@ -126,9 +128,18 @@ export default function AttendTable() {
     </div>
   );
 
+  const TitleComponent = () => {
+    return (
+      <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+        <span style={{color: "#2f54eb"}} className="text-xl font-bold">ລາຍງານ ເຂົ້າ-ອອກວຽກ ປະຈຳເດືອນ</span>
+      </div>
+    );
+  };
+
   /* --------------------------- render ------------------------------- */
   return (
     <div>
+      <TitleComponent/>
       {header}
       <DataTable
         ref={dt}

@@ -92,7 +92,7 @@ export default function Create({ rowItem, setRowData }: CreateOutSideWorkProps) 
       // }
       // --------------------- API --------------------
       addCheckinManaul(formData).then((res: any)=>{
-        if(res?.status == 200 || 201) {
+        if(res?.status == 200 || res?.status == 201) {
           toast.success(res.sms);
         }else { 
           toast.error(res.sms)

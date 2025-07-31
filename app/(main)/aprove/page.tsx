@@ -11,7 +11,7 @@ import OutSideWorkTable from './outside-work';
 const DateComponent = () => {
     return (
         <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span className="text-xl text-900 font-bold">ການຮ້ອງຂໍ</span>
+            <span style={{color: "#2f54eb"}} className="text-xl font-bold">ການຮ້ອງຂໍ</span>
         </div>
     );
 };

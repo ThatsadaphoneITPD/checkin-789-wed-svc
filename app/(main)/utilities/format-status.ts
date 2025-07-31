@@ -119,8 +119,8 @@ export const statusLeaveType = (statusLeave_type_id: number): { bgcolor: string;
     switch (statusLeave_type_id) {
         case 1:
             // statusla = "ລາພັກເຈັບປ່ວຍ Sick";
-            bgcolor = "#d6e4ff";
-            color = "#1d39c4";
+            bgcolor = "#ffccc7";
+            color = "#a8071a";
             icon = "pi-heart";
             break;
         case 2: 
@@ -137,14 +137,14 @@ export const statusLeaveType = (statusLeave_type_id: number): { bgcolor: string;
             break;
         case 4: 
             // statusla = "ລາພັກແຕ່ງງານ";
-            bgcolor = "#f4ffb8";
-            color = "#3a3d00";
+            bgcolor = "#fff1f0";
+            color = "#cf1322";
             icon = "pi-heart-fill";
             break;
         case 5: 
             // statusla = "ລາພັກຄອບຄົວເສຍຊີວິດ";
-            bgcolor = "#ffccc7";
-            color = "#a8071a";
+            bgcolor = "#fff2e8";
+            color = "#d4380d";
             icon = "pi-exclamation-circle";
             break;
         case 6: 
@@ -171,8 +171,8 @@ export const statusLeaveTypeName = (statusLeave_type_name: string): { bgcolor: s
     switch (statusLeave_type_name) {
         case "ລາພັກເຈັບປ່ວຍ":
             // statusla = "ລາພັກເຈັບປ່ວຍ Sick";
-            bgcolor = "#d6e4ff";
-            color = "#1d39c4";
+            bgcolor = "#ffff";
+            color = "#a8071a";
             icon = "pi-heart";
             break;
         case "ລາພັກປະຈຳປີ": 
@@ -189,14 +189,14 @@ export const statusLeaveTypeName = (statusLeave_type_name: string): { bgcolor: s
             break;
         case "ລາພັກແຕ່ງງານ": 
             // statusla = "ລາພັກແຕ່ງງານ";
-            bgcolor = "#f4ffb8";
-            color = "#3a3d00";
+            bgcolor = "#fff1f0";
+            color = "#cf1322";
             icon = "pi-heart-fill";
             break;
         case "ລາພັກຄອບຄົວເສຍຊີວິດ": 
             // statusla = "ລາພັກຄອບຄົວເສຍຊີວິດ";
-            bgcolor = "#ffccc7";
-            color = "#a8071a";
+            bgcolor = "#fff2e8";
+            color = "#d4380d";
             icon = "pi-exclamation-circle";
             break;
         case "ລາພັກບໍ່ເອົາເງິນເດືອນ": 

@@ -2,7 +2,7 @@ export const contant = {
   tabview: {
     field_work: { l_name: 'ອອກວຽກສະໜາມ', e_name: 'Field Work', icon: 'pi pi-refresh' },
     outside_work: { l_name: 'ອອກວຽກນອກສະຖານທີ', e_name: 'OutSide Work', icon: 'pi pi-refresh' },
-    sick_leave: { l_name: 'ລາພັກ-ປວນ', e_name: 'Sick Leave', icon: 'pi pi-refresh' },
+    sick_leave: { l_name: 'ລາພັກ-ປ່ວຍ', e_name: 'Sick Leave', icon: 'pi pi-refresh' },
     employee_daily: { l_name: 'ປະຫວັດພະນັກງານ ກົດເຂົ້າ-ອອກ', e_name: 'Employee Rountim', icon: 'pi pi-refresh' },
     monthly_report: { l_name: 'ປະຈຳເດືອນ', e_name: 'Monthly Report', icon: 'pi pi-refresh' },
   },

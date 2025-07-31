@@ -139,12 +139,12 @@ export const menuItems: AppMenuItem[] = [
         ]
     },
     {
-        label: 'ວຽກລວງ-ເວລາ',
+        label: 'ວຽກລ່ວງ-ເວລາ',
         to: '/overtime',
         slugs: ['/overtime', '/overtime/weekday', '/overtime/weekend'],
         items: [
             {
-                label: 'ການລວງເວລາ',
+                label: 'ການລ່ວງເວລາ',
                 icon: 'pi pi-arrow-right-arrow-left',
                 to: '/overtime/weekday',
             },

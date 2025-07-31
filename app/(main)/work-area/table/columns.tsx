@@ -44,7 +44,8 @@ const LocateBody = (rowData: Checkin.WorkArea) => (
 
 const LocateDepBranchBody = (rowData: Checkin.WorkArea) => (
     <div >
-        {rowData?.location_name ? `${rowData?.location_name} [${rowData?.location_id}]` : '---'}
+        {rowData?.location_name ? `${rowData?.location_name}` : '---'}
+        {/* {rowData?.location_name ? `$[${rowData?.location_id}]` : ''} */}
     </div>
 );
 
@@ -73,7 +74,7 @@ export const GetColumns = ({
     return [
         <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="2" field="description" header="ສະຖານທີ່ ເຮັດວຽກ" body={descBody} headerStyle={{ minWidth: '10rem' }} />,
-        <Column key="2" field="description" header="ສະຖານທີ່ ເຮັດວຽກ" body={LocateDepBranchBody} headerStyle={{ minWidth: '4rem' }} />,
+        <Column key="2" field="description" header="ຝ່າຍ/ສາຂາ (Location)" body={LocateDepBranchBody} headerStyle={{ minWidth: '4rem' }} />,
         <Column key="3" field="longitude" header="ສັງກັດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
         <Column key="9" body={(rowData: Checkin.WorkArea) => actionBody(rowData, openViewDoc)} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];

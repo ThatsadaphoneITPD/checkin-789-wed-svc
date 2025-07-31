@@ -6,7 +6,10 @@ interface Props {
 
 }
 
-const header = (<div className="flex flex-wrap align-items-center justify-content-between gap-2"><span className="text-xl text-900 font-bold">ລວງເວລາ ວັນເຂົ້າການ</span></div>)
+const header = (
+<div className="flex flex-wrap align-items-center justify-content-between gap-2">
+    <span style={{color: "#2f54eb"}} className="text-xl font-bold">ລ່ວງເວລາ ວັນເຂົ້າການ</span>
+</div>)
 
 const page = (props: Props) => {
     return (

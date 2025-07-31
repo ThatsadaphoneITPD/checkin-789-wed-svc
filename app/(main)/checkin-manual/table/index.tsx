@@ -14,6 +14,9 @@ import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
 import { Checkin } from '@/types';
 import { useCheckinManualStore } from '@/app/store';
+import { HiOutlineDevicePhoneMobile } from 'react-icons/hi2';
+import { CiLogin } from "react-icons/ci";
+import { IoLogOutOutline } from "react-icons/io5";
 
 interface JustifyOption {
   icon: string;
@@ -108,39 +111,52 @@ export default function CheckinManual() {
     </div>
   );
 
+  const TitleComponent = () => {
+    return (
+      <div className="flex items-center justify-between flex-wrap gap-2 m-2">
+        <span style={{ color: "#2f54eb" }} className="text-xl font-bold flex items-center">
+          <HiOutlineDevicePhoneMobile size={24} className="mr-2 mt-1" />
+          <IoLogOutOutline size={24} className="mr-2 mt-1" />
+          ເພີ່ນ ການເຂົ້າ-ອອກວຽກ ພະນັກງານ
+        </span>
+      </div>
+    );
+  };
+
   /* ------------------------------------------------------------------ */
   return (
-    <div className="grid">
-      {/* left panel */}
-      <div className="col-12 md:col-3">
-        <Create rowItem={rowData || undefined} setRowData={setRowdata} />
-      </div>
-
-      {/* right panel */}
-      <div className="col-12 md:col-9">
-        {header}
-
-        <div className="card_manual mt-2">
-          <DataTable
-            dataKey="checkin_id"
-            value={filteredData}
-            rows={10}
-            paginator
-            ref={dt}
-            sortField="checkin_id"
-            sortOrder={-1}
-            selection={selectedItem}
-            onSelectionChange={(e) => setSelectedItem(e.value as any)}
-            rowsPerPageOptions={[10, 25, 50]}
-            className="datatable-responsive"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            emptyMessage={<EmptyData />}
-            responsiveLayout="scroll"
-          >
-            {GetColumns({ onViewDoc }).map((col, idx) =>
-              React.cloneElement(col, { key: `col-${idx}` })
-            )}
-          </DataTable>
+    <div>
+      <TitleComponent/>
+      <div className="grid">
+        {/* left panel */}
+        <div className="col-12 md:col-3">
+          <Create rowItem={rowData || undefined} setRowData={setRowdata} />
+        </div>
+        {/* right panel */}
+        <div className="col-12 md:col-9">
+          {header}
+          <div className="card_manual mt-2">
+            <DataTable
+              dataKey="checkin_id"
+              value={filteredData}
+              rows={10}
+              paginator
+              ref={dt}
+              sortField="checkin_id"
+              sortOrder={-1}
+              selection={selectedItem}
+              onSelectionChange={(e) => setSelectedItem(e.value as any)}
+              rowsPerPageOptions={[10, 25, 50]}
+              className="datatable-responsive"
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+              emptyMessage={<EmptyData />}
+              responsiveLayout="scroll"
+            >
+              {GetColumns({ onViewDoc }).map((col, idx) =>
+                React.cloneElement(col, { key: `col-${idx}` })
+              )}
+            </DataTable>
+          </div>
         </div>
       </div>
     </div>

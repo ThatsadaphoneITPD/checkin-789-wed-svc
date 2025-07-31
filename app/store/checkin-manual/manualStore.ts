@@ -36,7 +36,7 @@ export const useCheckinManualStore = create<CheckinManualStore, []>((set, get) =
         try {
             const response = await axiosClient.get(`/api/CheckIn/GetByEmpCode/${EmpCode}`);
             console.log("api-CheckinManual", response);
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 set({ ...initialState, success: true, dataCheckinManual: response.data || [] });
             } else {
                 set({ ...initialState, error: true, dataCheckinManual: [] });

@@ -135,7 +135,7 @@ export default function SickLeaveTable() {
         <InputText
           type="search"
           placeholder="ລະຫັດ"
-          className="input-text flex-1 md:max-w-15rem max-w-20rem"
+          className="input-text w-full md:w-10rem "
           value={globalFilter}
           onChange={searchGlobal}
         />
@@ -148,7 +148,7 @@ export default function SickLeaveTable() {
           readOnlyInput
           showButtonBar
           showIcon
-          className="w-auto calendar-search"
+          className="w-full md:w-12rem  calendar-search"
         />
         <SelectButton
           className="p-button-outlined"

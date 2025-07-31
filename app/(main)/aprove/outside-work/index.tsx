@@ -133,7 +133,7 @@ export default function OutSideWorkTable() {
           placeholder="ຄົ້ນຫາ"
           value={globalFilter}
           onChange={onSearchChange}
-          className="input-text flex-1 md:max-w-15rem max-w-20rem"
+          className="input-text w-full md:w-10rem"
         />
 
         {/* optional month picker */}
@@ -144,7 +144,7 @@ export default function OutSideWorkTable() {
           dateFormat="mm/yy"
           showIcon
           showButtonBar
-          className="w-auto calendar-search"
+          className="w-full md:w-12rem calendar-search"
         />
 
         {/* date‑range picker */}
@@ -156,7 +156,7 @@ export default function OutSideWorkTable() {
           showIcon
           value={dateRange}
           onChange={onRangeChange}
-          className="w-auto calendar-search"
+          className="w-full md:w-14rem calendar-search"
         />
         <SelectButton
           className="p-button-outlined"

@@ -60,11 +60,11 @@ export const adminmenu: any[] = [
     },
     {
         side_group_id: 3,
-        side_group_name: "ວຽກລວງ-ເວລາ",
+        side_group_name: "ວຽກລ່ວງ-ເວລາ",
         sideBars: [
             {
                 side_bar_id: 8,
-                side_bar_name: "ການລວງເວລາ",
+                side_bar_name: "ການລ່ວງເວລາ",
                 permissions: [
                     {
                         permission_id: 37763,

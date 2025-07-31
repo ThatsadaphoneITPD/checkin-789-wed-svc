@@ -86,6 +86,7 @@ export default function MobileUserTable() {
                 <InputText
                     type="search"
                     placeholder="ລະຫັດ ພະນັກງານ"
+                    className="w-full md:w-20rem"
                     value={emcode || ''}
                     onChange={(e) => setEmcode(e.target.value)}
                 />
@@ -103,7 +104,7 @@ export default function MobileUserTable() {
                     optionLabel="option_name"
                     optionValue="id"
                     placeholder="ເລືອກ ຝ່າຍ"
-                    className="w-full ml-2 md:w-20rem"
+                    className="w-full sm:ml-2 md:w-20rem mt-2 md:mt-0"
                 />
                 <Dropdown
                     showClear
@@ -116,7 +117,7 @@ export default function MobileUserTable() {
                     optionLabel="option_name"
                     optionValue="id"
                     placeholder="ເລືອກ ພະແນກ"
-                    className="w-full ml-2 md:w-20rem"
+                    className="w-full sm:ml-2 md:w-20rem mt-2 md:mt-0"
                 />
             </div>
         </div>
