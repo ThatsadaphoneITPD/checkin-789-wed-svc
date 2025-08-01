@@ -23,7 +23,7 @@ export const useUnitStore = create<UnitStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get( '/api/units');
-            console.log("api-data",response )
+            // console.log("api-data",response )
             set({ ...initialState, success: true, data: response.status === 200 ? response.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);

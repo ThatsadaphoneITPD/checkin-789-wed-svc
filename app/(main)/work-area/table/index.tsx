@@ -29,7 +29,7 @@ export default function MobileUserTable() {
   useEffect(() => {
     getzLocationData()
     getzWorkAreaData();
-  }, [getzWorkAreaData]);
+  }, [getzWorkAreaData, getzLocationData]);
 
   const optionLocations = useMemo(
     () =>

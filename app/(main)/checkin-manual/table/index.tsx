@@ -37,11 +37,6 @@ export default function CheckinManual() {
   const dt = useRef<DataTable<any>>(null);
 
   /* ------------------------------------------------------------------ */
-  // 🔁 Initial API fetch once
-  useEffect(() => {
-    getzCheckinManualData('');
-  }, []);
-
   /* 🔍 Filter by date range */
   const applyFilters = useCallback(() => {
     let data = dataCheckinManual;
@@ -73,7 +68,9 @@ export default function CheckinManual() {
 
     if (typingTimeout.current) clearTimeout(typingTimeout.current);
     typingTimeout.current = setTimeout(() => {
-      getzCheckinManualData(val.trim());
+      if (val.trim().length >= 5) {
+        getzCheckinManualData(val.trim());
+      }
     }, 300);
   };
 

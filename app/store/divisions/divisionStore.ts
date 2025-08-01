@@ -23,7 +23,7 @@ export const useDivisionStore = create<DivisionStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClientEoffice.get( '/api/divisions');
-            console.log("api-div",response )
+            // console.log("api-div",response )
             set({ ...initialState, success: true, datadiv: response.status === 200 ? response.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -34,7 +34,7 @@ export const useDivisionStore = create<DivisionStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClientEoffice.get(`/api/divisions?departmentId=${DepId}`);
-            console.log('divbyDep', response.data )
+            // console.log('divbyDep', response.data )
             set({ ...initialState, success: true, datadiv: response.status === 200 ? response.data : [] });
         } catch (error) {
             console.error('Error fetching data by province ID:', error);

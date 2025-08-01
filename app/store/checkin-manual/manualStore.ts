@@ -22,7 +22,7 @@ export const useCheckinManualStore = create<CheckinManualStore, []>((set, get) =
     getzManualEmps: async (empCode?: string) => {
         try {
             const res = await axiosClient.get(`api/UserAccount/GetFullname/${empCode}`,);
-            console.log("getzManualEmps", res)
+            // console.log("getzManualEmps", res)
             set({ manunalEmployee: res?.data?.fullname });
         } catch (error) {
             console.error('getUsersData error', error);
@@ -35,7 +35,7 @@ export const useCheckinManualStore = create<CheckinManualStore, []>((set, get) =
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get(`/api/CheckIn/GetByEmpCode/${EmpCode}`);
-            console.log("api-CheckinManual", response);
+            // console.log("api-CheckinManual", response);
             if (response.status === 200 || response.status === 201) {
                 set({ ...initialState, success: true, dataCheckinManual: response.data || [] });
             } else {
@@ -55,7 +55,7 @@ export const useCheckinManualStore = create<CheckinManualStore, []>((set, get) =
         try {
             // Make API call to add a new center on the server
             const response = await axiosClient.post('/api/CheckIn/ManaulCheckIn', ManaulCheckIn);
-            console.log("add", response)
+            // console.log("add", response)
             // Check if the API call was successful (status code 201)
             if (response.status === 200 || 201) {
                 // Update the local state with the new center

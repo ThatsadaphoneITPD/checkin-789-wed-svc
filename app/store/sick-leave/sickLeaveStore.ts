@@ -70,7 +70,7 @@ export const useSickLeaveStore = create<SickLeaveStore, []>((set, get) => ({
             const response = await axiosClient.post( `api/LeaveApproval/ApprovalLeaveRequest`, itemAprove);
             // Check if the API call was successful (status code 200)
             if (response.status === 200 || response.status === 201) {
-                console.log('approveSickLeave', response);
+                // console.log('approveSickLeave', response);
                 const id = response?.data?.data?.leave_req_id;
                 set((state) => ({data: state.data.map((fw) => fw.leave_req_id === id ?  response?.data?.data?.leaveRequest : fw ),}));
                 return {status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.leaveRequest?.status };

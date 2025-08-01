@@ -38,7 +38,7 @@ export const useOvertimeStore = create<OvertimeStore, []>((set, get) => ({
 
         try {
             const response = await axiosClient.get(`api/Overtime/${apiPath}`);
-             console.log("response:", response);
+            //  console.log("response:", response);
 
             const data = Array.isArray(response?.data) ? response.data : [];
 
@@ -61,7 +61,7 @@ export const useOvertimeStore = create<OvertimeStore, []>((set, get) => ({
             const response = await axiosClient.post( `api/OvertimeApproval/ApprovalOvertime`, itemAprove);
             // Check if the API call was successful (status code 200)
             if (response.status === 200 || response.status === 201) {
-                console.log('approveOvertime', response);
+                // console.log('approveOvertime', response);
                 const id = response?.data?.data?.ot_id;
                 set((state) => ({dataOvertime: state?.dataOvertime.map((overtime) => overtime?.ot_id === id ?  response?.data?.data?.overtime : overtime ),}));
                 return {status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.status };

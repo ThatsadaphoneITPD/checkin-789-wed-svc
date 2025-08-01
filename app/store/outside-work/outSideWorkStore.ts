@@ -60,7 +60,7 @@ export const useOutSideWorkStore = create<OutSideWorkStore, []>((set, get) => ({
             const response = await axiosClient.post( `api/WorkOutsideApproval/ApprovalWorkOutside`, itemAprove);
             // Check if the API call was successful (status code 200)
             if (response.status === 200 || response.status === 201) {
-                console.log('approveOutSideWork', response);
+                // console.log('approveOutSideWork', response);
                 const id = response?.data?.data?.work_out_id;
                 set((state) => ({data: state?.data.map((outwork) => outwork?.work_out_id === id ?  response?.data?.data?.workOutside : outwork ),}));
                 return {status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.workOutside?.status };

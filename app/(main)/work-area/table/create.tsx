@@ -78,14 +78,10 @@ export default function Create({ rowItem }: CreateOutSideWorkProps) {
     // closeModal();
   };
 
-  const optionLocations = useMemo(
-    () =>
-      Object?.values(dataLocation).map(e => ({
-        ful_name: `${e.location_name}`,
-        id: e.location_id
-      })),
-    []
-  );
+  const optionLocations = Object?.values(dataLocation).map(e => ({
+    ful_name: `${e.location_name}`,
+    id: e.location_id
+  }));
 
   const FormCreate = (
     <Form<CreateWorkAreaInput>

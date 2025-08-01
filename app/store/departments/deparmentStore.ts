@@ -18,7 +18,7 @@ export const useDepartmentStore = create<DepartmentStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClientEoffice.get('/api/departments');
-            console.log("api-eoffice-dep",response )
+            // console.log("api-eoffice-dep",response )
             set({ ...initialState, success: true, datadep: response.status === 200 ? response.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);

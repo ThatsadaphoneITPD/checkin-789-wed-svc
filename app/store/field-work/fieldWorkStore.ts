@@ -117,11 +117,11 @@ export const useFieldWorkStore = create<FieldWorkStore, []>((set, get) => ({
     approveFieldWork: async (itemAprove: Checkin.ApproveField) => {
         try {
             // Make API call to update the center on the server
-            console.log("itemAprove", itemAprove)
+            // console.log("itemAprove", itemAprove)
             const response = await axiosClient.post(`api/FieldWorkApproval/ApprovalFieldWorkRequest`, itemAprove);
             // Check if the API call was successful (status code 200)
             if (response.status === 200 || response.status === 201) {
-                console.log('approveFieldWork', response);
+                // console.log('approveFieldWork', response);
                 const id = response?.data?.data?.fw_req_id;
                 set((state) => ({ data: state.data.map((fw) => fw.fw_req_id === id ? response?.data?.data?.fieldWorkRequest : fw), }));
                 return { status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.fieldWorkRequest?.status };

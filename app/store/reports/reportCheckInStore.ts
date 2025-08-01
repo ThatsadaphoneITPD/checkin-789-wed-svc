@@ -47,7 +47,7 @@ export const usereportCheckInStore = create<reportCheckInStore, []>((set, get) =
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get(`api/SumAttendance/GetTimeAttendance?month=${month}&year=${year}`);
-            console.log("attend-data",response )
+            // console.log("attend-data",response )
             set({ ...initialState, success: true, attendance: Array.isArray(response?.data) && response?.data.length ? response?.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);

@@ -33,7 +33,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             const response = await axiosClient.post('/api/Auth/login', userLogin);
             return response;
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             throw error;
         }
     },
@@ -42,7 +42,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             const response = await axiosClientEoffice.post('/api/login', userLogin);
             return response;
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             throw error;
         }
     },
@@ -135,7 +135,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
     moveUserWorkArea: async (user_id: number, work_area: any) => {
         try {
             const response = await axiosClient.put(`api/EmpWorkArea/UpdateEmpWorkArea/${user_id}`, work_area);
-            console.log("move", response.data)
+            // console.log("move", response.data)
             if (response.status === 200 && response.data?.message === "Updated successfully!") {
                 const updatedWorkAreaId = response?.data?.workAreas;
 
