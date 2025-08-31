@@ -22,6 +22,7 @@ interface CreateOutSideWorkProps {
 export default function Create({ rowItem }: CreateOutSideWorkProps) {
   const [lang, setLang] = useState("LA");
   const [reset, setReset] = useState({});
+  const { authData } = authenStore();
   const { addWorkArea, updateWorkArea } = useWorkAreaStore();
   const { dataLocation } = useLocationStore();
   const [openModal, setopenModal] = useState(false)
@@ -32,6 +33,17 @@ export default function Create({ rowItem }: CreateOutSideWorkProps) {
     setLoading(value)
   }
   // console.log("rowItem", rowItem)
+
+  const buttonDisable = (() => {
+    switch (authData?.role) {
+      case "admin":
+        return false;
+      case "branchadmin":
+        return true;
+      default:
+        return true;
+    }
+  })();
 
   const onSubmit: SubmitHandler<CreateWorkAreaInput> = async (data) => {
     try {
@@ -132,6 +144,7 @@ export default function Create({ rowItem }: CreateOutSideWorkProps) {
                       <Dropdown
                         id={field.name}
                         value={field.value}
+                        disabled={buttonDisable}
                         options={optionLocations}
                         optionLabel="ful_name"
                         optionValue="id"

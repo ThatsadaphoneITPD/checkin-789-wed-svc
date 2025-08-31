@@ -8,7 +8,7 @@ import { Checkin } from '@/types';
 type FieldWorkStore = {
     data: Checkin.FieldWork[];
     getFieldWorkData: () => Promise<void>;
-    getFieldWorkPath: (path?: string) => Promise<void>;
+    getFieldWorkPath: (path?: string, params?: any) => Promise<void>;
     getFieldWorkByFieldWorkId: (FieldWorkId: number) => Promise<void>;
     getFieldWorkById: (FieldWorkId: number) => any;
     addFieldWork: (newBranch: Checkin.FieldWork) => void;
@@ -42,12 +42,14 @@ export const useFieldWorkStore = create<FieldWorkStore, []>((set, get) => ({
             set({ ...initialState, error: true });
         }
     },
-    getFieldWorkPath: async (path: string) => {
+    getFieldWorkPath: async (path: string, params: any) => {
         const apiPath = path?.trim() ? path : "GetFieldWorkRequests";
         set({ ...initialState, loading: true });
 
         try {
-            const response = await axiosClient.get(`api/FieldWorkRequest/${apiPath}`);
+            const response = await axiosClient.get(`api/FieldWorkRequest/${apiPath}`, {
+                params: params?.division_id ? { department_id: params?.department_id, division_id: params?.division_id } : {},
+            });
 
             const data = Array.isArray(response?.data) ? response.data : [];
 

@@ -1,7 +1,7 @@
 'use client';
 import React, { useMemo, useState } from 'react';
 import { Controller, SubmitHandler } from 'react-hook-form';
-import { useLocationStore, useWorkAreaStore } from '@/app/store';
+import { useLocationStore, useWorkAreaStore, authenStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { Button } from 'primereact/button';
 import { Form } from '@/app/components/ui/form';
@@ -19,6 +19,7 @@ interface CreateMobileUserProps {
 
 export default function Create({ rowItem }: CreateMobileUserProps) {
   const [reset, setReset] = useState({});
+  const { authData } = authenStore();
   const { moveUserWorkArea } = useUsersStore();
   const { dataLocation } = useLocationStore();
   const { dataworkarea, getzWorkAreaByLocationId } = useWorkAreaStore();
@@ -27,6 +28,17 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
   const [openModal, setopenModal] = useState(false)
   const handOpen = () => { setopenModal(true) }
   const handClose = () => { setopenModal(false) }
+
+  const buttonDisable = (() => {
+        switch (authData?.role) {
+            case "admin":
+                return false;
+            case "branchadmin":
+                return true;
+            default:
+                return true;
+        }
+    })();
 
   const onSubmit: SubmitHandler<CreateMobileUserkInput> = async (data) => {
     try {
@@ -101,6 +113,7 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
                       <Dropdown
                         id={field.name}
                         value={field.value}
+                        disabled={buttonDisable}
                         options={optionLocations}
                         optionLabel="ful_name"
                         optionValue="id"
@@ -171,7 +184,7 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
       <Button label="ບັນທຶກ" icon="pi pi-check" form="createExportForm" type="submit" />
     </>
   );
-  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຂໍ້ມູນ ຜູ້ໃຊ້ ({rowItem?.emp_code})</div></div>)
+  const header = (<div style={{ width: "100%", display: "flex", justifyContent: "center", color: "#2684FF" }}><div>ຕັ້ງຄ່າ ຈຸດພິກັດ ຜູ້ໃຊ້ ({rowItem?.emp_code}) ສາມາດ ກົດເຂົ້າ-ອອກ</div></div>)
 
   return (
     <>

@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import { Nullable } from 'primereact/ts-helpers';
 import { Calendar } from 'primereact/calendar';
-import { useFileCheckStore, useOvertimeStore } from '@/app/store';
+import { useFileCheckStore, useOvertimeStore, authenStore } from '@/app/store';
 import EmptyData from '@/app/shared/empty-table/container';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
 interface JustifyOption {
@@ -16,7 +16,8 @@ interface JustifyOption {
 }
 
 export default function SickLeaveTable() {
-  const { getOvertimePath, getOvertimeData, dataOvertime } = useOvertimeStore();
+  const { authData } = authenStore();
+  const { getOvertimePath, dataOvertime } = useOvertimeStore();
   const { openModal } = useModal();
   const { getFile } = useFileCheckStore();
 
@@ -36,9 +37,21 @@ export default function SickLeaveTable() {
   const [activeIndex, setActiveIndex] = useState<JustifyOption | null>(items[0]);
 
   /* ---------- data load ---------- */
-  useEffect(() => { 
-    getOvertimePath(activeIndex?.value)
-   }, [activeIndex]);
+  useEffect(() => {
+    // Guard clause: only run when authData is loaded
+    if (!authData || !authData.role) return;
+
+    if (authData.role === "admin") {
+      getOvertimePath(activeIndex?.value, {});
+    } else if (authData.role === "branchadmin") {
+      getOvertimePath(activeIndex?.value, {
+        department_id: authData.department_id,
+        division_id: authData.division_id,
+      });
+    }
+  }, [authData, activeIndex, getOvertimePath]);
+
+
   useEffect(() => { setFilteredData(dataOvertime); }, [dataOvertime]);
 
   /* ---------- view file ---------- */

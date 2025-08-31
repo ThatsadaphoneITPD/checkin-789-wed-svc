@@ -17,7 +17,7 @@ import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import toast from 'react-hot-toast';
-import { useFileCheckStore } from '@/app/store';
+import { authenStore, useFileCheckStore } from '@/app/store';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
 interface JustifyOption {
   icon: string;
@@ -26,6 +26,7 @@ interface JustifyOption {
 }
 
 export default function SickLeaveTable() {
+  const { authData } = authenStore();
   const { data, getLeaveTypeData, getSickLeavePath } = useSickLeaveStore();
   const { openModal } = useModal();
   const { getFile } = useFileCheckStore();
@@ -54,9 +55,19 @@ export default function SickLeaveTable() {
   }, []);
 
   useEffect(() => {
-    // getSickLeaveData();
-    getSickLeavePath(activeIndex?.value)
-  }, [activeIndex]);
+    // Guard clause: only run when authData is loaded
+    if (!authData || !authData.role) return;
+
+    if (authData.role === "admin") {
+      getSickLeavePath(activeIndex?.value, {});
+    } else if (authData.role === "branchadmin") {
+      getSickLeavePath(activeIndex?.value, {
+        department_id: authData.department_id,
+        division_id: authData.division_id,
+      });
+    }
+  }, [authData, activeIndex, getSickLeavePath]);
+
 
   /* combined filter --------------------------------------------------- */
   const applyFilters = useCallback(() => {

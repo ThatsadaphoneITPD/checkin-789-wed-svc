@@ -3,7 +3,7 @@ import { z } from 'zod';
 // form zod validation schema
 export const loginSchema = z.object({
   // email: z.string().email(),
-  username: z.string().min(5, 'ກະລຸນາ ລະຫັດພະນັກງານ'),
+  username: z.string().min(4, 'ກະລຸນາ ລະຫັດພະນັກງານ'),
   deviceId: z.string().optional().default(''),
   password: z.string().min(5, 'ກະລຸນາປ້ອນລະຫັດຜ່ານ'),
 });

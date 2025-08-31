@@ -92,8 +92,8 @@ export const GetColumns = ({
         <Column key="3" field="description" header="ຊື່ - ນາມສະກຸນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
         <Column key="4" field="position" header="ຕຳແໜ່ງ" body={positionBody} headerStyle={{ minWidth: '8rem' }} />,
         // <Column key="4" field="longitude" header="ຝ່າຍ" body={LocateDepartment} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="5" field="longitude" header="ພະແນກ" body={LocateDivision} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="6" field="work_area_id" header="ສະຖານທີ ເຮັດວຽກ" body={LocateWorkArea} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="5" field="longitude" header="ສະຖານທີ/ບ່ອນສັງກັດ" body={LocateDivision} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="6" field="work_area_id" header="ຈຸດພິກັດ-ເຂົ້າອອກວຽກ" body={LocateWorkArea} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="7" body={(rowData: Checkin.MobileUser) => (<ActionButtons rowData={rowData} openViewDoc={openViewDoc} />)} headerStyle={{ minWidth: '5rem' }} />
     ];
 };

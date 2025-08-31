@@ -8,6 +8,9 @@ type User = {
     position_name: string;
     username: string;
     role: string;
+    department_id: string;
+    division_id: string;
+    location: string;
 };
 
 type Store = {

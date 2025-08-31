@@ -8,7 +8,7 @@ import { Checkin } from '@/types';
 type OutSideWorkStore = {
     data: Checkin.OutSideWork[];
     getOutSideWorkData: () => Promise<void>;
-    getOutSideWorkPath: (path?: string) => Promise<void>;
+    getOutSideWorkPath: (path?: string, params?: any) => Promise<void>;
     getOutSideWorkByOutSideWorkId: (OutSideWorkId: number) => Promise<void>;
     getOutSideWorkById: (OutSideWorkId: number) => any;
     addOutSideWork: (newBranch: Checkin.OutSideWork) => void;
@@ -32,12 +32,14 @@ export const useOutSideWorkStore = create<OutSideWorkStore, []>((set, get) => ({
             set({ ...initialState, error: true });
         }
     },
-    getOutSideWorkPath: async (path: string) => {
+    getOutSideWorkPath: async (path: string, params: any) => {
         const apiPath = path?.trim() ? path : "GetWorkOutsides";
         set({ ...initialState, loading: true });
 
         try {
-            const response = await axiosClient.get(`api/WorkOutside/${apiPath}`);
+            const response = await axiosClient.get(`api/WorkOutside/${apiPath}`, {
+                params: params?.division_id ? { department_id: params?.department_id, division_id: params?.division_id } : {},
+            });
 
             const data = Array.isArray(response?.data) ? response.data : [];
 

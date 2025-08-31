@@ -16,7 +16,7 @@ import { useFieldWorkStore } from '@/app/store/field-work/fieldWorkStore';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
-import { useFileCheckStore } from '@/app/store';
+import { authenStore, useFileCheckStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
 interface JustifyOption {
@@ -26,7 +26,8 @@ interface JustifyOption {
 }
 
 export default function FieldWorkTable() {
-  const { data, getFieldWorkData, getFieldWorkPath} = useFieldWorkStore();
+  const { authData } = authenStore();
+  const { data, getFieldWorkPath } = useFieldWorkStore();
   const { getFile } = useFileCheckStore();
   const { openModal } = useModal();
 
@@ -48,10 +49,20 @@ export default function FieldWorkTable() {
   const [activeIndex, setActiveIndex] = useState<JustifyOption | null>(items[0]);
 
   /* ------------------------------- fetch -------------------------------- */
+
   useEffect(() => {
-    // getFieldWorkData();
-    getFieldWorkPath(activeIndex?.value)
-  }, [activeIndex]);
+      // Guard clause: only run when authData is loaded
+      if (!authData || !authData.role) return;
+  
+      if (authData.role === "admin") {
+        getFieldWorkPath(activeIndex?.value, {});
+      } else if (authData.role === "branchadmin") {
+        getFieldWorkPath(activeIndex?.value, {
+          department_id: authData.department_id,
+          division_id: authData.division_id,
+        });
+      }
+    }, [authData, activeIndex, getFieldWorkPath]);
 
   /* --------------------------- combined filter -------------------------- */
   const applyFilters = useCallback(() => {

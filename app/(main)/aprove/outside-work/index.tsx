@@ -17,7 +17,7 @@ import { useOutSideWorkStore } from '@/app/store/outside-work/outSideWorkStore';
 import EmptyData from '@/app/shared/empty-table/container';
 import { GetColumns } from './columns';
 import { useModal } from '@/app/shared/modal-views/use-modal';
-import { useFileCheckStore } from '@/app/store';
+import { useFileCheckStore, authenStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
 interface JustifyOption {
@@ -27,7 +27,8 @@ interface JustifyOption {
 }
 
 export default function OutSideWorkTable() {
-  const { data, getOutSideWorkData, getOutSideWorkPath } = useOutSideWorkStore();
+  const { authData } = authenStore();
+  const { data, getOutSideWorkPath } = useOutSideWorkStore();
   const { openModal } = useModal();
   const { getFile } = useFileCheckStore();
 
@@ -50,10 +51,20 @@ export default function OutSideWorkTable() {
 
   /* ------------------------------------------------------------------ */
   /* Fetch initial data ------------------------------------------------ */
+
   useEffect(() => {
-    // getOutSideWorkData();
-    getOutSideWorkPath(activeIndex?.value)
-  }, [activeIndex]);
+    // Guard clause: only run when authData is loaded
+    if (!authData || !authData.role) return;
+
+    if (authData.role === "admin") {
+      getOutSideWorkPath(activeIndex?.value, {});
+    } else if (authData.role === "branchadmin") {
+      getOutSideWorkPath(activeIndex?.value, {
+        department_id: authData.department_id,
+        division_id: authData.division_id,
+      });
+    }
+  }, [authData, activeIndex, getOutSideWorkPath]);
 
   /* ------------------------------------------------------------------ */
   /* Combined filter fn ------------------------------------------------ */

@@ -53,6 +53,7 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
         department_id?: string;
         page?: number;
         pageSize?: number;
+        role?: string;
     }) => {
         const {
             empCode = '',
@@ -60,8 +61,8 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
             department_id = '',
             page = 1,
             pageSize = 10,
+            role
         } = params || {};
-
         set({ loading: true });
 
         try {
@@ -70,19 +71,21 @@ export const useUsersStore = create<UsersStore, []>((set, get) => ({
 
             // Priority: If empCode exists, use ONLY empCode (ignore others)
             if (empCode) {
-                queryParams.empCode = empCode;
+                if (role === 'admin') {
+                    // Only send empCode if admin
+                    if (empCode) queryParams.empCode = empCode;
+                } else if (role === 'branchadmin') {
+                    // Send empCode if exists, plus department_id and division_id
+                    if (empCode) queryParams.empCode = empCode;
+                    if (department_id) queryParams.department_id = department_id;
+                    if (division_id) queryParams.division_id = division_id;
+                }
             } else {
                 if (division_id) queryParams.division_id = division_id;
                 if (department_id) queryParams.department_id = department_id;
-
-                const hasFilters = division_id || department_id;
-                if (!hasFilters) {
-                    queryParams.page = page;
-                    queryParams.pageSize = pageSize;
-                }
+                queryParams.page = page;
+                queryParams.pageSize = pageSize;
             }
-
-
             const res = await axiosClient.get('api/UserAccount/GetEmployees/filter', {
                 params: queryParams,
             });

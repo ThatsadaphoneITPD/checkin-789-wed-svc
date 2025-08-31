@@ -8,7 +8,7 @@ import { Checkin } from '@/types';
 type OvertimeStore = {
     dataOvertime: Checkin.Overtime[];
     getOvertimeData: () => Promise<void>;
-    getOvertimePath: (path: string) => Promise<void>;
+    getOvertimePath: (path: string, params?: any) => Promise<void>;
     getOvertimeByOvertimeId: (OvertimeId: number) => Promise<void>;
     getOvertimeById: (OvertimeId: number) => any;
     addOvertime: (newBranch: Checkin.Overtime) => void;
@@ -32,13 +32,14 @@ export const useOvertimeStore = create<OvertimeStore, []>((set, get) => ({
             set({ ...initialState, error: true });
         }
     },
-    getOvertimePath: async (path: string) => {
+    getOvertimePath: async (path: string, params: any) => {
         const apiPath = path?.trim() ? path : "GetOvertimes";
         set({ ...initialState, loading: true });
 
         try {
-            const response = await axiosClient.get(`api/Overtime/${apiPath}`);
-            //  console.log("response:", response);
+            const response = await axiosClient.get(`api/Overtime/${apiPath}`, {
+                params: params?.division_id ? { department_id: params?.department_id, division_id: params?.division_id } : {},
+            });
 
             const data = Array.isArray(response?.data) ? response.data : [];
 

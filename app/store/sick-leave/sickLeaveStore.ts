@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import { initialState } from '@/config/constants-api';
 import axiosClient from '@/config/axiosClient';
 import { Checkin } from '@/types';
@@ -9,7 +9,7 @@ type SickLeaveStore = {
     data: Checkin.SickLeave[];
     dataType: Checkin.LeaveType[];
     getSickLeaveData: () => Promise<void>;
-    getSickLeavePath: (path?: string) => Promise<void>;
+    getSickLeavePath: (path?: string, params?: any) => Promise<void>;
     getLeaveTypeData: () => Promise<void>;
     approveSickLeave: (itemAprove: Checkin.ApproveField) => Promise<void>;
 
@@ -24,31 +24,33 @@ export const useSickLeaveStore = create<SickLeaveStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get('api/LeaveRequest/GetLeaveRequests');
-            console.log("SickLeave-data",response )
+            console.log("SickLeave-data", response)
             set({ ...initialState, success: true, data: Array.isArray(response?.data) && response?.data.length ? response?.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);
             set({ ...initialState, error: true });
         }
     },
-    getSickLeavePath: async (path: string) => {
+    getSickLeavePath: async (path: string, params: any) => {
         const apiPath = path?.trim() ? path : "GetLeaveRequests";
         set({ ...initialState, loading: true });
 
         try {
-            const response = await axiosClient.get(`api/LeaveRequest/${apiPath}`);
+            const response = await axiosClient.get(`api/LeaveRequest/${apiPath}`, {
+                params: params?.division_id ? { department_id: params?.department_id, division_id: params?.division_id } : {},
+            });
 
             const data = Array.isArray(response?.data) ? response.data : [];
 
-            set({ ...initialState, success: true, data: data.length > 0 ? data : [],});
+            set({ ...initialState, success: true, data: data.length > 0 ? data : [], });
         } catch (error: any) {
             console.error("❌ Error fetching data:", error);
             // If 404 or any error, treat it as empty data
             const status = error?.response?.status;
             if (status === 404) {
-                set({ ...initialState, success: true, data: [],});
+                set({ ...initialState, success: true, data: [], });
             } else {
-                set({ ...initialState, error: true, data: [],});
+                set({ ...initialState, error: true, data: [], });
             }
         }
     },
@@ -57,7 +59,7 @@ export const useSickLeaveStore = create<SickLeaveStore, []>((set, get) => ({
             const response = await axiosClient.get('api/LeaveType/GetLeaveTypes');
             // console.log("SickLeave-data",response )
             const dataType = Array.isArray(response?.data) && response?.data.length ? response?.data : [];
-            set({dataType});
+            set({ dataType });
             // console.log('LeaveType:', dataType);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -67,20 +69,20 @@ export const useSickLeaveStore = create<SickLeaveStore, []>((set, get) => ({
         try {
             // Make API call to update the center on the server
             // console.log("itemAprove", itemAprove)
-            const response = await axiosClient.post( `api/LeaveApproval/ApprovalLeaveRequest`, itemAprove);
+            const response = await axiosClient.post(`api/LeaveApproval/ApprovalLeaveRequest`, itemAprove);
             // Check if the API call was successful (status code 200)
             if (response.status === 200 || response.status === 201) {
                 // console.log('approveSickLeave', response);
                 const id = response?.data?.data?.leave_req_id;
-                set((state) => ({data: state.data.map((fw) => fw.leave_req_id === id ?  response?.data?.data?.leaveRequest : fw ),}));
-                return {status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.leaveRequest?.status };
+                set((state) => ({ data: state.data.map((fw) => fw.leave_req_id === id ? response?.data?.data?.leaveRequest : fw), }));
+                return { status: response.status, sms: `ສຳເລັດອະນຸມັດ ເລກທີ ${id}`, approvething: response?.data?.data?.leaveRequest?.status };
             } else {
                 console.error('Failed to update center. Status:', response.status);
-                return {status: response.status, sms: response?.data?.message };
+                return { status: response.status, sms: response?.data?.message };
             }
         } catch (error) {
             console.error('Error updating center:', error);
-            return {status: error?.status, sms: error?.message };
+            return { status: error?.status, sms: error?.message };
         }
     },
 }));

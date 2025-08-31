@@ -11,14 +11,26 @@ import { useUsersStore } from '@/app/store/user/usersStore';
 import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
 import { Dropdown } from 'primereact/dropdown';
 import { useDivisionStore } from '@/app/store/divisions/divisionStore';
-import { useLocationStore, useWorkAreaStore } from '@/app/store';
+import { authenStore, useLocationStore, useWorkAreaStore } from '@/app/store';
 
 export default function MobileUserTable() {
+    const { authData } = authenStore();
     const { dataUser, getUsersData, page, totalCount, pageSize } = useUsersStore();
     const { getzWorkAreaData } = useWorkAreaStore();
     const { getzLocationData } = useLocationStore();
     const { datadep } = useDepartmentStore();
     const { datadiv, getDivisionByDepId } = useDivisionStore();
+    const buttonDisable = (() => {
+        switch (authData?.role) {
+            case "admin":
+                return false;
+            case "branchadmin":
+                return true;
+            default:
+                return true;
+        }
+    })();
+
 
     const [emcode, setEmcode] = useState<Nullable<string>>('');
     const [filtered, setFiltered] = useState<any[]>([]);
@@ -53,14 +65,31 @@ export default function MobileUserTable() {
 
     // Fetch users when filters change
     useEffect(() => {
-        getUsersData({
-            empCode: debouncedEmcode,
-            department_id: selectedDep || undefined,
-            division_id: selectedDiv || undefined,
-            page,
-            pageSize,
-        });
-    }, [debouncedEmcode, selectedDep, selectedDiv, page, pageSize]);
+        // Only run if authData is fully loaded
+        if (!authData || !authData.role) return;
+
+        const baseParams = { page, pageSize, role: authData.role };
+        let params: any = {};
+
+        if (authData.role === "admin") {
+            params = {
+                ...baseParams,
+                empCode: debouncedEmcode || undefined,
+                department_id: selectedDep || undefined,
+                division_id: selectedDiv || undefined,
+            };
+        } else if (authData.role === "branchadmin") {
+            params = {
+                ...baseParams,
+                department_id: authData.department_id,
+                division_id: authData.division_id,
+                ...(debouncedEmcode ? { empCode: debouncedEmcode } : {}),
+            };
+        }
+
+        getUsersData(params);
+    }, [debouncedEmcode, selectedDep, selectedDiv, page, pageSize, authData]);
+
 
     // Update filtered state after data fetched
     useEffect(() => {
@@ -71,14 +100,21 @@ export default function MobileUserTable() {
     }, [dataUser]);
 
     const onPage = (e: any) => {
+        const isAdmin = authData?.role === "admin";
+
+        const department_id = isAdmin ? selectedDep || undefined : authData?.department_id;
+        const division_id = isAdmin ? selectedDiv || undefined : authData?.division_id;
+
         getUsersData({
-            empCode: debouncedEmcode,
-            department_id: selectedDep || undefined,
-            division_id: selectedDiv || undefined,
+            empCode: debouncedEmcode || undefined,
+            department_id: department_id,
+            division_id: division_id,
             page: e.page + 1,
             pageSize: e.rows,
         });
     };
+
+
 
     const header = (
         <div className="card-no-bro flex flex-column md:flex-row gap-2 justify-content-start">
@@ -92,6 +128,7 @@ export default function MobileUserTable() {
                 />
                 <Dropdown
                     showClear
+                    disabled={buttonDisable}
                     options={finaldep}
                     value={selectedDep}
                     onChange={(e: any) => {
@@ -108,6 +145,7 @@ export default function MobileUserTable() {
                 />
                 <Dropdown
                     showClear
+                    disabled={buttonDisable}
                     options={finaldiv}
                     value={selectedDiv}
                     onChange={(e: any) => {
