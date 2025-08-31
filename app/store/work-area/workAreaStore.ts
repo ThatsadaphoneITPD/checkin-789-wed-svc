@@ -8,7 +8,7 @@ import { Checkin } from '@/types';
 type WorkAreaStore = {
     dataworkarea: Checkin.WorkArea[];
     getzWorkAreaData: (params?: any) => Promise<void>;
-    getzWorkAreaByLocationId: (location_id: number) => Promise<void>;
+    getzWorkAreaByLocationId: (location_id: number | null) => Promise<void>;
     addWorkArea: (newWorkArea: any) => Promise<void>;
     updateWorkArea: (updatedWorkArea: any, work_area_id: number) => Promise<void>;
     deleteWorkArea: (work_area_id: number) => Promise<void>;
@@ -39,7 +39,7 @@ export const useWorkAreaStore = create<WorkAreaStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
         try {
             const response = await axiosClient.get(`/api/WorkArea/GetAll?location_Id=${location_id}`);
-            // console.log("api-data",response )
+            // console.log("api-WR-LocatID",response )
             set({ ...initialState, success: true, dataworkarea: response.status === 200 ? response.data : [] });
         } catch (error) {
             console.error('Error fetching data:', error);

@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler } from 'react-hook-form';
 import { useLocationStore, useWorkAreaStore, authenStore } from '@/app/store';
 import toast from 'react-hot-toast';
@@ -11,13 +11,15 @@ import { LiaMapMarkedAltSolid } from "react-icons/lia";
 import { CreateMobileUserkInput, createMobileUser } from '@/utils/validators/create-mobile-user.schema';
 import { Dropdown } from 'primereact/dropdown';
 import { useUsersStore } from '@/app/store/user/usersStore';
+import { number } from 'prop-types';
 
 interface CreateMobileUserProps {
   rowItem: Checkin.MobileUser;
+  handleCallWorkArea?: () => void;
 }
 
 
-export default function Create({ rowItem }: CreateMobileUserProps) {
+export default function Create({ rowItem, handleCallWorkArea }: CreateMobileUserProps) {
   const [reset, setReset] = useState({});
   const { authData } = authenStore();
   const { moveUserWorkArea } = useUsersStore();
@@ -26,19 +28,24 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
   // 1 GB = 1 * 10^9 bytes // or 2 GB = 2 * 10^9 bytes
   //   const Gigabytes = 1 * (10 ** 9);
   const [openModal, setopenModal] = useState(false)
-  const handOpen = () => { setopenModal(true) }
+  const handOpen = () => {
+    setopenModal(true);
+    if (rowItem) {
+      handleCallWorkArea()
+    }
+  }
   const handClose = () => { setopenModal(false) }
 
   const buttonDisable = (() => {
-        switch (authData?.role) {
-            case "admin":
-                return false;
-            case "branchadmin":
-                return true;
-            default:
-                return true;
-        }
-    })();
+    switch (authData?.role) {
+      case "admin":
+        return false;
+      case "branchadmin":
+        return true;
+      default:
+        return true;
+    }
+  })();
 
   const onSubmit: SubmitHandler<CreateMobileUserkInput> = async (data) => {
     try {
@@ -54,11 +61,11 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
         formData.append(key, value !== undefined && value !== null ? String(value) : "");
       });
 
-      moveUserWorkArea(data?.user_id, formData).then((res: any)=>{
-        if(res?.status == 200) {
-            handClose();
-            toast.success(res.sms);
-        }else { 
+      moveUserWorkArea(data?.user_id, formData).then((res: any) => {
+        if (res?.status == 200) {
+          handClose();
+          toast.success(res.sms);
+        } else {
           toast.error(res.sms)
         }
       })
@@ -69,24 +76,15 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
     // closeModal();
   };
 
+  const optionLocations = Object?.values(dataLocation).map(e => ({
+    ful_name: `${e.location_name}`,
+    id: e.location_id
+  }));
 
-  const optionLocations = useMemo(
-    () =>
-      Object?.values(dataLocation).map(e => ({
-        ful_name: `${e.location_name}`,
-        id: e.location_id
-      })),
-    [dataLocation]
-  );
-
-  const optionWorkAreas = useMemo(
-    () =>
-      Object?.values(dataworkarea).map(e => ({
-        ful_name: `${e.area_name}`,
-        id: e.work_area_id
-      })),
-    [dataworkarea]
-  );
+  const optionWorkAreas = Object?.values(dataworkarea).map(e => ({
+    ful_name: `${e.area_name}`,
+    id: e.work_area_id
+  }));
 
   const FormCreate = (
     <Form<CreateMobileUserkInput> id="createExportForm" resetValues={reset} validationSchema={createMobileUser} onSubmit={onSubmit} className="p-fluid"
@@ -108,38 +106,40 @@ export default function Create({ rowItem }: CreateMobileUserProps) {
                 <Controller
                   name="location_id"
                   control={control}
-                  render={({ field }) => (
-                    <span className="contentfloat w-full">
-                      <Dropdown
-                        id={field.name}
-                        value={field.value}
-                        disabled={buttonDisable}
-                        options={optionLocations}
-                        optionLabel="ful_name"
-                        optionValue="id"
-                        placeholder="ເລືອກ ສັງກັດ-ຫ້ອງການ"
-                        // showClear
-                        filter
-                        className="w-full"
-                        onChange={e => {
-                          const selected = e.value ?? null;
-                          field.onChange(selected);
-                          if (selected) {
-                            getzWorkAreaByLocationId(selected);
-                          }
-                          setValue("work_area_id", null);
-                        }}
-                      />
-                      <label htmlFor={field.name}>
-                        ສັງກັດ ຝ່າຍ/ສາຂາ<span className="required-star">*</span>
-                        {errors.location_id && (
-                          <small className="p-invalid required-star">
-                            ເລືອກດ້ວຍ
-                          </small>
-                        )}
-                      </label>
-                    </span>
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <span className="contentfloat w-full">
+                        <Dropdown
+                          id={field.name}
+                          value={field.value}
+                          disabled={buttonDisable}
+                          options={optionLocations}
+                          optionLabel="ful_name"
+                          optionValue="id"
+                          placeholder="ເລືອກ ສັງກັດ-ຫ້ອງການ"
+                          // showClear
+                          filter
+                          className="w-full"
+                          onChange={e => {
+                            const selected = e.value ?? null;
+                            field.onChange(selected);
+                            if (selected) {
+                              getzWorkAreaByLocationId(selected);
+                            }
+                            setValue("work_area_id", null);
+                          }}
+                        />
+                        <label htmlFor={field.name}>
+                          ສັງກັດ ຝ່າຍ/ສາຂາ<span className="required-star">*</span>
+                          {errors.location_id && (
+                            <small className="p-invalid required-star">
+                              ເລືອກດ້ວຍ
+                            </small>
+                          )}
+                        </label>
+                      </span>
+                    )
+                  }}
                 />
                 <div className="mt-5">
                   <Controller
