@@ -111,7 +111,7 @@ export default function MobileUserTable() {
           />
         </div>
         <div className="flex gap-2">
-          <Create />
+          {authData?.role === "admin" && <Create />}
         </div>
       </div>
     </div>
