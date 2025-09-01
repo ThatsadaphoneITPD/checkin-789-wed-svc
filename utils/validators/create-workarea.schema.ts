@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // form zod validation schema
 export const createWorkAreaSchema = z.object({
-    work_area_id: z.number().optional(),
+    work_area_id: z.number().nullable().optional(),
     area_name: z.string().min(1, { message: "ຂໍ້ມູນວ່າງເປົ່າ" }).min(3, { message: "ຊື່ແທັກນ້ອຍເກີນໄປ" }),
     latitude: z.number(),
     longitude: z.number(),
