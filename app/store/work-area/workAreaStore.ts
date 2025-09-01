@@ -50,7 +50,7 @@ export const useWorkAreaStore = create<WorkAreaStore, []>((set, get) => ({
         try {
             // Make API call to add a new center on the server
             const response = await axiosClient.post('/api/WorkArea/PostWorkArea', newWorkArea);
-            // console.log("add", response)
+            console.log("add", response)
             // Check if the API call was successful (status code 201)
             if (response.status === 200) {
                 // Update the local state with the new center
@@ -58,7 +58,6 @@ export const useWorkAreaStore = create<WorkAreaStore, []>((set, get) => ({
 
                 return { status: response.status, sms: `ເພີ່ມສຳເລັດ`, };
             } else {
-                console.error('Failed to add center. Status:', response.status);
                 return { status: response.status, sms: response?.data?.message };
             }
         } catch (error) {

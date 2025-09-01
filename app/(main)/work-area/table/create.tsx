@@ -46,48 +46,58 @@ export default function Create({ rowItem }: CreateOutSideWorkProps) {
   })();
 
   const onSubmit: SubmitHandler<CreateWorkAreaInput> = async (data) => {
-    try {
-      const formattedData = {
-        ...data,
-      };
-      console.log("formattedData", formattedData);
-      // Create a new FormData object
-      const formData = new FormData();
 
-      // Append each field to the FormData object
-      Object.entries(formattedData).forEach(([key, value]) => {
-        formData.append(key, value as string); // Convert to string if necessary
-      });
-      if (!rowItem) {
-        addWorkArea(formData).then((res: any) => {
-          if (res?.status == 201 || res?.status === 200) {
-            handleLoadig(false);
-            toast.success(res.sms)
-            setReset({});
-            handClose()
-          } else {
-            handleLoadig(false);
-            toast.error(`${res.sms}-${res?.status}`)
-          }
-        })
-      } else {
-        updateWorkArea(formData, data?.work_area_id).then((res: any) => {
-          if (res?.status == 201 || res?.status === 200) {
-            handleLoadig(false);
-            toast.success(res.sms)
-            setReset({});
-            handClose()
-          } else {
-            handleLoadig(false);
-            toast.error(`${res.sms}-${res?.status}`)
-          }
-        })
-      }
-      console.log("sendAPI", formData);
-    } catch (err: any) {
-      console.log("errAPI", err.message);
+    const dataCheck: any = {
+      ...data,
+    };
+
+    if (!rowItem) {
+      delete dataCheck.work_area_id;
     }
-    // closeModal();
+
+    // Create a new FormData object
+    const formData = new FormData();
+    const formattedData = Object.keys(dataCheck).reduce((acc, key) => {
+      acc[key] =
+        dataCheck[key] === undefined ||
+          (Array.isArray(data[key]) && dataCheck[key].length === 0)
+          ? null
+          : dataCheck[key];
+      return acc;
+    }, {});
+    // Convert to string 
+    Object.entries(formattedData).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+    formData.forEach((value, key) => {
+      console.log("formData", key, value);
+    });
+    if (!rowItem) {
+      addWorkArea(formData).then((res: any) => {
+        if (res?.status == 201 || res?.status === 200) {
+          handleLoadig(false);
+          toast.success(res.sms)
+          setReset({});
+          handClose()
+        } else {
+          handleLoadig(false);
+          toast.error(`${res.sms}-${res?.status}`)
+        }
+      })
+    } else {
+      updateWorkArea(formData, data?.work_area_id).then((res: any) => {
+        if (res?.status == 201 || res?.status === 200) {
+          handleLoadig(false);
+          toast.success(res.sms)
+          setReset({});
+          handClose()
+        } else {
+          handleLoadig(false);
+          toast.error(`${res.sms}-${res?.status}`)
+        }
+      })
+    }
+
   };
 
   const optionLocations = Object?.values(dataLocation).map(e => ({
@@ -104,7 +114,7 @@ export default function Create({ rowItem }: CreateOutSideWorkProps) {
       className="p-fluid"
       useFormProps={{
         defaultValues: {
-          work_area_id: rowItem?.work_area_id,
+          work_area_id: rowItem?.work_area_id || null,
           area_name: rowItem?.area_name,
           latitude: rowItem?.latitude,
           longitude: rowItem?.longitude,
