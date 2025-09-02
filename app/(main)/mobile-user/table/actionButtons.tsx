@@ -6,7 +6,7 @@ import { Checkin } from '@/types';
 import Create from './create';
 import { useUsersStore } from '@/app/store/user/usersStore';
 import toast from 'react-hot-toast';
-import { useWorkAreaStore } from '@/app/store';
+import { authenStore, useWorkAreaStore } from '@/app/store';
 
 type Props = {
   rowData: Checkin.MobileUser;
@@ -18,7 +18,8 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
   const [Resetload, setResetload] = useState(false);
   const [ResetIDload, setResetIDload] = useState(false);
   const { resetDeviceId } = useUsersStore();
-  const {getzWorkAreaByLocationId } = useWorkAreaStore();
+  const { authData } = authenStore();
+  const { getzWorkAreaByLocationId } = useWorkAreaStore();
 
   const handleUnlock = () => {
     setUnload(true);
@@ -26,7 +27,12 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
   };
 
   const handleWorkArea = () => {
-    getzWorkAreaByLocationId(rowData?.workAreas?.length && rowData?.workAreas?.[0]?.location_id || null,);
+    if (!authData?.role) return;
+    if (authData?.role === "admin") {
+      getzWorkAreaByLocationId(  rowData?.workAreas?.[0]?.location_id ?? null);
+    } else if (authData.role === "branchadmin") {
+      getzWorkAreaByLocationId( authData?.location ? Number(authData?.location) : null);
+    }
   };
 
   const handleReset = () => {
@@ -59,7 +65,7 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
       <button className="button resetMobileId-button custom-target-des" data-pr-tooltip="Device" onClick={handleResetDeviceID} disabled={ResetIDload}>
         {ResetIDload ? <i className="pi pi-spin pi-cog" /> : <i className="pi pi-mobile" />}
       </button>
-      <Create rowItem={rowData} handleCallWorkArea={handleWorkArea}  />
+      <Create rowItem={rowData} handleCallWorkArea={handleWorkArea} />
     </div>
   );
 };

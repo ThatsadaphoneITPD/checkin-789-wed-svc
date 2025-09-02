@@ -12,23 +12,9 @@ const LoginPage = () => {
    
     const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
     
-    // const NavigationBar = 
-    // (<div 
-    //     className="login-navigate text-center text-lg font-medium p-3" 
-    //     style={{ position: 'fixed',  top: 0,  left: 0,  width: '100%',  backgroundColor: 'transparent',  display: 'flex',  justifyContent: 'center',  alignItems: 'center',  zIndex: 1000 }}
-    // >
-    //     <div className="flex items-center">
-    //         <img src="/demo/images/login/checkin.png" alt="Image" height="50" className="mr-2" />
-    //         <div style={{color: "white", marginTop:"0.65rem"}}>
-    //             <span>CheckIn Time</span>
-    //         </div>
-    //     </div>
-    // </div>
-    // );
 
     return (
         <div>
-            {/* {NavigationBar} */}
             <div className={containerClassName}>
                 <div className="flex flex-column align-items-center justify-content-center min-h-screen p-3">
                     <div className="container-login">  
@@ -38,9 +24,9 @@ const LoginPage = () => {
                             <div className="flex flex-column align-items-center mb-1 sm:mb-4">
                                 <span className="flex items-center">
                                     <img src="/demo/images/login/checkin.png" alt="Image" height="50" className="mr-2" />
-                                    <div className="text-3xl sm:text-xl  font-medium " style={{marginTop:"0.4rem", color: 'var(--primary-color)' }}> Check-In Time</div>
+                                    <div className="text-3xl sm:text-xl  font-medium " style={{marginTop:"0.4rem", color: 'var(--primary-color)' }}>HR Check-In</div>
                                 </span>
-                                <span className="text-600 text-sm font-medium">ບໍລິຫານ ເຂົ້າ-ອອກວຽກ ພະນັກງານ ໂດຍ EDL</span>
+                                <span className="text-600 text-sm font-medium">ລະບົບ ຕິດຕາມ ການເຂົ້າ-ອອກວຽກ ໄຟຟ້າລາວ</span>
                             </div>
                             <SignInForm/>
                         </div>
