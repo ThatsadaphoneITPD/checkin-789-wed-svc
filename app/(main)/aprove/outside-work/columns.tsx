@@ -41,7 +41,7 @@ const codeBody = (rowData: Checkin.OutSideWork) => {
 const titleBody = (rowData: Checkin.OutSideWork) => (
     <>
         <span className="p-column-title">emp_code</span>
-        {rowData?.fullname ? <>{rowData?.fullname}[{rowData?.emp_code}]</>: rowData?.emp_code }
+        {rowData?.fullname ? <>{rowData?.fullname}[{rowData?.emp_code}]</> : rowData?.emp_code}
     </>
 );
 
@@ -49,8 +49,8 @@ const descBody = (rowData: Checkin.OutSideWork) => (
     <>
         <div>
             <Tooltip target=".custom-target-des" />
-            <span className="custom-target-des"   data-pr-tooltip={rowData?.description === "" ? "---" : rowData?.description}   data-pr-position="bottom"  >
-                <span style={{ display: "inline-block",  maxWidth: "8rem",  whiteSpace: "nowrap",  overflow: "hidden",  textOverflow: "ellipsis",  verticalAlign: "middle" }}>
+            <span className="custom-target-des" data-pr-tooltip={rowData?.description === "" ? "---" : rowData?.description} data-pr-position="bottom"  >
+                <span style={{ display: "inline-block", maxWidth: "8rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", verticalAlign: "middle" }}>
                     {rowData?.description === "" ? "---" : rowData?.description}
                 </span>
             </span>
@@ -78,6 +78,16 @@ const reqestStartEndBody = (rowData: Checkin.OutSideWork) => (
         <Tag style={{ background: `#d6e4ff`, color: `#2f54eb` }} value={`${formatDateLao(rowData?.punch_time)}`} />
     </div>
 );
+const DepDivBody = (rowData: Checkin.OutSideWork) => (
+    <div>
+        <Tooltip target=".custom-target-des" />
+        <span className="custom-target-des" data-pr-tooltip={rowData?.department === "" ? "---" : rowData?.department} data-pr-position="bottom"  >
+            <span style={{ display: "inline-block", maxWidth: "5rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", verticalAlign: "middle" }}>
+                {!rowData?.division ? "---" : rowData?.division}
+            </span>
+        </span>
+    </div>
+);
 
 export const GetColumns = ({
     onViewDoc,
@@ -91,10 +101,11 @@ export const GetColumns = ({
     return [
         <Column key="0" field="work_out_id" header="ເລກທີ" body={(rowData: Checkin.OutSideWork) => codeBody(rowData)} headerStyle={{ minWidth: '3rem' }} />,
         <Column key="1" field="emp_code" header="ຊື່-ນາມສະກຸນ ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="3" field="description" header="ລາຍລະອຽດ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
+        <Column key="2" field="description" header="ລາຍລະອຽດ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
+        <Column key="3" field="dep-div" header="ຝ່າຍ-ສາຂາ" body={DepDivBody} headerStyle={{ minWidth: '5rem' }} />,
         <Column key="4" field="punch_time" header="ເວລາ-ຮ້ອງຂໍ" body={reqestStartEndBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
-        <Column key="6" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
-        <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
-        <Column key="8" body={(rowData: Checkin.OutSideWork) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="5" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
+        <Column key="6" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
+        <Column key="7" body={(rowData: Checkin.OutSideWork) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} />,
     ];
 };

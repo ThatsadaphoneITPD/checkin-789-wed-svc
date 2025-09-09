@@ -92,6 +92,17 @@ const totalDaysBody = (rowData: Checkin.FieldWork) => (
     </>
 );
 
+const DepDivBody = (rowData: Checkin.FieldWork) => (
+    <div>
+        <Tooltip target=".custom-target-des" />
+        <span className="custom-target-des" data-pr-tooltip={rowData?.department === "" ? "---" : rowData?.department} data-pr-position="bottom"  >
+            <span style={{ display: "inline-block", maxWidth: "5rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", verticalAlign: "middle" }}>
+                {!rowData?.division ? "---" : rowData?.division}
+            </span>
+        </span>
+    </div>
+);
+
 export const GetColumns = ({
     onViewDoc,
 }: ColumnsProps) => {
@@ -108,10 +119,11 @@ export const GetColumns = ({
         <Column key="2" field="field_work_type" header="ປະເພດ" body={TypeBody} headerStyle={{ maxWidth: '2rem' }} />,
         <Column key="2" field="workplace" header="ສະຖານທີ" body={workplaceBody} headerStyle={{ maxWidth: '2rem' }} />,
         <Column key="3" field="description" header="ລາຍລະອຽດ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
-        <Column key="4" field="start_date" header="ໄລຍະ-ອອກສະໜາມ" body={reqestStartEndBody} headerStyle={{ minWidth: '5rem' }} />,
-        <Column key="5" field="total_days" header="ຈຳນວນ" body={totalDaysBody} headerStyle={{ minWidth: '1rem' }} />,
-        <Column key="6" field="create_at" header="ວັນທີຮ້ອງຂໍ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="7" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} />,
-        <Column key="8" body={(rowData: Checkin.FieldWork) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="4" field="dep-div" header="ຝ່າຍ-ສາຂາ" body={DepDivBody} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="5" field="start_date" header="ໄລຍະ-ອອກສະໜາມ" body={reqestStartEndBody} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="6" field="total_days" header="ຈຳນວນ" body={totalDaysBody} headerStyle={{ minWidth: '1rem' }} />,
+        <Column key="7" field="create_at" header="ວັນທີຮ້ອງຂໍ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="8" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="9" body={(rowData: Checkin.FieldWork) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} />,
     ];
 };

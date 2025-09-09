@@ -108,6 +108,8 @@ declare namespace Checkin {
         emp_code: string;
         fullname: string
         field_work_type: string;
+        department: string
+        division: string
         description: string;
         workplace: string;
         start_date: Date;
@@ -130,6 +132,8 @@ declare namespace Checkin {
         emp_code: string
         fullname: string
         description: string
+        department: string
+        division: string
         punch_time: string
         latitude: number
         longitude: number
@@ -150,6 +154,8 @@ declare namespace Checkin {
         leave_type_id: number
         leave_type_name: string
         reasons: string
+        department: string
+        division: string
         start_date: string
         end_date: string
         total_days: number
@@ -210,6 +216,8 @@ declare namespace Checkin {
         ot_id: number
         emp_code: string
         fullname: string
+        department: string
+        division: string
         description: string
         punch_time: string
         latitude: number

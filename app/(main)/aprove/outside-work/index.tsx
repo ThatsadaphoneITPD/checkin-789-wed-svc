@@ -70,26 +70,24 @@ export default function OutSideWorkTable() {
   /* Fetch initial data ------------------------------------------------ */
 
   useEffect(() => {
-    // Guard clause: only run when authData is loaded
-    if (!authData || !authData.role) return;
+    if (!authData?.role) return;
 
-    if (authData.role === "admin") {
-      getOutSideWorkPath(activeIndex?.value, {});
-    } else if (authData.role === "branchadmin") {
-      getOutSideWorkPath(activeIndex?.value, {
+    // admin: requires filter selections
+    if (authData.role === 'admin') {
+      getOutSideWorkPath(activeIndex.value, {
+        ...(selectedDep ? { department_id: selectedDep } : {}),
+        ...(selectedDiv ? { division_id: selectedDiv } : {}),
+      });
+    }
+
+    // branch admin: always tied to their department/division
+    if (authData.role === 'branchadmin') {
+      getOutSideWorkPath(activeIndex.value, {
         department_id: authData.department_id,
         division_id: authData.division_id,
       });
     }
-  }, [authData, activeIndex, getOutSideWorkPath]);
-
-  useEffect(() => {
-    // Only run if authData is fully loaded
-    getOutSideWorkPath(activeIndex?.value, {
-      department_id: selectedDep,
-      division_id: selectedDiv,
-    });
-  }, [selectedDep, selectedDiv, authData]);
+  }, [authData, activeIndex, selectedDep, selectedDiv, getOutSideWorkPath]);
 
   /* ------------------------------------------------------------------ */
   /* Combined filter fn ------------------------------------------------ */
@@ -169,7 +167,7 @@ export default function OutSideWorkTable() {
           placeholder="ຄົ້ນຫາ"
           value={globalFilter}
           onChange={onSearchChange}
-          className="input-text w-full md:w-10rem"
+          className="input-text w-full md:w-7rem"
         />
 
         {/* optional month picker */}
@@ -194,36 +192,36 @@ export default function OutSideWorkTable() {
           onChange={onRangeChange}
           className="w-full md:w-14rem calendar-search"
         />
-        {authData.role === "admin" && 
-        <>
-          <Dropdown
-            showClear
-            options={finaldep}
-            value={selectedDep}
-            onChange={(e: any) => {
-              const depId = e.value;
-              setSelectedDep(depId);
-              setSelectedDiv(null); // reset division if department changes
-              getDivisionByDepId(depId || null);
-            }}
-            optionLabel="option_name"
-            optionValue="id"
-            placeholder="ເລືອກ ຝ່າຍ"
-             className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
-          />
-          <Dropdown
-            showClear
-            options={finaldiv}
-            value={selectedDiv}
-            onChange={(e: any) => {
-              setSelectedDiv(e.value)
-            }}
-            optionLabel="option_name"
-            optionValue="id"
-            placeholder="ເລືອກ ພະແນກ"
-             className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
-          />
-        </>
+        {authData?.role === "admin" &&
+          <>
+            <Dropdown
+              showClear
+              options={finaldep}
+              value={selectedDep}
+              onChange={(e: any) => {
+                const depId = e.value;
+                setSelectedDep(depId);
+                setSelectedDiv(null); // reset division if department changes
+                getDivisionByDepId(depId || null);
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ຝ່າຍ"
+              className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+            <Dropdown
+              showClear
+              options={finaldiv}
+              value={selectedDiv}
+              onChange={(e: any) => {
+                setSelectedDiv(e.value)
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ພະແນກ"
+              className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+          </>
         }
         <SelectButton
           className="p-button-outlined"
@@ -231,6 +229,8 @@ export default function OutSideWorkTable() {
           onChange={(e: SelectButtonChangeEvent) => {
             const selectedOption = items.find((item) => item.value === e.value);
             if (selectedOption) setActiveIndex(selectedOption);
+            setSelectedDep(null)
+            setSelectedDiv(null)
           }}
           itemTemplate={justifyTemplate}
           optionLabel="name"

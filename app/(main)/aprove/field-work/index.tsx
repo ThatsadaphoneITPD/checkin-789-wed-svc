@@ -67,27 +67,25 @@ export default function FieldWorkTable() {
 
   /* ------------------------------- fetch -------------------------------- */
 
-  useEffect(() => {
-    // Guard clause: only run when authData is loaded
-    if (!authData || !authData.role) return;
-
-    if (authData.role === "admin") {
-      getFieldWorkPath(activeIndex?.value, {});
-    } else if (authData.role === "branchadmin") {
-      getFieldWorkPath(activeIndex?.value, {
-        department_id: authData.department_id,
-        division_id: authData.division_id,
-      });
-    }
-  }, [authData, activeIndex, getFieldWorkPath]);
-
-  useEffect(() => {
-    // Only run if authData is fully loaded
-    getFieldWorkPath(activeIndex?.value, {
-      department_id: selectedDep,
-      division_id: selectedDiv,
-    });
-  }, [selectedDep, selectedDiv, authData]);
+    useEffect(() => {
+      if (!authData?.role) return;
+  
+      // admin: requires filter selections
+      if (authData.role === 'admin') {
+        getFieldWorkPath(activeIndex.value, {
+          ...(selectedDep ? { department_id: selectedDep } : {}),
+          ...(selectedDiv ? { division_id: selectedDiv } : {}),
+        });
+      }
+  
+      // branch admin: always tied to their department/division
+      if (authData.role === 'branchadmin') {
+        getFieldWorkPath(activeIndex.value, {
+          department_id: authData.department_id,
+          division_id: authData.division_id,
+        });
+      }
+    }, [authData, activeIndex, selectedDep, selectedDiv, getFieldWorkPath]);
 
   /* --------------------------- combined filter -------------------------- */
   const applyFilters = useCallback(() => {
@@ -217,7 +215,7 @@ export default function FieldWorkTable() {
           onChange={onRangeChange}
           className="w-full md:w-14rem calendar-search"
         />
-        {authData.role === "admin" &&
+        {authData?.role === "admin" &&
           <>
             <Dropdown
               showClear
@@ -232,7 +230,7 @@ export default function FieldWorkTable() {
               optionLabel="option_name"
               optionValue="id"
               placeholder="ເລືອກ ຝ່າຍ"
-               className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+              className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
             />
             <Dropdown
               showClear
@@ -244,7 +242,7 @@ export default function FieldWorkTable() {
               optionLabel="option_name"
               optionValue="id"
               placeholder="ເລືອກ ພະແນກ"
-               className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+              className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
             />
           </>
         }
@@ -254,6 +252,8 @@ export default function FieldWorkTable() {
           onChange={(e: SelectButtonChangeEvent) => {
             const selectedOption = items.find((item) => item.value === e.value);
             if (selectedOption) setActiveIndex(selectedOption);
+            setSelectedDep(null)
+            setSelectedDiv(null)
           }}
           itemTemplate={justifyTemplate}
           optionLabel="name"

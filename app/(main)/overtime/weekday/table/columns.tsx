@@ -75,6 +75,17 @@ const reqestTimeBody = (rowData: Checkin.Overtime) => (
     </>
 );
 
+const DepDivBody = (rowData: Checkin.Overtime) => (
+    <div>
+        <Tooltip target=".custom-target-des" />
+        <span className="custom-target-des" data-pr-tooltip={rowData?.department === "" ? "---" : rowData?.department} data-pr-position="bottom"  >
+            <span style={{ display: "inline-block", maxWidth: "5rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", verticalAlign: "middle" }}>
+                {!rowData?.division ? "---" : rowData?.division}
+            </span>
+        </span>
+    </div>
+);
+
 
 export const GetColumns = ({
     onViewDoc,
@@ -90,9 +101,10 @@ export const GetColumns = ({
         <Column key="0" field="leave_req_id" header="ເລກທີ" body={(rowData: Checkin.Overtime) => codeBody(rowData)} headerStyle={{ minWidth: '3rem' }} />,
         <Column key="1" field="emp_code" header="ລະຫັດ" body={titleBody} headerStyle={{ minWidth: '2rem' }} />,
         <Column key="2" field="description" header="ເຫດຜົນ" body={descBody} headerStyle={{ minWidth: '8rem' }} />,
-        <Column key="3" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
-        <Column key="4" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
-        <Column key="5" field="create_at" header="ເວລາ OT ກົດເຂົ້າ-ອອກ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
-        <Column key="6" body={(rowData: Checkin.Overtime) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
+        <Column key="3" field="dep-div" header="ຝ່າຍ-ສາຂາ" body={DepDivBody} headerStyle={{ minWidth: '5rem' }} />,
+        <Column key="4" field="longitude" header="ສະຖານທີກົດ" body={LocateBody} headerStyle={{ minWidth: '2rem' }} alignHeader='center' />,
+        <Column key="5" field="status" header="ສະຖານະ" body={StatusBody} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
+        <Column key="6" field="create_at" header="ເວລາ OT ກົດເຂົ້າ-ອອກ" body={reqestTimeBody} headerStyle={{ minWidth: '2rem' }} />,
+        <Column key="7" body={(rowData: Checkin.Overtime) => <ActionBody rowData={rowData} onViewDoc={onViewDoc} />} headerStyle={{ minWidth: '5rem' }} alignHeader='center' />,
     ];
 };
