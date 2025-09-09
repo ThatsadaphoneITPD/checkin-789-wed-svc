@@ -12,7 +12,7 @@ const header = (
         <span style={{ color: "#2f54eb" }} className="text-xl font-bold">ລ່ວງເວລາ ວັນເຂົ້າການ</span>
     </div>)
 
-const page = (props: Props) => {
+const Page = (props: Props) => {
     const { getDepartmentData } = useDepartmentStore()
     useEffect(() => {
         getDepartmentData()
@@ -24,4 +24,4 @@ const page = (props: Props) => {
         </>
     )
 }
-export default page;
+export default Page;
