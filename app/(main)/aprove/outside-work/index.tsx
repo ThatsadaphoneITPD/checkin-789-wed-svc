@@ -20,6 +20,9 @@ import { useModal } from '@/app/shared/modal-views/use-modal';
 import { useFileCheckStore, authenStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
+import { useDivisionStore } from '@/app/store/divisions/divisionStore';
+import { Dropdown } from 'primereact/dropdown';
 interface JustifyOption {
   icon: string;
   name?: string;
@@ -31,6 +34,20 @@ export default function OutSideWorkTable() {
   const { data, getOutSideWorkPath } = useOutSideWorkStore();
   const { openModal } = useModal();
   const { getFile } = useFileCheckStore();
+  const { datadep } = useDepartmentStore();
+  const { datadiv, getDivisionByDepId } = useDivisionStore();
+  const [selectedDep, setSelectedDep] = useState<Nullable<string>>(null);
+  const [selectedDiv, setSelectedDiv] = useState<Nullable<string>>(null);
+
+  const finaldep = datadep.map(dep => ({
+    option_name: `${dep?.department_name}[${dep?.id}]`,
+    id: dep?.id
+  }));
+
+  const finaldiv = datadiv.map(div => ({
+    option_name: `${div?.division_name}[${div?.id}]`,
+    id: div?.id
+  }));
 
   /* ------------------------------------------------------------------ */
   /* State ------------------------------------------------------------- */
@@ -65,6 +82,14 @@ export default function OutSideWorkTable() {
       });
     }
   }, [authData, activeIndex, getOutSideWorkPath]);
+
+  useEffect(() => {
+    // Only run if authData is fully loaded
+    getOutSideWorkPath(activeIndex?.value, {
+      department_id: selectedDep,
+      division_id: selectedDiv,
+    });
+  }, [selectedDep, selectedDiv, authData]);
 
   /* ------------------------------------------------------------------ */
   /* Combined filter fn ------------------------------------------------ */
@@ -169,6 +194,37 @@ export default function OutSideWorkTable() {
           onChange={onRangeChange}
           className="w-full md:w-14rem calendar-search"
         />
+        {authData.role === "admin" && 
+        <>
+          <Dropdown
+            showClear
+            options={finaldep}
+            value={selectedDep}
+            onChange={(e: any) => {
+              const depId = e.value;
+              setSelectedDep(depId);
+              setSelectedDiv(null); // reset division if department changes
+              getDivisionByDepId(depId || null);
+            }}
+            optionLabel="option_name"
+            optionValue="id"
+            placeholder="ເລືອກ ຝ່າຍ"
+             className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+          />
+          <Dropdown
+            showClear
+            options={finaldiv}
+            value={selectedDiv}
+            onChange={(e: any) => {
+              setSelectedDiv(e.value)
+            }}
+            optionLabel="option_name"
+            optionValue="id"
+            placeholder="ເລືອກ ພະແນກ"
+             className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+          />
+        </>
+        }
         <SelectButton
           className="p-button-outlined"
           value={activeIndex?.value}

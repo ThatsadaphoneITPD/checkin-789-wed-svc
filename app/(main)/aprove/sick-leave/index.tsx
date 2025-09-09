@@ -19,6 +19,9 @@ import { useModal } from '@/app/shared/modal-views/use-modal';
 import toast from 'react-hot-toast';
 import { authenStore, useFileCheckStore } from '@/app/store';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
+import { useDivisionStore } from '@/app/store/divisions/divisionStore';
+import { Dropdown } from 'primereact/dropdown';
 interface JustifyOption {
   icon: string;
   name?: string;
@@ -30,6 +33,20 @@ export default function SickLeaveTable() {
   const { data, getLeaveTypeData, getSickLeavePath } = useSickLeaveStore();
   const { openModal } = useModal();
   const { getFile } = useFileCheckStore();
+  const { datadep } = useDepartmentStore();
+  const { datadiv, getDivisionByDepId } = useDivisionStore();
+  const [selectedDep, setSelectedDep] = useState<Nullable<string>>(null);
+  const [selectedDiv, setSelectedDiv] = useState<Nullable<string>>(null);
+
+  const finaldep = datadep.map(dep => ({
+    option_name: `${dep?.department_name}[${dep?.id}]`,
+    id: dep?.id
+  }));
+
+  const finaldiv = datadiv.map(div => ({
+    option_name: `${div?.division_name}[${div?.id}]`,
+    id: div?.id
+  }));
 
   /* ------------------------------------------------------------------ */
   /* state ------------------------------------------------------------- */
@@ -67,6 +84,14 @@ export default function SickLeaveTable() {
       });
     }
   }, [authData, activeIndex, getSickLeavePath]);
+
+  useEffect(() => {
+    // Only run if authData is fully loaded​
+    getSickLeavePath(activeIndex?.value, {
+      department_id: selectedDep,
+      division_id: selectedDiv,
+    });
+  }, [selectedDep, selectedDiv, authData]);
 
 
   /* combined filter --------------------------------------------------- */
@@ -178,7 +203,7 @@ export default function SickLeaveTable() {
           placeholder="ຄົ້ນຫາ"
           value={globalFilter}
           onChange={onSearchChange}
-          className="input-text w-full md:w-10rem "
+          className="input-text w-full md:w-8rem "
         />
 
         {/* month picker */}
@@ -203,6 +228,38 @@ export default function SickLeaveTable() {
           onChange={onRangeChange}
           className="w-full md:w-14rem  calendar-search"
         />
+
+        {authData.role === "admin" &&
+          <>
+            <Dropdown
+              showClear
+              options={finaldep}
+              value={selectedDep}
+              onChange={(e: any) => {
+                const depId = e.value;
+                setSelectedDep(depId);
+                setSelectedDiv(null); // reset division if department changes
+                getDivisionByDepId(depId || null);
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ຝ່າຍ"
+               className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+            <Dropdown
+              showClear
+              options={finaldiv}
+              value={selectedDiv}
+              onChange={(e: any) => {
+                setSelectedDiv(e.value)
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ພະແນກ"
+               className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+          </>
+        }
 
         <SelectButton
           className="p-button-outlined"

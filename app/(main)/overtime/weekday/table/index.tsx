@@ -9,6 +9,9 @@ import { Calendar } from 'primereact/calendar';
 import { useFileCheckStore, useOvertimeStore, authenStore } from '@/app/store';
 import EmptyData from '@/app/shared/empty-table/container';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
+import { useDivisionStore } from '@/app/store/divisions/divisionStore';
+import { Dropdown } from 'primereact/dropdown';
 interface JustifyOption {
   icon: string;
   name?: string;
@@ -20,6 +23,20 @@ export default function SickLeaveTable() {
   const { getOvertimePath, dataOvertime } = useOvertimeStore();
   const { openModal } = useModal();
   const { getFile } = useFileCheckStore();
+  const { datadep } = useDepartmentStore();
+  const { datadiv, getDivisionByDepId } = useDivisionStore();
+  const [selectedDep, setSelectedDep] = useState<Nullable<string>>(null);
+  const [selectedDiv, setSelectedDiv] = useState<Nullable<string>>(null);
+
+  const finaldep = datadep.map(dep => ({
+    option_name: `${dep?.department_name}[${dep?.id}]`,
+    id: dep?.id
+  }));
+
+  const finaldiv = datadiv.map(div => ({
+    option_name: `${div?.division_name}[${div?.id}]`,
+    id: div?.id
+  }));
 
   /* ---------- local state ---------- */
   const [selectedItem, setSelectedItem] = useState<any[]>([]);
@@ -50,6 +67,14 @@ export default function SickLeaveTable() {
       });
     }
   }, [authData, activeIndex, getOvertimePath]);
+
+  useEffect(() => {
+    // Only run if authData is fully loaded​
+    getOvertimePath(activeIndex?.value, {
+      department_id: selectedDep,
+      division_id: selectedDiv,
+    });
+  }, [selectedDep, selectedDiv, authData]);
 
 
   useEffect(() => { setFilteredData(dataOvertime); }, [dataOvertime]);
@@ -163,6 +188,37 @@ export default function SickLeaveTable() {
           showIcon
           className="w-full md:w-12rem  calendar-search"
         />
+        {authData.role === "admin" &&
+          <>
+            <Dropdown
+              showClear
+              options={finaldep}
+              value={selectedDep}
+              onChange={(e: any) => {
+                const depId = e.value;
+                setSelectedDep(depId);
+                setSelectedDiv(null); // reset division if department changes
+                getDivisionByDepId(depId || null);
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ຝ່າຍ"
+              className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+            <Dropdown
+              showClear
+              options={finaldiv}
+              value={selectedDiv}
+              onChange={(e: any) => {
+                setSelectedDiv(e.value)
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ພະແນກ"
+              className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+          </>
+        }
         <SelectButton
           className="p-button-outlined"
           value={activeIndex?.value}

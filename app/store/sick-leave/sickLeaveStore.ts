@@ -36,8 +36,12 @@ export const useSickLeaveStore = create<SickLeaveStore, []>((set, get) => ({
         set({ ...initialState, loading: true });
 
         try {
+             const queryParams = {};
+            if (params?.department_id) queryParams['department_id'] = params.department_id;
+            if (params?.division_id) queryParams['division_id'] = params.division_id;
+
             const response = await axiosClient.get(`api/LeaveRequest/${apiPath}`, {
-                params: params?.division_id ? { department_id: params?.department_id, division_id: params?.division_id } : {},
+                params: Object.keys(queryParams).length > 0 ? queryParams : {},
             });
 
             const data = Array.isArray(response?.data) ? response.data : [];

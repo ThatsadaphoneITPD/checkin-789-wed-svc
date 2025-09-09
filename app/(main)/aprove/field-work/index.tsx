@@ -19,6 +19,9 @@ import { GetColumns } from './columns';
 import { authenStore, useFileCheckStore } from '@/app/store';
 import toast from 'react-hot-toast';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
+import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
+import { useDivisionStore } from '@/app/store/divisions/divisionStore';
+import { Dropdown } from 'primereact/dropdown';
 interface JustifyOption {
   icon: string;
   name?: string;
@@ -30,6 +33,20 @@ export default function FieldWorkTable() {
   const { data, getFieldWorkPath } = useFieldWorkStore();
   const { getFile } = useFileCheckStore();
   const { openModal } = useModal();
+  const { datadep } = useDepartmentStore();
+  const { datadiv, getDivisionByDepId } = useDivisionStore();
+  const [selectedDep, setSelectedDep] = useState<Nullable<string>>(null);
+  const [selectedDiv, setSelectedDiv] = useState<Nullable<string>>(null);
+
+  const finaldep = datadep.map(dep => ({
+    option_name: `${dep?.department_name}[${dep?.id}]`,
+    id: dep?.id
+  }));
+
+  const finaldiv = datadiv.map(div => ({
+    option_name: `${div?.division_name}[${div?.id}]`,
+    id: div?.id
+  }));
 
   /* ------------------------------- state -------------------------------- */
   const [globalFilter, setGlobalFilter] = useState('');
@@ -51,18 +68,26 @@ export default function FieldWorkTable() {
   /* ------------------------------- fetch -------------------------------- */
 
   useEffect(() => {
-      // Guard clause: only run when authData is loaded
-      if (!authData || !authData.role) return;
-  
-      if (authData.role === "admin") {
-        getFieldWorkPath(activeIndex?.value, {});
-      } else if (authData.role === "branchadmin") {
-        getFieldWorkPath(activeIndex?.value, {
-          department_id: authData.department_id,
-          division_id: authData.division_id,
-        });
-      }
-    }, [authData, activeIndex, getFieldWorkPath]);
+    // Guard clause: only run when authData is loaded
+    if (!authData || !authData.role) return;
+
+    if (authData.role === "admin") {
+      getFieldWorkPath(activeIndex?.value, {});
+    } else if (authData.role === "branchadmin") {
+      getFieldWorkPath(activeIndex?.value, {
+        department_id: authData.department_id,
+        division_id: authData.division_id,
+      });
+    }
+  }, [authData, activeIndex, getFieldWorkPath]);
+
+  useEffect(() => {
+    // Only run if authData is fully loaded
+    getFieldWorkPath(activeIndex?.value, {
+      department_id: selectedDep,
+      division_id: selectedDiv,
+    });
+  }, [selectedDep, selectedDiv, authData]);
 
   /* --------------------------- combined filter -------------------------- */
   const applyFilters = useCallback(() => {
@@ -169,7 +194,7 @@ export default function FieldWorkTable() {
           placeholder="ຄົ້ນຫາ"
           value={globalFilter}
           onChange={onSearchChange}
-          className="input-text w-full md:w-10rem"
+          className="input-text w-full md:w-7rem"
         />
 
         <Calendar
@@ -192,6 +217,37 @@ export default function FieldWorkTable() {
           onChange={onRangeChange}
           className="w-full md:w-14rem calendar-search"
         />
+        {authData.role === "admin" &&
+          <>
+            <Dropdown
+              showClear
+              options={finaldep}
+              value={selectedDep}
+              onChange={(e: any) => {
+                const depId = e.value;
+                setSelectedDep(depId);
+                setSelectedDiv(null); // reset division if department changes
+                getDivisionByDepId(depId || null);
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ຝ່າຍ"
+               className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+            <Dropdown
+              showClear
+              options={finaldiv}
+              value={selectedDiv}
+              onChange={(e: any) => {
+                setSelectedDiv(e.value)
+              }}
+              optionLabel="option_name"
+              optionValue="id"
+              placeholder="ເລືອກ ພະແນກ"
+               className="w-full sm:ml-2 md:w-10rem mt-2 md:mt-0"
+            />
+          </>
+        }
         <SelectButton
           className="p-button-outlined"
           value={activeIndex?.value}
