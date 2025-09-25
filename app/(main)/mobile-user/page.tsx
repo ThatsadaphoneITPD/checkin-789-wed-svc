@@ -13,7 +13,7 @@ export default function Page() {
   const TitleComponent = () => {
     return (
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <span style={{color: "#2f54eb"}} className="text-xl font-bold flex items-center">
+        <span style={{color: "#81901e"}} className="text-xl font-bold flex items-center">
           <HiOutlineDevicePhoneMobile size={24} className="mr-2 mt-1" />
           ຈັດການ ຂໍ້ມູນພະນັກງານ
         </span>

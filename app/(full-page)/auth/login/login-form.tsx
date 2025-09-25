@@ -71,7 +71,7 @@ export default function SignInForm() {
                 <div className="">
                     <div>
                         <label htmlFor="username" className="block text-900 text-sm sm:text-lg font-medium mb-2">
-                            ລະຫັດພະນັກງານ
+                            Username
                         </label>
                         {errors.username?.message && (
                             <small className="p-invalid required-star">{errors.username?.message}</small>

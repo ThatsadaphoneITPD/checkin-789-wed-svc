@@ -6,8 +6,6 @@ export const roleAuthMenu = (role: string) => {
     switch (role) {
         case "Super Admin": return menuItems;
         case "admin": return adminmenu;
-        case "branchadmin": return branchadminmenu;
-        case "deptadmin": return deptadminmenu;
         case "User": return sideGroups;
         default: return defaultsides;
     }

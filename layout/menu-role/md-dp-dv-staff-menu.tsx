@@ -16,84 +16,84 @@ export const adminmenu: any[] = [
             },
         ]
     },
-    {
-        side_group_id: 2,
-        side_group_name: "ການບໍລິຫານ ເຂົ້າ-ອອກວຽກ",
-        sideBars: [
-            {
-                side_bar_id: 8,
-                side_bar_name: "ຂໍ້ມູນພະນັກງານ",
-                permissions: [
-                    {
-                        permission_id: 37763,
-                        role_id: 3,
-                        side_bar_id: 8,
-                        created_at: "2025-01-20T02:59:15.419Z",
-                    }
-                ]
-            },
-            {
-                side_bar_id: 8,
-                side_bar_name: "Checkin Manual",
-                permissions: [
-                    {
-                        permission_id: 37763,
-                        role_id: 3,
-                        side_bar_id: 8,
-                        created_at: "2025-01-20T02:59:15.419Z",
-                    }
-                ]
-            },
-            {
-                side_bar_id: 7,
-                side_bar_name: "ການອະນຸມັດວຽກ",
-                permissions: [
-                    {
-                        permission_id: 37763,
-                        role_id: 3,
-                        side_bar_id: 8,
-                        created_at: "2025-01-20T02:59:15.419Z",
-                    }
-                ]
-            },
-        ]
-    },
-    {
-        side_group_id: 3,
-        side_group_name: "ວຽກລ່ວງ-ເວລາ",
-        sideBars: [
-            {
-                side_bar_id: 8,
-                side_bar_name: "ການລ່ວງເວລາ",
-                permissions: [
-                    {
-                        permission_id: 37763,
-                        role_id: 3,
-                        side_bar_id: 8,
-                        created_at: "2025-01-20T02:59:15.419Z",
-                    }
-                ]
-            },
-        ]
-    },
-    {
-        side_group_id: 3,
-        side_group_name: "ສະຖານທີ ເຂົ້າ-ອອກວຽກ",
-        sideBars: [
-            {
-                side_bar_id: 8,
-                side_bar_name: "ພີກັດ-ຫ້ອງການ",
-                permissions: [
-                    {
-                        permission_id: 37763,
-                        role_id: 3,
-                        side_bar_id: 8,
-                        created_at: "2025-01-20T02:59:15.419Z",
-                    }
-                ]
-            },
-        ]
-    },
+    // {
+    //     side_group_id: 2,
+    //     side_group_name: "ການບໍລິຫານ ເຂົ້າ-ອອກວຽກ",
+    //     sideBars: [
+    //         {
+    //             side_bar_id: 8,
+    //             side_bar_name: "ຂໍ້ມູນພະນັກງານ",
+    //             permissions: [
+    //                 {
+    //                     permission_id: 37763,
+    //                     role_id: 3,
+    //                     side_bar_id: 8,
+    //                     created_at: "2025-01-20T02:59:15.419Z",
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             side_bar_id: 8,
+    //             side_bar_name: "Checkin Manual",
+    //             permissions: [
+    //                 {
+    //                     permission_id: 37763,
+    //                     role_id: 3,
+    //                     side_bar_id: 8,
+    //                     created_at: "2025-01-20T02:59:15.419Z",
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             side_bar_id: 7,
+    //             side_bar_name: "ການອະນຸມັດວຽກ",
+    //             permissions: [
+    //                 {
+    //                     permission_id: 37763,
+    //                     role_id: 3,
+    //                     side_bar_id: 8,
+    //                     created_at: "2025-01-20T02:59:15.419Z",
+    //                 }
+    //             ]
+    //         },
+    //     ]
+    // },
+    // {
+    //     side_group_id: 3,
+    //     side_group_name: "ວຽກລ່ວງ-ເວລາ",
+    //     sideBars: [
+    //         {
+    //             side_bar_id: 8,
+    //             side_bar_name: "ການລ່ວງເວລາ",
+    //             permissions: [
+    //                 {
+    //                     permission_id: 37763,
+    //                     role_id: 3,
+    //                     side_bar_id: 8,
+    //                     created_at: "2025-01-20T02:59:15.419Z",
+    //                 }
+    //             ]
+    //         },
+    //     ]
+    // },
+    // {
+    //     side_group_id: 3,
+    //     side_group_name: "ສະຖານທີ ເຂົ້າ-ອອກວຽກ",
+    //     sideBars: [
+    //         {
+    //             side_bar_id: 8,
+    //             side_bar_name: "ພີກັດ-ຫ້ອງການ",
+    //             permissions: [
+    //                 {
+    //                     permission_id: 37763,
+    //                     role_id: 3,
+    //                     side_bar_id: 8,
+    //                     created_at: "2025-01-20T02:59:15.419Z",
+    //                 }
+    //             ]
+    //         },
+    //     ]
+    // },
     {
         side_group_id: 2,
         side_group_name: "ລາຍງານ",

@@ -10,7 +10,7 @@ import EmployeeTable from './employee';
 const DateComponent = () => {
     return (
         <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span style={{color: "#2f54eb"}} className="text-xl font-bold">ລາຍງານ ການເຂົ້າ-ອອກວຽກ</span>
+            <span style={{color: "#81901e"}} className="text-xl font-bold">ລາຍງານ ການເຂົ້າ-ອອກວຽກ</span>
         </div>
     );
 };

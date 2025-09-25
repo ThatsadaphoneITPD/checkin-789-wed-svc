@@ -13,7 +13,7 @@ const ProfileUser = () => {
                         </div>
                     </div>
                     <div className="col-12 flex justify-content-center -mt-3">
-                        <div style={{  height: "7.5rem",   width: "7.5rem",   borderRadius: "1.5rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, rgba(48,42,157,1) 0%, rgba(28,28,140,1) 41%, rgba(84,84,235,1) 100%)", padding: "5px"  }} >
+                        <div style={{  height: "7.5rem",   width: "7.5rem",   borderRadius: "1.5rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, #21542C 0%, #14331B 41%, #338244 100%)", padding: "5px"  }} >
                             <div style={{  height: "6.8rem", width: "7rem", background: "white", borderRadius: "1.7rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }} >
                                 <img src={`/layout/images/testProfile.png`} alt="logo"  style={{ height: "9rem", width: "8rem", margin: "2rem 0 0 2rem",  transform: "rotate(-42deg)", objectFit: "cover"}}/>
                             </div>
@@ -21,12 +21,12 @@ const ProfileUser = () => {
                     </div>
                     <div className="grid justify-content-center text-center">
                         <div style={{marginLeft: "-4rem", marginRight: "4rem", marginTop: "-3.5rem"}}>
-                            <div style={{  height: "6rem",   width: "6rem",   borderRadius: "0.9rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, rgba(48,42,157,1) 0%, rgba(28,28,140,1) 41%, rgba(84,84,235,1) 100%)", padding: "5px"  }} >
+                            <div style={{  height: "6rem",   width: "6rem",   borderRadius: "0.9rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, #21542C 0%, #14331B 41%, #338244 100%)", padding: "5px"  }} >
                                 <div style={{  height: "4.5rem", width: "4.5rem", background: "white", borderRadius: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }} />
                             </div>
                         </div>
                         <div style={{marginLeft: "4rem", marginRight: "-4rem", marginTop: "-3.5rem"}}>
-                            <div style={{  height: "6rem",   width: "6rem",   borderRadius: "0.8rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, rgba(48,42,157,1) 0%, rgba(28,28,140,1) 41%, rgba(84,84,235,1) 100%)", padding: "5px"  }} >
+                            <div style={{  height: "6rem",   width: "6rem",   borderRadius: "0.8rem",   transform: "rotate(45deg)",    display: "flex",    alignItems: "center",    justifyContent: "center",   overflow: "hidden",   background: "linear-gradient(90deg, #21542C 0%, #14331B 41%, #338244 100%)", padding: "5px"  }} >
                                 <div style={{  height: "4.5rem", width: "4.5rem", background: "white", borderRadius: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }} />
                             </div>
                         </div>

@@ -53,7 +53,7 @@ const AppMenu = () => {
 
 
 
-    const BroadHelper = (<div className="broad-contrainer w-full mt-3" style={{ width: "100%", height: "4rem", background: "#2B7BF4" }}>
+    const BroadHelper = (<div className="broad-contrainer w-full mt-3" style={{ width: "100%", height: "4rem", background: "#338244" }}>
         <div className='help-tag'>
             <div className='time-container'>
                 <div className='timecount'>
@@ -82,8 +82,8 @@ const AppMenu = () => {
     return (
         <MenuProvider>
             <Link href="/" className="layout-apptopbar layout-topbar-logo">
-                <img src={`/layout/images/edl_logo.svg`} width="40px" height="35px" alt="logo" />
-                <span style={{ color: "#fff", marginTop: "-0.3rem" }}> CHCEK-IN TIME</span>
+                <img src={`/layout/images/789-CFS.svg`} width="30px" height="28px" alt="logo" />
+                <span style={{ color: "#fff", marginTop: "-0.3rem", marginLeft: "0.5rem" }}> CHCEK-IN TIME</span>
             </Link>
              <ul className="layout-menu">
                 {finalmenuItems.length > 0 ? (

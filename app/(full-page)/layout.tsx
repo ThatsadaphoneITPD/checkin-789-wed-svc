@@ -7,8 +7,8 @@ interface SimpleLayoutProps {
 }
 
 export const metadata: Metadata = {
-    title: 'EDL CheckIn Time',
-    description: 'EDl CheckIn Time'
+    title: '789 CheckIn Time',
+    description: '789 CSF CheckIn Time'
 };
 
 export default function SimpleLayout({ children }: SimpleLayoutProps) {

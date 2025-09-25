@@ -131,7 +131,7 @@ export default function AttendTable() {
   const TitleComponent = () => {
     return (
       <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-        <span style={{color: "#2f54eb"}} className="text-xl font-bold">ລາຍງານ ເຂົ້າ-ອອກວຽກ ປະຈຳເດືອນ</span>
+        <span style={{color: "#81901e"}} className="text-xl font-bold">ລາຍງານ ເຂົ້າ-ອອກວຽກ ປະຈຳເດືອນ</span>
       </div>
     );
   };
