@@ -34,7 +34,7 @@ export default function SignInForm() {
                 localStorage.setItem('token', resp?.data?.accessToken);
                 document.cookie = `token=${resp?.data?.accessToken}; path=/;`;
                 setAuthData(resp?.data?.user);
-                if (resp?.data?.user?.role == "admin"){
+                if (['admin', 'deptadmin'].includes(resp?.data?.user?.role ?? '')){
                     const resp_eoffce: any = await loginEoffice({username: "appcheckin", password: "EDL1234"})
                     localStorage.setItem('eoffice_token', resp_eoffce?.data?.token);
                     document.cookie = `eoffice_token=${resp_eoffce?.data?.token}; path=/;`;

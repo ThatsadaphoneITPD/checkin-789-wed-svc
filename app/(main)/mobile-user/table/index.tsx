@@ -1,17 +1,18 @@
 'use client';
 
+import React, { useEffect, useRef, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useRef, useState } from 'react';
-import { GetColumns } from './columns';
-import { useModal } from '@/app/shared/modal-views/use-modal';
+import { Dropdown } from 'primereact/dropdown';
 import { Nullable } from 'primereact/ts-helpers';
+
+import { GetColumns } from './columns';
 import EmptyData from '@/app/shared/empty-table/container';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import { authenStore, useLocationStore, useWorkAreaStore } from '@/app/store';
 import { useUsersStore } from '@/app/store/user/usersStore';
 import { useDepartmentStore } from '@/app/store/departments/deparmentStore';
-import { Dropdown } from 'primereact/dropdown';
 import { useDivisionStore } from '@/app/store/divisions/divisionStore';
-import { authenStore, useLocationStore, useWorkAreaStore } from '@/app/store';
 
 export default function MobileUserTable() {
     const { authData } = authenStore();
@@ -20,91 +21,93 @@ export default function MobileUserTable() {
     const { getzLocationData } = useLocationStore();
     const { datadep } = useDepartmentStore();
     const { datadiv, getDivisionByDepId } = useDivisionStore();
-    const buttonDisable = (() => {
-        switch (authData?.role) {
-            case "admin":
-                return false;
-            case "branchadmin":
-                return true;
-            default:
-                return true;
-        }
-    })();
+    const { openModal } = useModal();
 
+    const dt = useRef<DataTable<any>>(null);
 
+    // 🔹 State
     const [emcode, setEmcode] = useState<Nullable<string>>('');
-    const [filtered, setFiltered] = useState<any[]>([]);
     const [debouncedEmcode, setDebouncedEmcode] = useState<Nullable<string>>('');
+    const [filtered, setFiltered] = useState<any[]>([]);
     const [selectedItem, setSelectedItem] = useState<any[]>([]);
     const [selectedDep, setSelectedDep] = useState<Nullable<string>>(null);
     const [selectedDiv, setSelectedDiv] = useState<Nullable<string>>(null);
 
-    const { openModal } = useModal();
-    const dt = useRef<DataTable<any>>(null);
+    // 🔹 Role-based dropdown disable logic
+    const buttonDisableDepartment = !['admin'].includes(authData?.role ?? '');
+    const buttonDisableDiv = !['admin', 'deptadmin'].includes(authData?.role ?? '');
 
-    const finaldep = datadep.map(dep => ({
-        option_name: `${dep?.department_name}[${dep?.id}]`,
-        id: dep?.id
+    // 🔹 Dropdown options
+    const finaldep = datadep.map((dep) => ({
+        option_name: `${dep.department_name}[${dep.id}]`,
+        id: dep.id,
     }));
 
-    const finaldiv = datadiv.map(div => ({
-        option_name: `${div?.division_name}[${div?.id}]`,
-        id: div?.id
+    const finaldiv = datadiv.map((div) => ({
+        option_name: `${div.division_name}[${div.id}]`,
+        id: div.id,
     }));
 
+    // 🔹 Initial data fetch
     useEffect(() => {
-        getzLocationData()
+        getzLocationData();
         getzWorkAreaData();
     }, [getzWorkAreaData, getzLocationData]);
 
-    // Debounce empcode input
+    // 🔹 Debounce empcode
     useEffect(() => {
         const handler = setTimeout(() => setDebouncedEmcode(emcode), 300);
         return () => clearTimeout(handler);
     }, [emcode]);
 
-    // Fetch users when filters change
+    // 🔹 Fetch users when filters change
     useEffect(() => {
-        // Only run if authData is fully loaded
-        if (!authData || !authData.role) return;
+        if (!authData?.role) return;
 
         const baseParams = { page, pageSize, role: authData.role };
-        let params: any = {};
+        let params: any = { ...baseParams };
 
-        if (authData.role === "admin") {
-            params = {
-                ...baseParams,
-                empCode: debouncedEmcode || undefined,
-                department_id: selectedDep || undefined,
-                division_id: selectedDiv || undefined,
-            };
-        } else if (authData.role === "branchadmin") {
-            params = {
-                ...baseParams,
-                department_id: authData.department_id,
-                division_id: authData.division_id,
-                ...(debouncedEmcode ? { empCode: debouncedEmcode } : {}),
-            };
-        } else if (authData.role === "deptadmin") {
-            params = {
-                ...baseParams,
-                department_id: authData.department_id,
-                ...(debouncedEmcode ? { empCode: debouncedEmcode } : {}),
-            };
+        switch (authData.role) {
+            case 'admin':
+                params = {
+                    ...params,
+                    empCode: debouncedEmcode || undefined,
+                    department_id: selectedDep || undefined,
+                    division_id: selectedDiv || undefined,
+                };
+                break;
+            case 'deptadmin':
+                params = {
+                    ...params,
+                    department_id: authData.department_id,
+                    division_id: selectedDiv || undefined,
+                    ...(debouncedEmcode ? { empCode: debouncedEmcode } : {}),
+                };
+                setSelectedDep(authData.department_id);
+                getDivisionByDepId(Number(authData.department_id) || null);
+                break;
+            case 'branchadmin':
+                params = {
+                    ...params,
+                    department_id: authData.department_id,
+                    division_id: authData.division_id,
+                    ...(debouncedEmcode ? { empCode: debouncedEmcode } : {}),
+                };
+                break;
+            default:
+                break;
         }
 
         getUsersData(params);
     }, [debouncedEmcode, selectedDep, selectedDiv, page, pageSize, authData]);
 
-
-    // Update filtered state after data fetched
+    // 🔹 Update filtered state after data fetch
     useEffect(() => {
-        const delay = setTimeout(() => {
-            setFiltered(dataUser);
-        }, 150);
+        const delay = setTimeout(() => setFiltered(dataUser), 150);
         return () => clearTimeout(delay);
     }, [dataUser]);
 
+    // 🔹 Handle pagination
     const onPage = (e: any) => {
         const { role, department_id: authDeptId, division_id: authDivId } = authData || {};
 
@@ -118,11 +121,11 @@ export default function MobileUserTable() {
                 break;
 
             case "deptadmin":
-                department_id = authDeptId; //  deptadmin’s own dept
-                division_id = undefined;    // ignore division
+                department_id = authDeptId;
+                division_id = selectedDiv || undefined;
                 break;
 
-            default:
+            default: // branchadmin or others
                 department_id = authDeptId;
                 division_id = authDivId;
                 break;
@@ -138,53 +141,7 @@ export default function MobileUserTable() {
     };
 
 
-
-
-    const header = (
-        <div className="card-no-bro flex flex-column md:flex-row gap-2 justify-content-start">
-            <div className="m-4">
-                <InputText
-                    type="search"
-                    placeholder="ລະຫັດ ພະນັກງານ"
-                    className="w-full md:w-20rem"
-                    value={emcode || ''}
-                    onChange={(e) => setEmcode(e.target.value)}
-                />
-                <Dropdown
-                    showClear
-                    disabled={buttonDisable}
-                    options={finaldep}
-                    value={selectedDep}
-                    onChange={(e: any) => {
-                        const depId = e.value;
-                        setEmcode('');
-                        setSelectedDep(depId);
-                        setSelectedDiv(null); // reset division if department changes
-                        getDivisionByDepId(depId || null);
-                    }}
-                    optionLabel="option_name"
-                    optionValue="id"
-                    placeholder="ເລືອກ ຝ່າຍ"
-                    className="w-full sm:ml-2 md:w-20rem mt-2 md:mt-0"
-                />
-                <Dropdown
-                    showClear
-                    disabled={buttonDisable}
-                    options={finaldiv}
-                    value={selectedDiv}
-                    onChange={(e: any) => {
-                        setEmcode('');
-                        setSelectedDiv(e.value)
-                    }}
-                    optionLabel="option_name"
-                    optionValue="id"
-                    placeholder="ເລືອກ ພະແນກ"
-                    className="w-full sm:ml-2 md:w-20rem mt-2 md:mt-0"
-                />
-            </div>
-        </div>
-    );
-
+    // 🔹 Open modal
     const onViewDoc = (id: any) => {
         openModal({
             view: <div style={{ height: '100vh', maxHeight: '80vh' }}>{id}</div>,
@@ -194,6 +151,52 @@ export default function MobileUserTable() {
             dialogFooter: null,
         });
     };
+
+    // 🔹 Table header
+    const header = (
+        <div className="card-no-bro flex flex-column md:flex-row gap-2 justify-content-start">
+            <div className="m-4 flex flex-col md:flex-row gap-2">
+                <InputText
+                    type="search"
+                    placeholder="ລະຫັດ ພະນັກງານ"
+                    className="w-full md:w-20rem"
+                    value={emcode || ''}
+                    onChange={(e) => setEmcode(e.target.value)}
+                />
+                <Dropdown
+                    showClear
+                    disabled={buttonDisableDepartment}
+                    options={finaldep}
+                    value={selectedDep}
+                    onChange={(e: any) => {
+                        const depId = e.value;
+                        setEmcode('');
+                        setSelectedDep(depId);
+                        setSelectedDiv(null);
+                        getDivisionByDepId(depId || null);
+                    }}
+                    optionLabel="option_name"
+                    optionValue="id"
+                    placeholder="ເລືອກ ຝ່າຍ"
+                    className="w-full md:w-20rem"
+                />
+                <Dropdown
+                    showClear
+                    disabled={buttonDisableDiv}
+                    options={finaldiv}
+                    value={selectedDiv}
+                    onChange={(e: any) => {
+                        setEmcode('');
+                        setSelectedDiv(e.value);
+                    }}
+                    optionLabel="option_name"
+                    optionValue="id"
+                    placeholder="ເລືອກ ພະແນກ"
+                    className="w-full md:w-20rem"
+                />
+            </div>
+        </div>
+    );
 
     return (
         <div>
