@@ -27,7 +27,7 @@ const LoginPage = () => {
                             <div className="flex flex-column align-items-center mb-1 sm:mb-4">
                                 <span className="flex items-center">
                                     <img src="/demo/images/login/789-CFS.png" alt="Image" height="40" className="mr-2" />
-                                    <div className="text-3xl sm:text-xl  font-medium " style={{ marginTop: "0.4rem", color: 'var(--primary-color)' }}>789 CFS's Check-In</div>
+                                    <div className="text-3xl sm:text-xl  font-medium " style={{ marginTop: "0.4rem", color: 'var(--primary-color)' }}>789 CFS Check-In</div>
                                 </span>
                                 <span className="text-600 text-sm font-medium">ລະບົບ ການເຂົ້າ-ອອກວຽກ 789 ຄອນກຣີດ</span>
                             </div>
