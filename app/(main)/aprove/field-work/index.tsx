@@ -67,25 +67,32 @@ export default function FieldWorkTable() {
 
   /* ------------------------------- fetch -------------------------------- */
 
-    useEffect(() => {
-      if (!authData?.role) return;
-  
-      // admin: requires filter selections
-      if (authData.role === 'admin') {
-        getFieldWorkPath(activeIndex.value, {
-          ...(selectedDep ? { department_id: selectedDep } : {}),
-          ...(selectedDiv ? { division_id: selectedDiv } : {}),
-        });
-      }
-  
-      // branch admin: always tied to their department/division
-      if (authData.role === 'branchadmin') {
-        getFieldWorkPath(activeIndex.value, {
-          department_id: authData.department_id,
-          division_id: authData.division_id,
-        });
-      }
-    }, [authData, activeIndex, selectedDep, selectedDiv, getFieldWorkPath]);
+  useEffect(() => {
+    if (!authData?.role) return;
+
+    // admin: requires filter selections
+    if (authData.role === 'admin') {
+      getFieldWorkPath(activeIndex.value, {
+        ...(selectedDep ? { department_id: selectedDep } : {}),
+        ...(selectedDiv ? { division_id: selectedDiv } : {}),
+      });
+    }
+
+    // branch admin: always tied to their department/division
+    if (authData.role === 'branchadmin') {
+      getFieldWorkPath(activeIndex.value, {
+        department_id: authData.department_id,
+        division_id: authData.division_id,
+      });
+    }
+
+    if (authData.role === 'deptadmin') {
+      getFieldWorkPath(activeIndex.value, {
+        department_id: authData.department_id,
+      });
+    }
+    
+  }, [authData, activeIndex, selectedDep, selectedDiv, getFieldWorkPath]);
 
   /* --------------------------- combined filter -------------------------- */
   const applyFilters = useCallback(() => {

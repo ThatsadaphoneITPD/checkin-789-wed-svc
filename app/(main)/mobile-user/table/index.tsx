@@ -85,6 +85,12 @@ export default function MobileUserTable() {
                 division_id: authData.division_id,
                 ...(debouncedEmcode ? { empCode: debouncedEmcode } : {}),
             };
+        } else if (authData.role === "deptadmin") {
+            params = {
+                ...baseParams,
+                department_id: authData.department_id,
+                ...(debouncedEmcode ? { empCode: debouncedEmcode } : {}),
+            };
         }
 
         getUsersData(params);
@@ -100,19 +106,37 @@ export default function MobileUserTable() {
     }, [dataUser]);
 
     const onPage = (e: any) => {
-        const isAdmin = authData?.role === "admin";
+        const { role, department_id: authDeptId, division_id: authDivId } = authData || {};
 
-        const department_id = isAdmin ? selectedDep || undefined : authData?.department_id;
-        const division_id = isAdmin ? selectedDiv || undefined : authData?.division_id;
+        let department_id: string | undefined;
+        let division_id: string | undefined;
+
+        switch (role) {
+            case "admin":
+                department_id = selectedDep || undefined;
+                division_id = selectedDiv || undefined;
+                break;
+
+            case "deptadmin":
+                department_id = authDeptId; //  deptadmin’s own dept
+                division_id = undefined;    // ignore division
+                break;
+
+            default:
+                department_id = authDeptId;
+                division_id = authDivId;
+                break;
+        }
 
         getUsersData({
             empCode: debouncedEmcode || undefined,
-            department_id: department_id,
-            division_id: division_id,
+            department_id,
+            division_id,
             page: e.page + 1,
             pageSize: e.rows,
         });
     };
+
 
 
 

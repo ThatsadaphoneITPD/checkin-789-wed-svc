@@ -89,6 +89,12 @@ export default function SickLeaveTable() {
         division_id: authData.division_id,
       });
     }
+
+    if (authData.role === 'deptadmin') {
+      getSickLeavePath(activeIndex.value, {
+        department_id: authData.department_id,
+      });
+    }
   }, [authData, activeIndex, selectedDep, selectedDiv, getSickLeavePath]);
 
 

@@ -25,6 +25,7 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
     setUnload(true);
     setTimeout(() => setUnload(false), 800);
   };
+  const AllowChangeLocation = ["admin", "branchadmin"].includes(authData?.role ?? "");
 
   const handleWorkArea = () => {
     if (!authData?.role) return;
@@ -65,7 +66,7 @@ const ActionButtons: React.FC<Props> = ({ rowData, openViewDoc }) => {
       <button className="button resetMobileId-button custom-target-des" data-pr-tooltip="Device" onClick={handleResetDeviceID} disabled={ResetIDload}>
         {ResetIDload ? <i className="pi pi-spin pi-cog" /> : <i className="pi pi-mobile" />}
       </button>
-      <Create rowItem={rowData} handleCallWorkArea={handleWorkArea} />
+      {AllowChangeLocation && <Create rowItem={rowData} handleCallWorkArea={handleWorkArea} />}
     </div>
   );
 };

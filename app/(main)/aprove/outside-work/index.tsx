@@ -87,6 +87,12 @@ export default function OutSideWorkTable() {
         division_id: authData.division_id,
       });
     }
+
+    if (authData.role === 'deptadmin') {
+      getOutSideWorkPath(activeIndex.value, {
+        department_id: authData.department_id,
+      });
+    }
   }, [authData, activeIndex, selectedDep, selectedDiv, getOutSideWorkPath]);
 
   /* ------------------------------------------------------------------ */

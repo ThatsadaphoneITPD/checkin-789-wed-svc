@@ -1,5 +1,5 @@
 import { AppMenuItem } from "@/types";
-import { defaultsides, devItem, menuItems, sideGroups, adminmenu, branchadminmenu } from "./menu-role";
+import { defaultsides, devItem, menuItems, sideGroups, adminmenu, branchadminmenu, deptadminmenu } from "./menu-role";
 
 
 export const roleAuthMenu = (role: string) => {
@@ -7,6 +7,7 @@ export const roleAuthMenu = (role: string) => {
         case "Super Admin": return menuItems;
         case "admin": return adminmenu;
         case "branchadmin": return branchadminmenu;
+        case "deptadmin": return deptadminmenu;
         case "User": return sideGroups;
         default: return defaultsides;
     }
