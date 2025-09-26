@@ -18,6 +18,7 @@ export default function EmployeeTable() {
     const dt = useRef<DataTable<any>>(null);
     const [emcode, setEmcode] = useState<Nullable<string>>('');
     const [debouncedEmcode, setDebouncedEmcode] = useState<Nullable<string>>('');
+    const [date, setDate] = useState<Nullable<Date>>(new Date());
 
     // Debounce effect to delay updates to `debouncedEmcode`
     useEffect(() => {
@@ -58,18 +59,31 @@ export default function EmployeeTable() {
         [openModal]
     );
 
+
     const header = (
-        <div className="card-no-bro flex justify-content-center">
-            <InputText
+        <div className="card-no-bro">
+            <div className="flex flex-wrap gap-1 justify-content-start">
+               <InputText
                 type="search"
                 style={{height: "2.5rem"}}
                 placeholder="ລະຫັດ ພະນັກງານ"
-                className="input-text mb-3"
+                className="input-text w-full md:w-14rem mb-2"
                 value={emcode}
                 onChange={(e: any) => setEmcode(e.target.value)}
             />
+              <Calendar
+                value={date}
+                style={{height: "2.5rem"}}
+                onChange={(e: any) => setDate(e.value)}
+                view="month"
+                placeholder="ເລືອກເດືອນ"
+                showIcon
+                showButtonBar
+                className="calendar-search w-full md:w-14rem mb-2"
+              />
+            </div>
         </div>
-    );
+      );
 
     return (
         <div>
@@ -87,8 +101,8 @@ export default function EmployeeTable() {
                 onSelectionChange={(e: any) => setSelectedItem(e.value as any)}
                 rowsPerPageOptions={[10, 25, 30, 40, 50, 100]}
                 className="datatable-responsive"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Max"
+                paginatorTemplate="PrevPageLink CurrentPageReport NextPageLink RowsPerPageDropdown"
+                currentPageReportTemplate="({currentPage} > {totalPages})"
                 loading={loading}
                 emptyMessage={<EmptyData emptytext="ຂໍ້ມູນ ວ່າງເປົ່າ" />}
                 responsiveLayout="scroll"

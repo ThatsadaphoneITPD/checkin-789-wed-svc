@@ -10,7 +10,7 @@ import EmployeeTable from './employee';
 const DateComponent = () => {
     return (
         <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span style={{color: "#81901e"}} className="text-xl font-bold">ລາຍງານ ການເຂົ້າ-ອອກວຽກ</span>
+            <span style={{ color: "black" }} className="text-xl font-bold">ລາຍງານ ການເຂົ້າ-ອອກວຽກ</span>
         </div>
     );
 };
@@ -21,14 +21,7 @@ const DriveDocument = () => {
     return (
         <>
             <DateComponent />
-            <TabView>
-                {/* <TabPanel header={translate(contant, 'tabview', 'monthly_report', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
-                    <MonthlyTable/>
-                </TabPanel> */}
-                <TabPanel header={translate(contant, 'tabview', 'employee_daily', 'l_name', lang)} style={{ marginRight: "0.5rem" }}>
-                    <EmployeeTable/>
-                </TabPanel>
-            </TabView>
+            <EmployeeTable />
         </>
     );
 };

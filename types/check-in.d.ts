@@ -185,6 +185,7 @@ declare namespace Checkin {
 
     // ----- Report Check-In -----
     type EmployeeReport = {
+        fullname: string
         emp_code: string
         punch_date: string
         first_punch: string

@@ -121,17 +121,11 @@ export default function AttendTable() {
   );
 
   /* ------------------- optional skeleton rows ---------------------- */
-  const loaderTemplate = () => (
-    <div className="flex flex-column w-full py-2 px-3">
-      <Skeleton height="1.5rem" width="100%" className="mb-2" />
-      <Skeleton height="1.5rem" width="90%" />
-    </div>
-  );
 
   const TitleComponent = () => {
     return (
       <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-        <span style={{color: "#81901e"}} className="text-xl font-bold">ລາຍງານ ເຂົ້າ-ອອກວຽກ ປະຈຳເດືອນ</span>
+        <span style={{color: "black"}} className="text-xl font-bold">ລາຍງານ ເຂົ້າ-ອອກວຽກ ປະຈຳເດືອນ</span>
       </div>
     );
   };
@@ -151,12 +145,10 @@ export default function AttendTable() {
         sortField="_key"
         sortOrder={1}
         selection={selectedItem}
-        onSelectionChange={(e) => setSelectedItem(e.value)}
         className="datatable-responsive"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         currentPageReportTemplate="ຈຳນວນ"
         loading={isLoading}
-        loadingIcon={loaderTemplate}
         emptyMessage={<EmptyData emptytext="ຂໍ້ມູນ ວ່າງເປົ່າ" />}
         responsiveLayout="scroll"
       >
